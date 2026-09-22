@@ -1,0 +1,58 @@
+[project]
+name = "pvfit"
+version = "0.1.0"
+description = "Primary vertex reconstruction and performance analysis for 4D tracking studies"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Zhihong Shen", email = "zhihong.shen@cern.ch" },
+    { name = "Xueting Yang", email = "xueting.yang@cern.ch" },
+    { name = "Tianwen Zhou", email = "tianwen.zhou@cern.ch" },
+]
+keywords = ["high-energy-physics", "primary-vertex", "lhcb", "4d-tracking", "reconstruction"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+    "h5py>=3.15.1",
+    "matplotlib>=3.10.5",
+    "numpy>=2.0",
+    "optuna>=4.8.0",
+    "pandas>=2.3.1",
+    "pyyaml>=6.0.2",
+    "scipy>=1.16.1",
+    "snakemake>=9.14.5",
+    "tqdm>=4.67.1",
+    "uproot>=5.6.4",
+]
+
+[project.urls]
+Repository = "https://github.com/OWNER/pvfit"
+Issues = "https://github.com/OWNER/pvfit/issues"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.14",
+    # notebooks: analysis_optuna.ipynb and docs/derivations/
+    "ipykernel>=7.2.0",
+    "sympy>=1.14.0",
+    # profiling
+    "scalene>=1.5.51",
+]
+
+[tool.ruff]
+target-version = "py312"
+# Notebooks are exploratory; lint the library and the scripts.
+extend-exclude = ["docs/derivations", "*.ipynb"]
+
+[tool.ruff.lint]
+# The tree is clean under these today, so CI stays green.
+select = ["E4", "E7", "E9", "F", "I"]
+# Next steps, each needing a manual pass rather than a blanket --fix:
+#   "B"   -> B905 (zip strict=) is a per-call-site physics judgement, 22 sites
+#   "UP"  -> typing modernisation (typing.List -> list, Optional -> | None)

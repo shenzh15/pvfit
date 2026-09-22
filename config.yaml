@@ -1,0 +1,73 @@
+# =========================
+# Paths (Snakemake-level)
+# =========================
+paths:
+  input_root: "input/key_sample.root"
+  track_tree_name: "velo_kalman_filter/monitor_tree"  # Track data from Allen
+  mc_vertex_tree_name: "mc_pv_dumper/MCPV_effective_tree"       # MC true vertex data
+  output_dir: "./output/baseline"
+  hdf5_file: "fit_results.h5"
+
+# =========================
+# Workflow control
+# =========================
+workflow:
+  event_number: -1
+  max_workers: 30
+  analyses:
+    - efficiency_track
+    - efficiency_geo
+    - fake_rate_track
+    - fake_rate_geo
+    - merge_rate
+    - split_rate
+    - resolution
+    - plot_histogram
+    - track_pull
+    - vertex_pull
+
+# =========================
+# Algorithm parameters
+# =========================
+algorithm:
+  # Track cuts
+  minTracks: 2.5
+  smear_window_size: 2
+  beamline_chi2_cut: true   # true: apply beamline chi2 cut before filling histogram
+  max_track_bl_chi2: 10.0    # threshold for beamline chi2 cut
+  z0_err_cut: true          # true: apply a max z0 error cut before filling histogram
+  pp_max_track_z0_err: 1.5  # mm
+
+  # Histogram parameters
+  z_range:
+    min: -200
+    max: 200
+  t_range:
+    min: -0.6
+    max: 0.8
+  bins:
+    z: 800
+    t: 56
+
+  # Vertex fitting
+  max_chi2: 10  # Tukey weight threshold also threshold for track-vertex matching
+  is_adaptive_tukey: true  # true: recompute chi2 each iteration; false: use cached chi2 from initial assignment
+  drop_low_track_seeds: true  # true: remove seeds with < 4 tracks and reassign their tracks
+
+  # Vertex merging (post-fit)
+  merge_vertices: true  # true: merge close vertices after fitting
+  nsigma_merge: 5       # merge threshold: chi2_zt < nsigma^2 = 25 in (z,t) space
+
+  # Matching
+  recall_threshold: 0.7
+  purity_threshold: 0.7
+
+  # Geo Elliptical matching scales in (z, t): sigma_z = z_scale * m_r / 2, sigma_t = t_scale * m_r / 2
+  z_scale: 1.5
+  t_scale: 0.06
+  m_r: 0.8
+  nsigma: 3.0
+
+  plot_event_id: 0
+  draw_fixed_ellipses: false
+  draw_fitted_ellipses: true

@@ -1,0 +1,99 @@
+import unittest
+
+import numpy as np
+import pandas as pd
+
+from src.fit.truth_matching import build_true_vertex_info, select_tracks
+
+
+class TruthMatchingTests(unittest.TestCase):
+    def setUp(self):
+        self.tracks = pd.DataFrame(
+            {
+                "event_number": [7] * 5,
+                "mc_key": [10, 11, 12, 13, -1],
+                "ovtx_x": [0.0] * 5,
+                "ovtx_y": [0.0] * 5,
+                "ovtx_z": [0.0] * 5,
+                "ovtx_t": [0.0] * 5,
+                "beamPOCA_z": [0.0] * 5,
+                "beamPOCA_t": [0.0] * 5,
+            },
+            index=[20, 40, 50, 80, 90],
+        )
+        self.vertices = pd.DataFrame(
+            {
+                "event_number": [7],
+                "effective_pv_key": [99],
+                "x": [0.0],
+                "y": [0.0],
+                "z": [0.0],
+                "time": [0.0],
+                "n_valid_tracks": [20],
+                "track_keys": [np.array([10, 11, 12, 13])],
+            }
+        )
+
+    def test_key_does_not_match_unrelated_track_at_same_position(self):
+        key = build_true_vertex_info(self.tracks, self.vertices)
+        self.assertEqual(key[0]["track_indices"], [0, 1, 2, 3])
+        self.assertEqual(key[0]["effective_pv_key"], 99)
+
+    def test_key_matches_displaced_origin(self):
+        self.tracks.loc[:, "ovtx_z"] = 1.0
+        self.assertEqual(len(build_true_vertex_info(self.tracks, self.vertices)), 1)
+
+    def test_keys_are_event_local(self):
+        self.vertices.loc[:, "event_number"] = 8
+        with self.assertRaisesRegex(ValueError, "same single event"):
+            build_true_vertex_info(self.tracks, self.vertices)
+
+    def test_minimum_counts_selected_rows_not_dump_count(self):
+        self.tracks.loc[20, "beamPOCA_z"] = 500.0
+        selected = select_tracks(
+            self.tracks, dict(zmin=-200, zmax=200, tmin=-1, tmax=1)
+        )
+        self.assertEqual(build_true_vertex_info(selected, self.vertices), [])
+        info = build_true_vertex_info(selected, self.vertices, min_tracks=0)
+        self.assertEqual(info[0]["track_indices"], [0, 1, 2])
+
+    def test_missing_key_fields_never_fall_back(self):
+        with self.assertRaisesRegex(ValueError, "mc_key"):
+            build_true_vertex_info(self.tracks.drop(columns="mc_key"), self.vertices)
+        with self.assertRaisesRegex(ValueError, "track_keys"):
+            build_true_vertex_info(
+                self.tracks, self.vertices.drop(columns="track_keys")
+            )
+
+    def test_duplicate_reco_keys_preserve_track_rows(self):
+        self.tracks.loc[90, "mc_key"] = 10
+        self.assertEqual(
+            build_true_vertex_info(self.tracks, self.vertices)[0]["track_indices"],
+            list(range(5)),
+        )
+
+    def test_conflicting_truth_owners_fail(self):
+        other = self.vertices.copy()
+        other["effective_pv_key"] = 100
+        with self.assertRaisesRegex(ValueError, "multiple truth vertices"):
+            build_true_vertex_info(self.tracks, pd.concat([self.vertices, other]))
+
+    def test_empty_truth_and_required_count(self):
+        self.assertEqual(
+            build_true_vertex_info(self.tracks, self.vertices.iloc[:0]), []
+        )
+        with self.assertRaisesRegex(ValueError, "n_valid_tracks"):
+            build_true_vertex_info(
+                self.tracks, self.vertices.drop(columns="n_valid_tracks")
+            )
+
+    def test_membership_does_not_require_origin_coordinates(self):
+        tracks = self.tracks.drop(columns=["ovtx_x", "ovtx_y", "ovtx_z", "ovtx_t"])
+        self.assertEqual(
+            build_true_vertex_info(tracks, self.vertices)[0]["track_indices"],
+            [0, 1, 2, 3],
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()
