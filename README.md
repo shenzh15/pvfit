@@ -166,16 +166,6 @@ analysis succeeds.
 handles arguments and dispatch; reconstruction and analysis remain independently
 callable Python modules.
 
-### Standalone histogram plot
-
-Plot the stored Allen `(z, t)` histogram for one event with the truth overlay,
-without running the pipeline:
-
-```bash
-uv run python plot_histograms_2d.py --input /path/to/sample.root \
-  --event 1 --output-dir output/plots
-```
-
 ## Configuration
 
 Each stage owns its configuration:
@@ -450,7 +440,6 @@ repository — run the cells yourself.
 ```
 pvfit/
 ├── pyproject.toml           # package metadata and installed pvfit command
-├── plot_histograms_2d.py    # standalone histogram plot
 ├── analysis_optuna.ipynb    # optimization result inspection
 ├── configs/
 │   ├── reconstruction.yaml # inputs, reconstruction settings and output
