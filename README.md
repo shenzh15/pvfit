@@ -431,7 +431,7 @@ and analysis CSVs. Each trial changes only the reconstruction parameters. The
 analysis configuration retains its thresholds and runs the four required metric
 modules.
 
-`analysis_optuna.ipynb` is a notebook for inspecting those results; it builds on
+`notebooks/analysis_optuna.ipynb` is a notebook for inspecting those results; it builds on
 the helpers in `pvfit/optimize/analysis.py`. Notebook outputs are stripped in the
 repository — run the cells yourself.
 
@@ -440,7 +440,7 @@ repository — run the cells yourself.
 ```
 pvfit/
 ├── pyproject.toml           # package metadata and installed pvfit command
-├── analysis_optuna.ipynb    # optimization result inspection
+├── notebooks/               # optimization result inspection (analysis_optuna.ipynb)
 ├── configs/
 │   ├── reconstruction.yaml # inputs, reconstruction settings and output
 │   ├── analysis.yaml       # independent evaluation and plots

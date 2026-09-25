@@ -48,7 +48,7 @@ Issues = "https://github.com/OWNER/pvfit/issues"
 [dependency-groups]
 dev = [
     "ruff>=0.14.14",
-    # notebooks: analysis_optuna.ipynb and docs/derivations/
+    # notebooks/ and docs/derivations/
     "ipykernel>=7.2.0",
     "sympy>=1.14.0",
     # profiling
