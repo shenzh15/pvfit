@@ -60,6 +60,7 @@ def process_event(
           - event_number
           - n_true
           - n_seedings
+          - seeds: every (z, t) seed, including ones later dropped or merged
           - n_fitted
           - histogram
           - vertex_true_info
@@ -69,9 +70,9 @@ def process_event(
     # ------------------------------------------------------------
     # 0. Extract configuration parameters
     # ------------------------------------------------------------
-    max_chi2 = params.get("max_chi2", 10)
-    is_adaptive_tukey = params.get("is_adaptive_tukey", True)
-    drop_low_track_seeds = params.get("drop_low_track_seeds", True)
+    max_chi2 = params["max_chi2"]
+    is_adaptive_tukey = params["is_adaptive_tukey"]
+    drop_low_track_seeds = params["drop_low_track_seeds"]
 
     # ------------------------------------------------------------
     # 1. Select tracks and build truth membership on the same row order
@@ -119,8 +120,8 @@ def process_event(
     # ------------------------------------------------------------
     # 5b. Merge close vertices in (z, t) space
     # ------------------------------------------------------------
-    if params.get("merge_vertices", False):
-        nsigma_merge = params.get("nsigma_merge", 5)
+    if params["merge_vertices"]:
+        nsigma_merge = params["nsigma_merge"]
         merge_close_vertices(
             event_data_selected,
             vertex_rec_info,
@@ -138,6 +139,7 @@ def process_event(
         "event_number": event_number,
         "n_true": len(vertex_true_info),
         "n_seedings": len(seedings),
+        "seeds": seedings,
         "n_fitted": n_fitted,
         "histogram": H,
         "vertex_true_info": vertex_true_info,

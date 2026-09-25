@@ -1,4 +1,18 @@
-"""Plot 2D histogram of vertex seeding and fitted positions."""
+"""Plot the 2D (z, t) seeding histogram with vertex overlays.
+
+Works for any HDF5 file that follows the PVFit event layout, whichever program
+produced it. Only ``histogram`` is required; each overlay is drawn when present:
+
+    <event_id>/
+    ├── histogram [n_bins_z, n_bins_t]
+    │   @z_min, @z_max, @t_min, @t_max, @n_bins_z, @n_bins_t
+    ├── seeds/          z, t                              (all seeds / peaks)
+    ├── true_vertices/  z, t  [vertex_id, track_indices]  (labels)
+    └── rec_vertices/   z, t  [z_err, t_err]              (error ellipses)
+
+Files written before ``seeds/`` existed fall back to ``rec_vertices/{z,t}_seed``.
+The optional file attribute ``@source`` (e.g. "PVFit", "Allen") labels the plot.
+"""
 
 from pathlib import Path
 
@@ -6,141 +20,131 @@ import h5py
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
-import yaml
 
 
-def plot_event_histogram(
-    hdf5_path,
-    event_id=None,
-    output_dir="output",
-    config_path="config.yaml",
-    draw_fixed_ellipses=False,
-    draw_fitted_ellipses=False,
-):
-    """Create a 2D visualization of vertex seeding histogram with overlaid vertex positions.
+def _read_points(event_group, group_name, *optional, z="z", t="t"):
+    """Read (z, t) and any optional per-point fields; None if not stored."""
+    group = event_group.get(group_name)
+    if group is None or z not in group or t not in group:
+        return None
+    points = {"z": group[z][:], "t": group[t][:]}
+    for name in optional:
+        if name in group:
+            points[name] = group[name][:]
+    return points
 
-    Plots the track density histogram used for vertex seeding, with overlaid markers
-    showing initial seeded positions, fitted vertex positions, and true vertex locations.
-    Provides visual validation of the vertex finding and fitting pipeline.
+
+def load_event_histogram(hdf5_path, event_id=None):
+    """Load one event's histogram and overlays from an HDF5 file.
 
     Args:
-        hdf5_path: Path to the HDF5 file containing fit results
-        event_id: Event ID to plot. If None, plots the first event in the file
-        output_dir: Directory for saving plots
-        config_path: Path to config.yaml file
-        draw_fixed_ellipses: Whether to draw fixed matching ellipses around initial seeded positions
-        draw_fitted_ellipses: Whether to draw 3-sigma error ellipses around fitted positions
+        hdf5_path: Path to an HDF5 file in the PVFit event layout
+        event_id: Event ID to load. If None, loads the first event in the file
 
     Returns:
-        None: Saves 2D histogram plot to output directory
+        dict with event_id, source, histogram, z_edges, t_edges and the overlays
+        true / seeds / rec (each a dict of arrays, or None when not stored);
+        None if the event or its histogram is missing.
     """
-    print("Plotting 2D Histogram...")
-
-    # Load parameters from config.yaml
-    with open(config_path, "r") as f:
-        config = yaml.safe_load(f)
-
-    m_r = config["algorithm"]["m_r"]
-    z_scale = config["algorithm"]["z_scale"]
-    t_scale = config["algorithm"]["t_scale"]
-
-    print(
-        f"Using parameters from config: m_r={m_r}, z_scale={z_scale}, t_scale={t_scale}"
-    )
-
     with h5py.File(hdf5_path, "r") as f:
-        # Get event ID
+        available = sorted(int(key) for key in f.keys())
         if event_id is None:
-            # Use first event if not specified
-            event_ids = sorted([int(key) for key in f.keys()])
-            if not event_ids:
+            if not available:
                 print("No events found in HDF5 file")
-                return
-            event_id = event_ids[0]
+                return None
+            event_id = available[0]
             print(f"Using first event: {event_id}")
 
-        # Check if event exists
         if str(event_id) not in f:
             print(f"Event {event_id} not found in HDF5 file")
-            available = sorted([int(key) for key in f.keys()])
             print(
                 f"Available events: {available[:10]}{'...' if len(available) > 10 else ''}"
             )
-            return
+            return None
 
         event_group = f[str(event_id)]
-
-        # Load histogram if it exists
         if "histogram" not in event_group:
             print(f"No histogram data found for event {event_id}")
-            return
+            return None
 
         H = event_group["histogram"][:]
-
-        # Read histogram parameters from HDF5 attributes
         hist_attrs = event_group["histogram"].attrs
-        z_range = (hist_attrs["z_min"], hist_attrs["z_max"])
-        t_range = (hist_attrs["t_min"], hist_attrs["t_max"])
-        z_bins = hist_attrs["n_bins_z"]
-        t_bins = hist_attrs["n_bins_t"]
-
-        print(
-            f"Histogram parameters: z_range={z_range}, t_range={t_range}, z_bins={z_bins}, t_bins={t_bins}"
-        )
-
-        # Load true vertices
-        true_verts = event_group["true_vertices"]
-        true_z = true_verts["z"][:]
-        true_t = true_verts["t"][:]
-        true_ids = (
-            true_verts["vertex_id"][:]
-            if "vertex_id" in true_verts
-            else np.arange(len(true_z))
-        )
-        true_track_indices = true_verts["track_indices"][:]
-        true_ntracks = np.array([len(ti) for ti in true_track_indices])
-
-        # Load reconstructed vertices
-        rec_verts = event_group["rec_vertices"]
-        rec_z = rec_verts["z"][:]
-        rec_t = rec_verts["t"][:]
-
-        # Load initial seeded positions
-        if "z_seed" not in rec_verts or "t_seed" not in rec_verts:
-            raise KeyError(
-                f"Event {event_id}: 'z_seed' or 't_seed' not found in rec_vertices"
+        z_bins = int(hist_attrs["n_bins_z"])
+        t_bins = int(hist_attrs["n_bins_t"])
+        if H.shape != (z_bins, t_bins):
+            raise ValueError(
+                f"Event {event_id}: histogram shape {H.shape} does not match "
+                f"(n_bins_z, n_bins_t) = {(z_bins, t_bins)}"
             )
-        initial_z = rec_verts["z_seed"][:]
-        initial_t = rec_verts["t_seed"][:]
 
-        z_err = None
-        t_err = None
+        seeds = _read_points(event_group, "seeds")
+        if seeds is None:
+            seeds = _read_points(event_group, "rec_vertices", z="z_seed", t="t_seed")
 
-        if draw_fitted_ellipses:
-            if "z_err" in rec_verts and "t_err" in rec_verts:
-                z_err = rec_verts["z_err"][:]
-                t_err = rec_verts["t_err"][:]
+        source = f.attrs.get("source")
+        return {
+            "event_id": event_id,
+            "source": source.decode() if isinstance(source, bytes) else source,
+            "histogram": H,
+            "z_edges": np.linspace(hist_attrs["z_min"], hist_attrs["z_max"], z_bins + 1),
+            "t_edges": np.linspace(hist_attrs["t_min"], hist_attrs["t_max"], t_bins + 1),
+            "true": _read_points(
+                event_group, "true_vertices", "vertex_id", "track_indices"
+            ),
+            "seeds": seeds,
+            "rec": _read_points(event_group, "rec_vertices", "z_err", "t_err"),
+        }
 
-    # Create a copy and set zero values to NaN for better visualization
-    H_plot = np.copy(H)
-    H_plot[H_plot == 0] = np.nan
 
-    # Create edges for pcolormesh
-    z_edges = np.linspace(z_range[0], z_range[1], z_bins + 1)
-    t_edges = np.linspace(t_range[0], t_range[1], t_bins + 1)
+def plot_event_histogram(hdf5_path, output_dir, settings, event_id=None, label=None):
+    """Create a 2D visualization of the seeding histogram with vertex overlays.
 
-    # Create figure
+    Plots the track density histogram used for vertex seeding, with overlaid markers
+    for seeds, fitted vertices and true vertices when the file stores them.
+
+    Args:
+        hdf5_path: Path to the HDF5 file (PVFit event layout, any producer)
+        output_dir: Directory for saving plots
+        settings: AnalysisConfig; uses the matching scales and the draw_* flags
+        event_id: Event ID to plot. If None, plots the first event in the file
+        label: Title prefix; defaults to the file's @source attribute
+
+    Returns:
+        Path of the saved PDF, or None if the event could not be plotted
+    """
+    print("Plotting 2D Histogram...")
+
+    draw_fixed_ellipses = settings.draw_fixed_ellipses
+    draw_fitted_ellipses = settings.draw_fitted_ellipses
+    if draw_fixed_ellipses:
+        m_r, z_scale, t_scale = settings.m_r, settings.z_scale, settings.t_scale
+        print(f"Using matching scales: m_r={m_r}, z_scale={z_scale}, t_scale={t_scale}")
+
+    data = load_event_histogram(hdf5_path, event_id)
+    if data is None:
+        return None
+
+    z_edges, t_edges = data["z_edges"], data["t_edges"]
+    print(
+        f"Histogram parameters: z_range=({z_edges[0]:g}, {z_edges[-1]:g}), "
+        f"t_range=({t_edges[0]:g}, {t_edges[-1]:g}), "
+        f"z_bins={len(z_edges) - 1}, t_bins={len(t_edges) - 1}"
+    )
+
     fig, ax = plt.subplots(figsize=(15, 8))
 
-    # Create the main plot using the histogram
-    X, Y = np.meshgrid(z_edges, t_edges)
-    im = ax.pcolormesh(X, Y, H_plot.T, cmap="jet", shading="auto")
+    # Copy as float so empty bins can be hidden as NaN (also for integer input)
+    H_plot = data["histogram"].astype(float).T
+    H_plot[H_plot == 0] = np.nan
+    im = ax.pcolormesh(z_edges, t_edges, H_plot, cmap="jet", shading="auto")
 
-    # Mark true vertices with red circles and vertex_id labels
-    if len(true_z) > 0:
+    true, seeds, rec = data["true"], data["seeds"], data["rec"]
+
+    # Mark true vertices with red circles, labelled id(n_tracks)
+    if true is not None and len(true["z"]) > 0:
         ax.scatter(
-            true_z,
-            true_t,
+            true["z"],
+            true["t"],
             color="red",
             s=30,
             alpha=0.8,
@@ -149,10 +153,14 @@ def plot_event_histogram(
             edgecolors="darkred",
             linewidths=0.8,
         )
-        for i in range(len(true_z)):
+        ids = true.get("vertex_id", np.arange(len(true["z"])))
+        for i in range(len(true["z"])):
+            text = f"{int(ids[i])}"
+            if "track_indices" in true:
+                text += f"({len(true['track_indices'][i])})"
             ax.annotate(
-                f"{int(true_ids[i])}({true_ntracks[i]})",
-                xy=(true_z[i], true_t[i]),
+                text,
+                xy=(true["z"][i], true["t"][i]),
                 xytext=(3, 3),
                 textcoords="offset points",
                 fontsize=7,
@@ -160,24 +168,24 @@ def plot_event_histogram(
                 fontweight="bold",
             )
 
-    # Mark initial reconstructed vertices with green X marks
-    if len(initial_z) > 0:
+    # Mark seeds with green X marks
+    if seeds is not None and len(seeds["z"]) > 0:
         ax.scatter(
-            initial_z,
-            initial_t,
+            seeds["z"],
+            seeds["t"],
             color="green",
             s=20,
             alpha=0.8,
-            label="Initial Seeded Vertices",
+            label="Seeds",
             marker="x",
             linewidths=1.5,
         )
 
     # Mark fitted vertices with orange squares
-    if len(rec_z) > 0:
+    if rec is not None and len(rec["z"]) > 0:
         ax.scatter(
-            rec_z,
-            rec_t,
+            rec["z"],
+            rec["t"],
             color="orange",
             s=15,
             alpha=0.9,
@@ -187,11 +195,11 @@ def plot_event_histogram(
             linewidths=0.8,
         )
 
-    # Draw fixed matching ellipses around initial positions
-    if draw_fixed_ellipses and len(initial_z) > 0:
-        for i in range(len(initial_z)):
+    # Draw fixed matching ellipses around seeds
+    if draw_fixed_ellipses and seeds is not None:
+        for i in range(len(seeds["z"])):
             ellipse = patches.Ellipse(
-                xy=(initial_z[i], initial_t[i]),
+                xy=(seeds["z"][i], seeds["t"][i]),
                 width=z_scale * m_r,  # diameter in z
                 height=t_scale * m_r,  # diameter in t
                 fill=False,
@@ -202,29 +210,13 @@ def plot_event_histogram(
             )
             ax.add_patch(ellipse)
 
-            # Add label text for initial vertex
-            # label_text = f"{i}"
-            # ax.annotate(
-            #    label_text,
-            #    xy=(initial_z[i], initial_t[i]),
-            #    xytext=(2, 2),  # Text offset in points
-            #    textcoords='offset points',
-            #    fontsize=8,
-            #    color='green',
-            #    fontweight='bold'
-            # )
-
-    # Draw ellipses around fitted positions with error bounds
-    if draw_fitted_ellipses and z_err is not None and len(rec_z) > 0:
-        for i in range(len(rec_z)):
-            # 5-sigma ellipse
-            width = 2 * 5 * z_err[i]  # diameter
-            height = 2 * 5 * t_err[i]  # diameter
-
+    # Draw 5-sigma ellipses around fitted positions
+    if draw_fitted_ellipses and rec is not None and "z_err" in rec and "t_err" in rec:
+        for i in range(len(rec["z"])):
             ellipse_fitted = patches.Ellipse(
-                xy=(rec_z[i], rec_t[i]),
-                width=width,
-                height=height,
+                xy=(rec["z"][i], rec["t"][i]),
+                width=2 * 5 * rec["z_err"][i],  # diameter
+                height=2 * 5 * rec["t_err"][i],  # diameter
                 fill=False,
                 edgecolor="magenta",
                 linewidth=0.8,
@@ -233,105 +225,50 @@ def plot_event_histogram(
             )
             ax.add_patch(ellipse_fitted)
 
-    # Draw red arrows from initial to fitted positions
-    # if len(initial_z) == len(rec_z):
-    #     for i in range(len(rec_z)):
-    #         if abs(initial_z[i] - rec_z[i]) > 0.1 or abs(initial_t[i] - rec_t[i]) > 0.001:
-    #             arrowprops = dict(arrowstyle='-|>,head_length=0.4,head_width=0.3',
-    #                             color='red', alpha=0.6, lw=1.5)
-    #             ax.annotate('', xy=(rec_z[i], rec_t[i]),
-    #                        xytext=(initial_z[i], initial_t[i]),
-    #                        arrowprops=arrowprops)
-
     # Color bar & labels
-    cbar = plt.colorbar(im, label="Track Density", ax=ax)
+    cbar = fig.colorbar(im, ax=ax)
     cbar.set_label("Track Density (counts)", fontsize=18)
     cbar.ax.tick_params(labelsize=14)
 
     ax.set_xlabel("beamPOCA_z (mm)", fontsize=20)
     ax.set_ylabel("beamPOCA_t (ns)", fontsize=20)
-    ax.set_title(
-        f"2D Histogram with Vertex Positions for Event {event_id}", fontsize=22
-    )
-
-    # Increase tick label size
+    label = label or data["source"]
+    title = f"2D Histogram with Vertex Positions for Event {data['event_id']}"
+    ax.set_title(f"{label}: {title}" if label else title, fontsize=22)
     ax.tick_params(axis="both", which="major", labelsize=16)
 
-    # Larger legend with bigger markers
-    ax.legend(loc="upper right", fontsize=16, markerscale=1.5)
+    if ax.get_legend_handles_labels()[0]:
+        ax.legend(loc="upper right", fontsize=16, markerscale=1.5)
 
-    # Add statistics text box
-    stats_info = f"True vertices: {len(true_z)}\n"
-    stats_info += f"Initial seeded: {len(initial_z)}\n"
-    stats_info += f"Fitted vertices: {len(rec_z)}"
-
-    ax.text(
-        0.02,
-        0.98,
-        stats_info,
-        transform=ax.transAxes,
-        verticalalignment="top",
-        bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.8),
-        fontsize=18,
-    )
+    # Statistics text box, only for overlays stored in the file
+    stats = [
+        f"{name}: {len(points['z'])}"
+        for name, points in (
+            ("True vertices", true),
+            ("Seeds", seeds),
+            ("Fitted vertices", rec),
+        )
+        if points is not None
+    ]
+    if stats:
+        ax.text(
+            0.02,
+            0.98,
+            "\n".join(stats),
+            transform=ax.transAxes,
+            verticalalignment="top",
+            bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.8),
+            fontsize=18,
+        )
 
     # Save plot
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
-    output_file = output_path / f"histogram_event_{event_id}.pdf"
-    plt.tight_layout()
-    plt.savefig(output_file, format="pdf", dpi=300, bbox_inches="tight")
-    plt.close()
+    output_file = output_path / f"histogram_event_{data['event_id']}.pdf"
+    fig.tight_layout()
+    fig.savefig(output_file, format="pdf", dpi=300, bbox_inches="tight")
+    plt.close(fig)
 
     print(f"Plot saved as {output_file}")
-
-
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Plot 2D histogram of vertex seeding and fitted positions"
-    )
-    parser.add_argument(
-        "--hdf5_path",
-        type=str,
-        required=True,
-        help="Path to the HDF5 file containing fit results",
-    )
-    parser.add_argument(
-        "--event_id",
-        type=int,
-        default=0,
-        help="Event ID to plot (if not specified, plots first event)",
-    )
-    parser.add_argument(
-        "--output_dir", type=str, default="output", help="Output directory for plots"
-    )
-    parser.add_argument(
-        "--config_path",
-        type=str,
-        default="config.yaml",
-        help="Path to config.yaml file",
-    )
-    parser.add_argument(
-        "--draw_fixed_ellipses",
-        action="store_true",
-        help="Draw fixed matching ellipses around initial seeded positions",
-    )
-    parser.add_argument(
-        "--draw_fitted_ellipses",
-        action="store_true",
-        help="Draw 3-sigma error ellipses around fitted positions",
-    )
-
-    args = parser.parse_args()
-
-    plot_event_histogram(
-        hdf5_path=args.hdf5_path,
-        event_id=args.event_id,
-        output_dir=args.output_dir,
-        config_path=args.config_path,
-        draw_fixed_ellipses=args.draw_fixed_ellipses,
-        draw_fitted_ellipses=args.draw_fitted_ellipses,
-    )
+    return output_file

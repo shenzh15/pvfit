@@ -4,6 +4,7 @@
 HDF5 structure (top-level groups):
     <output_file>.h5/
     ├── @n_events: int
+    ├── @source: "PVFit"
     │
     ├── event_0/
     │   ├── @n_tracks: int
@@ -14,6 +15,9 @@ HDF5 structure (top-level groups):
     │   ├── histogram [n_bins_z, n_bins_t] float32
     │   │   @z_min, @z_max, @t_min, @t_max: float
     │   │   @n_bins_z, @n_bins_t: int
+    │   │
+    │   ├── seeds/
+    │   │   └── z, t [n_seedings] float32 (all seeds, incl. dropped/merged)
     │   │
     │   ├── true_vertices/
     │   │   ├── x, y, z, t [n_true] float32
@@ -28,6 +32,7 @@ HDF5 structure (top-level groups):
     │   │
     │   └── tracks/
     │       ├── x, y, z, t [n_tracks] float32
+    │       ├── tx, ty [n_tracks] float32; backward [n_tracks] bool
     │       ├── cov_xx, cov_yy, cov_tt [n_tracks] float32
     │       └── ovtx_x, ovtx_y, ovtx_z, ovtx_t [n_tracks] float32
 """
@@ -37,6 +42,18 @@ from pathlib import Path
 import h5py
 import numpy as np
 from tqdm import tqdm
+
+
+def _vlen_int32(rows):
+    """1D object array of int32 arrays for a vlen dataset.
+
+    np.array(rows, dtype=object) builds a 2D array when all rows have the same
+    length (e.g. a single vertex), which h5py cannot write as vlen.
+    """
+    out = np.empty(len(rows), dtype=object)
+    for i, row in enumerate(rows):
+        out[i] = np.asarray(row, dtype=np.int32)
+    return out
 
 
 def save_event_to_hdf5(event_result, event_data_selected, output_file, params):
@@ -84,6 +101,14 @@ def save_event_to_hdf5(event_result, event_data_selected, output_file, params):
         ds.attrs["t_max"] = params["tmax"]
         ds.attrs["n_bins_z"] = params["Nbins_z"]
         ds.attrs["n_bins_t"] = params["Nbins_t"]
+
+        # ============================================================
+        # Seeds (every histogram peak, before seeds are dropped/merged)
+        # ============================================================
+        seeds = np.asarray(event_result["seeds"], dtype=np.float32).reshape(-1, 2)
+        seeds_group = event_group.create_group("seeds")
+        seeds_group.create_dataset("z", data=seeds[:, 0])
+        seeds_group.create_dataset("t", data=seeds[:, 1])
 
         # ============================================================
         # True Vertices
@@ -140,7 +165,7 @@ def save_event_to_hdf5(event_result, event_data_selected, output_file, params):
         vlen_dtype = h5py.vlen_dtype(np.int32)
         true_group.create_dataset(
             "track_indices",
-            data=np.array(true_track_indices, dtype=object),
+            data=_vlen_int32(true_track_indices),
             dtype=vlen_dtype,
             compression="gzip",
             compression_opts=4,
@@ -226,7 +251,7 @@ def save_event_to_hdf5(event_result, event_data_selected, output_file, params):
         vlen_dtype = h5py.vlen_dtype(np.int32)
         rec_group.create_dataset(
             "track_indices",
-            data=np.array(rec_track_indices, dtype=object),
+            data=_vlen_int32(rec_track_indices),
             dtype=vlen_dtype,
             compression="gzip",
             compression_opts=4,
@@ -238,6 +263,21 @@ def save_event_to_hdf5(event_result, event_data_selected, output_file, params):
         tracks_group = event_group.create_group("tracks")
         tracks_group.create_dataset(
             "mc_key", data=event_data_selected["mc_key"].to_numpy(dtype=np.int64)
+        )
+
+        # Preserve the direction for transport to a truth vertex's z plane.
+        for name in ("tx", "ty"):
+            tracks_group.create_dataset(
+                name,
+                data=event_data_selected[f"beamPOCA_{name}"].to_numpy(dtype=np.float32),
+                compression="gzip",
+                compression_opts=4,
+            )
+        tracks_group.create_dataset(
+            "backward",
+            data=event_data_selected["backward"].to_numpy(dtype=np.bool_),
+            compression="gzip",
+            compression_opts=4,
         )
 
         # Extract track data from event_data_selected
@@ -325,6 +365,7 @@ def save_all_events_to_hdf5(fit_results, output_file, params):
     # Clear existing file
     with h5py.File(output_file, "w") as f:
         f.attrs["n_events"] = len(fit_results)
+        f.attrs["source"] = "PVFit"
 
     # Save each event
     for event_result in tqdm(fit_results, desc="Saving events to HDF5"):
