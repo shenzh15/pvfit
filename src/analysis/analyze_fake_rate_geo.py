@@ -13,14 +13,14 @@ from .utils import (
 
 def analyze_vertex_fake_rate(
     hdf5_path,
-    output_dir="output",
-    m_r=1.0,
-    z_scale=1.5,
-    t_scale=0.06,
-    plot_min_ntracks=4,
-    plot_max_ntracks=200,
-    plot_bin_width_ntracks=5,
-    method_name="PVfit_Geo_Based",
+    output_dir,
+    m_r,
+    z_scale,
+    t_scale,
+    plot_min_ntracks,
+    plot_max_ntracks,
+    plot_bin_width_ntracks,
+    method_name,
 ):
     """
     Analyze fake vertex rate using geometric (z,t) matching.

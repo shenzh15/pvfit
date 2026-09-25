@@ -1,362 +1,224 @@
-"""Input track pull analysis: Compare track parameters to true vertices."""
+"""Analyze truth-plane track residuals without a residual chi2 cut.
 
+The denominators remain the reported POCA uncertainties, as in the fitter.
+These are scaled residuals, not pulls using a fully propagated covariance.
+"""
+
+import json
 from pathlib import Path
 
 import h5py
 import matplotlib.pyplot as plt
 import numpy as np
 
+C_MM_PER_NS = 299.792458
+DATA_FIELDS = (
+    "pull_x",
+    "pull_y",
+    "pull_t",
+    "error_x",
+    "error_y",
+    "error_t",
+    "residual_x",
+    "residual_y",
+    "residual_t",
+    "delta_z",
+    "chi2",
+)
 
-def analyze_track_pull(hdf5_path, output_dir="output", max_chi2=10):
-    """Analyze input track pulls by comparing track parameters to true vertex positions.
 
-    For each track, calculates residuals and pulls (normalized residuals) relative to
-    its associated true vertex, accounting for track parameter uncertainties.
+def _collect_track_pulls(hdf5_path):
+    """Keep all finite, key-associated tracks with positive POCA variances."""
+    chunks = {name: [] for name in DATA_FIELDS}
+    counts = {"n_associated": 0, "n_invalid": 0}
+    with h5py.File(hdf5_path, "r") as f:
+        for event_id, event in f.items():
+            tracks = event["tracks"]
+            truth = event["true_vertices"]
+            # Use persisted key membership, not an origin-coordinate lookup.
+            owner = np.full(len(tracks["x"]), -1, dtype=np.int64)
+            for vertex_index, indices in enumerate(truth["track_indices"]):
+                owner[indices] = vertex_index
+            indices = np.flatnonzero(owner >= 0)
+            counts["n_associated"] += len(indices)
+            if not len(indices):
+                continue
+            missing = sorted({"tx", "ty", "backward"} - set(tracks))
+            if missing:
+                raise ValueError(
+                    f"Event {event_id}: track pull analysis requires tracks/{', '.join(missing)} "
+                    "for transport to the truth z plane. This HDF5 predates those fields; "
+                    "re-run reconstruction with the updated code "
+                    "(pvfit fit --config <your-config.yaml>)."
+                )
 
-    Args:
-        hdf5_path: Path to HDF5 file containing fit results and track data
-        output_dir: Directory for saving plots
-        max_chi2: Maximum chi2 threshold for track-vertex matching
+            def state(name):
+                # Promote saved float32 states before transport and subtraction.
+                return tracks[name][:][indices].astype(np.float64)
 
-    Returns:
-        None: Saves track pull analysis plots to output directory
-    """
-    print("\nStarting input track pull analysis...")
+            matched = owner[indices]
+            target = {
+                name: truth[name][:][matched].astype(np.float64)
+                for name in ("x", "y", "z", "t")
+            }
+            dz = target["z"] - state("z")
+            tx, ty = state("tx"), state("ty")
+            backward = state("backward")
+            time_slope = (
+                np.where(backward, -1.0, 1.0) * np.sqrt(1 + tx**2 + ty**2) / C_MM_PER_NS
+            )
+            residual = np.column_stack(
+                [
+                    state("x") + dz * tx - target["x"],
+                    state("y") + dz * ty - target["y"],
+                    state("t") + dz * time_slope - target["t"],
+                ]
+            )
+            covariance = np.column_stack(
+                [state("cov_xx"), state("cov_yy"), state("cov_tt")]
+            )
+            valid = (
+                np.isfinite(residual).all(axis=1)
+                & np.isfinite(covariance).all(axis=1)
+                & (covariance > 0).all(axis=1)
+                & np.isfinite(dz)
+                & np.isfinite(backward)
+            )
+            counts["n_invalid"] += int((~valid).sum())
+            error = np.sqrt(covariance[valid])
+            residual = residual[valid]
+            scaled = residual / error
+            for column, name in enumerate(("x", "y", "t")):
+                chunks[f"residual_{name}"].append(residual[:, column])
+                chunks[f"error_{name}"].append(error[:, column])
+                chunks[f"pull_{name}"].append(scaled[:, column])
+            chunks["delta_z"].append(dz[valid])
+            chunks["chi2"].append(np.sum(scaled**2, axis=1))
+    return {
+        name: np.concatenate(values) if values else np.empty(0)
+        for name, values in chunks.items()
+    }, counts
 
-    # Initialize storage for pull data
-    pull_data = {
-        "pull_x": [],
-        "pull_y": [],
-        "pull_t": [],
-        "error_x": [],
-        "error_y": [],
-        "error_t": [],
-        "residual_x": [],
-        "residual_y": [],
-        "residual_t": [],
-        "delta_z": [],
+
+def _statistics(values):
+    """Report full-sample statistics, irrespective of plotting limits."""
+    if not len(values):
+        return {"n": 0, "mean": None, "std": None, "central68_half_width": None}
+    low, high = np.quantile(values, [0.16, 0.84])
+    return {
+        "n": len(values),
+        "mean": float(np.mean(values)),
+        "std": float(np.std(values)),
+        "central68_half_width": float((high - low) / 2),
     }
 
-    with h5py.File(hdf5_path, "r") as f:
-        n_events = f.attrs["n_events"]
-        print(f"Processing {n_events} events...")
 
-        for event_id_str in f.keys():
-            event_group = f[event_id_str]
+def analyze_track_pull(hdf5_path, output_dir):
+    """Save truth-plane residual diagnostics and full-sample statistics.
 
-            # Load true vertices
-            true_verts = event_group["true_vertices"]
-            true_x = true_verts["x"][:]
-            true_y = true_verts["y"][:]
-            true_z = true_verts["z"][:]
-            true_t = true_verts["t"][:]
+    Include all key-associated tracks with finite states and positive variances,
+    without a residual chi2 cut. Covariances are not propagated; time transport
+    assumes beta = 1, as in the fitter. Old HDF5 files missing track directions
+    must be regenerated.
 
-            # Load tracks
-            tracks = event_group["tracks"]
-            track_x = tracks["x"][:]
-            track_y = tracks["y"][:]
-            track_z = tracks["z"][:]
-            track_t = tracks["t"][:]
-            track_cov_xx = tracks["cov_xx"][:]
-            track_cov_yy = tracks["cov_yy"][:]
-            track_cov_tt = tracks["cov_tt"][:]
-            track_ovtx_x = tracks["ovtx_x"][:]
-            track_ovtx_y = tracks["ovtx_y"][:]
-            track_ovtx_z = tracks["ovtx_z"][:]
-            track_ovtx_t = tracks["ovtx_t"][:]
-
-            # Process each track
-            for i in range(len(track_x)):
-                # Find matching true vertex by comparing ovtx with true vertices
-                # Use small tolerance for floating point comparison
-                tolerance = 1e-6
-                matched_idx = None
-                for j in range(len(true_x)):
-                    if (
-                        abs(track_ovtx_x[i] - true_x[j]) < tolerance
-                        and abs(track_ovtx_y[i] - true_y[j]) < tolerance
-                        and abs(track_ovtx_z[i] - true_z[j]) < tolerance
-                        and abs(track_ovtx_t[i] - true_t[j]) < tolerance
-                    ):
-                        matched_idx = j
-                        break
-
-                if matched_idx is None:
-                    continue  # Track's ovtx not in true vertex list
-
-                # Calculate residuals
-                res_x = track_x[i] - true_x[matched_idx]
-                res_y = track_y[i] - true_y[matched_idx]
-                res_t = track_t[i] - true_t[matched_idx]
-                delta_z = true_z[matched_idx] - track_z[i]
-
-                # Check covariance validity
-                if (
-                    track_cov_xx[i] <= 0
-                    or track_cov_yy[i] <= 0
-                    or track_cov_tt[i] <= 0
-                    or np.isnan(track_cov_xx[i])
-                    or np.isnan(track_cov_yy[i])
-                    or np.isnan(track_cov_tt[i])
-                ):
-                    continue
-
-                # Calculate errors (square root of covariance)
-                err_x = np.sqrt(track_cov_xx[i])
-                err_y = np.sqrt(track_cov_yy[i])
-                err_t = np.sqrt(track_cov_tt[i])
-
-                # Calculate pulls
-                pull_x = res_x / err_x
-                pull_y = res_y / err_y
-                pull_t = res_t / err_t
-
-                # Calculate chi2 for this track
-                chi2 = pull_x**2 + pull_y**2 + pull_t**2
-
-                # Apply chi2 cut
-                if chi2 > max_chi2:
-                    continue
-
-                # Store results
-                pull_data["pull_x"].append(pull_x)
-                pull_data["pull_y"].append(pull_y)
-                pull_data["pull_t"].append(pull_t)
-                pull_data["error_x"].append(err_x)
-                pull_data["error_y"].append(err_y)
-                pull_data["error_t"].append(err_t)
-                pull_data["residual_x"].append(res_x)
-                pull_data["residual_y"].append(res_y)
-                pull_data["residual_t"].append(res_t)
-                pull_data["delta_z"].append(delta_z)
-
-    # Convert to numpy arrays
-    for key in pull_data:
-        pull_data[key] = np.array(pull_data[key])
-
-    print(f"Collected {len(pull_data['pull_x'])} valid tracks for analysis")
-
-    if len(pull_data["pull_x"]) == 0:
-        print("No valid tracks found for pull analysis")
-        return
-
-    # Create plots
-    _plot_track_pulls(pull_data, output_dir)
-
-    print(f"Track pull analysis complete. Plots saved to {output_dir}/")
-
-
-def _plot_track_pulls(pull_data, output_dir):
-    """Create multi-panel figure showing track pull distributions."""
-
-    # Create combined plot with 3 rows x 4 columns
-    fig, axes = plt.subplots(3, 4, figsize=(20, 15))
-    fig.suptitle("Track-level Analysis: Residuals, Errors, and Pulls", fontsize=16)
-
-    pull_range_min, pull_range_max = -5, 5
-    residual_xy_range = (-0.75, 0.75)
-    residual_t_range = (-0.15, 0.15)
-    delta_z_range = (-5, 5)
-
-    # Filter data within ranges for statistics
-    pull_x_in_range = pull_data["pull_x"][
-        (pull_data["pull_x"] >= pull_range_min)
-        & (pull_data["pull_x"] <= pull_range_max)
-    ]
-    pull_y_in_range = pull_data["pull_y"][
-        (pull_data["pull_y"] >= pull_range_min)
-        & (pull_data["pull_y"] <= pull_range_max)
-    ]
-    pull_t_in_range = pull_data["pull_t"][
-        (pull_data["pull_t"] >= pull_range_min)
-        & (pull_data["pull_t"] <= pull_range_max)
-    ]
-
-    residual_x_in_range = pull_data["residual_x"][
-        (pull_data["residual_x"] >= residual_xy_range[0])
-        & (pull_data["residual_x"] <= residual_xy_range[1])
-    ]
-    residual_y_in_range = pull_data["residual_y"][
-        (pull_data["residual_y"] >= residual_xy_range[0])
-        & (pull_data["residual_y"] <= residual_xy_range[1])
-    ]
-    residual_t_in_range = pull_data["residual_t"][
-        (pull_data["residual_t"] >= residual_t_range[0])
-        & (pull_data["residual_t"] <= residual_t_range[1])
-    ]
-    delta_z_in_range = pull_data["delta_z"][
-        (pull_data["delta_z"] >= delta_z_range[0])
-        & (pull_data["delta_z"] <= delta_z_range[1])
-    ]
-
-    # Row 1: Residual distributions
-    axes[0, 0].hist(
-        pull_data["residual_x"],
-        bins=50,
-        range=residual_xy_range,
-        alpha=0.7,
-        density=True,
+    Returns:
+        dict: Counts and full-sample statistics also written to the JSON summary.
+    """
+    print("\nStarting truth-plane input track residual analysis...")
+    data, counts = _collect_track_pulls(hdf5_path)
+    summary = {
+        "normalization": "Truth-plane residual / reported POCA uncertainty; covariance not propagated",
+        "transport": "Straight line to matched truth z; forward/backward sign; beta = 1",
+        "matching": "Stored key-based true_vertices/track_indices",
+        "statistics_scope": "All finite key-associated tracks, including values outside plot limits",
+        **counts,
+        "n_valid": len(data["chi2"]),
+        "statistics": {name: _statistics(values) for name, values in data.items()},
+    }
+    output = Path(output_dir)
+    output.mkdir(parents=True, exist_ok=True)
+    (output / "pull_analysis_input_track_summary.json").write_text(
+        json.dumps(summary, indent=2, allow_nan=False) + "\n"
     )
-    axes[0, 0].set_xlabel("Residual X")
-    axes[0, 0].set_ylabel("Density")
-    axes[0, 0].set_title(
-        f"Residual X (mean={np.mean(residual_x_in_range):.3f}, std={np.std(residual_x_in_range):.3f})"
-    )
-    axes[0, 0].grid(True, alpha=0.3)
-
-    axes[0, 1].hist(
-        pull_data["residual_y"],
-        bins=50,
-        range=residual_xy_range,
-        alpha=0.7,
-        density=True,
-    )
-    axes[0, 1].set_xlabel("Residual Y")
-    axes[0, 1].set_ylabel("Density")
-    axes[0, 1].set_title(
-        f"Residual Y (mean={np.mean(residual_y_in_range):.3f}, std={np.std(residual_y_in_range):.3f})"
-    )
-    axes[0, 1].grid(True, alpha=0.3)
-
-    axes[0, 2].hist(
-        pull_data["residual_t"],
-        bins=50,
-        range=residual_t_range,
-        alpha=0.7,
-        density=True,
-    )
-    axes[0, 2].set_xlabel("Residual T")
-    axes[0, 2].set_ylabel("Density")
-    axes[0, 2].set_title(
-        f"Residual T (mean={np.mean(residual_t_in_range):.3f}, std={np.std(residual_t_in_range):.3f})"
-    )
-    axes[0, 2].grid(True, alpha=0.3)
-
-    axes[0, 3].hist(
-        pull_data["delta_z"], bins=50, range=delta_z_range, alpha=0.7, density=True
-    )
-    axes[0, 3].set_xlabel("Delta Z")
-    axes[0, 3].set_ylabel("Density")
-    axes[0, 3].set_title(
-        f"Delta Z (mean={np.mean(delta_z_in_range):.3f}, std={np.std(delta_z_in_range):.3f})"
-    )
-    axes[0, 3].grid(True, alpha=0.3)
-
-    # Row 2: Error distributions
-    axes[1, 0].hist(pull_data["error_x"], bins=50, alpha=0.7, density=True)
-    axes[1, 0].set_xlabel("Error X")
-    axes[1, 0].set_ylabel("Density")
-    axes[1, 0].set_title(
-        f"Error X (mean={np.mean(pull_data['error_x']):.3f}, std={np.std(pull_data['error_x']):.3f})"
-    )
-    axes[1, 0].grid(True, alpha=0.3)
-
-    axes[1, 1].hist(pull_data["error_y"], bins=50, alpha=0.7, density=True)
-    axes[1, 1].set_xlabel("Error Y")
-    axes[1, 1].set_ylabel("Density")
-    axes[1, 1].set_title(
-        f"Error Y (mean={np.mean(pull_data['error_y']):.3f}, std={np.std(pull_data['error_y']):.3f})"
-    )
-    axes[1, 1].grid(True, alpha=0.3)
-
-    axes[1, 2].hist(pull_data["error_t"], bins=50, alpha=0.7, density=True)
-    axes[1, 2].set_xlabel("Error T")
-    axes[1, 2].set_ylabel("Density")
-    axes[1, 2].set_title(
-        f"Error T (mean={np.mean(pull_data['error_t']):.3f}, std={np.std(pull_data['error_t']):.3f})"
-    )
-    axes[1, 2].grid(True, alpha=0.3)
-
-    # Empty subplot for row 2, column 4
-    axes[1, 3].axis("off")
-
-    # Row 3: Pull distributions
-    axes[2, 0].hist(
-        pull_data["pull_x"],
-        bins=50,
-        range=(pull_range_min, pull_range_max),
-        alpha=0.7,
-        density=True,
-    )
-    axes[2, 0].set_xlabel("Pull X")
-    axes[2, 0].set_ylabel("Density")
-    axes[2, 0].set_title(
-        f"Pull X (mean={np.mean(pull_x_in_range):.3f}, std={np.std(pull_x_in_range):.3f})"
-    )
-    axes[2, 0].grid(True, alpha=0.3)
-
-    axes[2, 1].hist(
-        pull_data["pull_y"],
-        bins=50,
-        range=(pull_range_min, pull_range_max),
-        alpha=0.7,
-        density=True,
-    )
-    axes[2, 1].set_xlabel("Pull Y")
-    axes[2, 1].set_ylabel("Density")
-    axes[2, 1].set_title(
-        f"Pull Y (mean={np.mean(pull_y_in_range):.3f}, std={np.std(pull_y_in_range):.3f})"
-    )
-    axes[2, 1].grid(True, alpha=0.3)
-
-    axes[2, 2].hist(
-        pull_data["pull_t"],
-        bins=50,
-        range=(pull_range_min, pull_range_max),
-        alpha=0.7,
-        density=True,
-    )
-    axes[2, 2].set_xlabel("Pull T")
-    axes[2, 2].set_ylabel("Density")
-    axes[2, 2].set_title(
-        f"Pull T (mean={np.mean(pull_t_in_range):.3f}, std={np.std(pull_t_in_range):.3f})"
-    )
-    axes[2, 2].grid(True, alpha=0.3)
-
-    # Empty subplot for row 3, column 4
-    axes[2, 3].axis("off")
-
-    plt.tight_layout()
-
-    output_path = Path(output_dir)
-    output_path.mkdir(parents=True, exist_ok=True)
-    plt.savefig(
-        output_path / "pull_analysis_input_track.pdf",
-        format="pdf",
-        dpi=300,
-        bbox_inches="tight",
-    )
-    plt.close()
-
+    _plot_track_pulls(data, output)
     print(
-        f"Track-level analysis plot saved as {output_path / 'pull_analysis_input_track.pdf'}"
+        f"Key-associated: {counts['n_associated']}; invalid: {counts['n_invalid']}; "
+        f"valid: {len(data['chi2'])}"
     )
+    print(f"Track residual plots and summary saved to {output}/")
+    return summary
 
 
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Analyze input track pulls relative to true vertices"
-    )
-    parser.add_argument(
-        "--hdf5_path",
-        type=str,
-        required=True,
-        help="Path to the HDF5 file containing fit results",
-    )
-    parser.add_argument(
-        "--output_dir", type=str, default="output", help="Output directory for plots"
-    )
-    parser.add_argument(
-        "--max_chi2",
-        type=float,
-        default=10,
-        help="Maximum chi2 threshold for track-vertex matching",
+def _plot_track_pulls(data, output_dir):
+    """Show the core, label overflow, and retain tails in the displayed statistics."""
+    fig, axes = plt.subplots(3, 4, figsize=(20, 13), layout="constrained")
+    fig.suptitle(
+        f"Tracks transported to truth z | No residual chi2 cut | N = {len(data['chi2']):,}\n"
+        "Scaled by reported POCA uncertainties (covariance not propagated)",
+        fontsize=15,
     )
 
-    args = parser.parse_args()
+    def histogram(ax, name, label, limits=None):
+        values = data[name]
+        ax.set_xlabel(label)
+        ax.set_ylabel("Probability density")
+        ax.grid(True, alpha=0.25)
+        if not len(values):
+            ax.text(
+                0.5,
+                0.5,
+                "No valid associated tracks",
+                ha="center",
+                transform=ax.transAxes,
+            )
+            return
+        counts, edges = np.histogram(values, bins=60, range=limits)
+        # Normalize by ALL entries, not just entries within the display window.
+        ax.stairs(counts / (len(values) * np.diff(edges)), edges, fill=True, alpha=0.6)
+        stats = _statistics(values)
+        outside = 100 * (1 - counts.sum() / len(values))
+        ax.set_title(
+            f"Mean {stats['mean']:.3g}, std {stats['std']:.3g}, "
+            f"68% half-width {stats['central68_half_width']:.3g}\n"
+            f"Outside display: {outside:.2f}%",
+            fontsize=10,
+        )
+        if limits is not None:
+            ax.set_xlim(limits)
 
-    analyze_track_pull(
-        hdf5_path=args.hdf5_path, output_dir=args.output_dir, max_chi2=args.max_chi2
+    for column, name in enumerate(("x", "y", "t")):
+        unit = "ns" if name == "t" else "mm"
+        limits = (-0.15, 0.15) if name == "t" else (-0.75, 0.75)
+        histogram(
+            axes[0, column],
+            f"residual_{name}",
+            f"Residual {name} at truth z [{unit}]",
+            limits,
+        )
+        histogram(
+            axes[1, column], f"error_{name}", f"Reported POCA sigma({name}) [{unit}]"
+        )
+        histogram(
+            axes[2, column],
+            f"pull_{name}",
+            f"Residual {name} / POCA sigma({name})",
+            (-5, 5),
+        )
+    histogram(axes[0, 3], "delta_z", "Truth z - POCA z [mm]", (-5, 5))
+    histogram(axes[1, 3], "chi2", "Sum of squared scaled residuals", (0, 30))
+    axes[2, 3].axis("off")
+    axes[2, 3].text(
+        0.0,
+        0.9,
+        "Statistics include ALL finite entries,\nincluding tails outside the\n"
+        "displayed ranges.\n\n"
+        "68% half-width = (q84 - q16) / 2.",
+        va="top",
+        fontsize=11,
+        transform=axes[2, 3].transAxes,
     )
+    output = Path(output_dir)
+    output.mkdir(parents=True, exist_ok=True)
+    for extension in ("pdf", "png"):
+        fig.savefig(output / f"pull_analysis_input_track.{extension}", dpi=120)
+    plt.close(fig)

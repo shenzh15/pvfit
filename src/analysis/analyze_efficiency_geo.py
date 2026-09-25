@@ -15,15 +15,15 @@ from .utils import (
 
 def analyze_vertex_efficiency(
     hdf5_path,
-    output_dir="output",
-    m_r=0.8,
-    z_scale=1.5,
-    t_scale=0.06,
-    nsigma=3.0,
-    plot_min_ntracks=4,
-    plot_max_ntracks=200,
-    plot_bin_width_ntracks=5,
-    method_name="PVfit_Geo_Based",
+    output_dir,
+    m_r,
+    z_scale,
+    t_scale,
+    nsigma,
+    plot_min_ntracks,
+    plot_max_ntracks,
+    plot_bin_width_ntracks,
+    method_name,
 ):
     """
     Analyze vertex reconstruction efficiency using geometric (z,t) matching.

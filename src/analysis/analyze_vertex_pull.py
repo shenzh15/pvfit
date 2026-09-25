@@ -10,7 +10,7 @@ from .utils import find_best_match
 
 
 def analyze_vertex_pull(
-    hdf5_path, output_dir="output", recall_threshold=0.7, purity_threshold=0.7
+    hdf5_path, output_dir, recall_threshold, purity_threshold
 ):
     """Analyze fitted vertex pulls by comparing fitted parameters to true vertices.
 
@@ -357,42 +357,4 @@ def _plot_vertex_pulls(pull_data, output_dir):
 
     print(
         f"Fitted vertex pull analysis plot saved as {output_path / 'pull_analysis_fitted_vertex.pdf'}"
-    )
-
-
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Analyze fitted vertex pulls relative to true vertices"
-    )
-    parser.add_argument(
-        "--hdf5_path",
-        type=str,
-        required=True,
-        help="Path to the HDF5 file containing fit results",
-    )
-    parser.add_argument(
-        "--output_dir", type=str, default="output", help="Output directory for plots"
-    )
-    parser.add_argument(
-        "--recall_threshold",
-        type=float,
-        default=0.7,
-        help="Minimum track overlap ratio for matching (true perspective)",
-    )
-    parser.add_argument(
-        "--purity_threshold",
-        type=float,
-        default=0.7,
-        help="Minimum track overlap ratio for matching (rec perspective)",
-    )
-
-    args = parser.parse_args()
-
-    analyze_vertex_pull(
-        hdf5_path=args.hdf5_path,
-        output_dir=args.output_dir,
-        recall_threshold=args.recall_threshold,
-        purity_threshold=args.purity_threshold,
     )

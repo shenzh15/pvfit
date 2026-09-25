@@ -1,5 +1,5 @@
 # =========================
-# Paths (Snakemake-level)
+# Reconstruction input/output (data paths are relative to the working directory)
 # =========================
 paths:
   input_root: "input/key_sample.root"
@@ -14,17 +14,6 @@ paths:
 workflow:
   event_number: -1
   max_workers: 30
-  analyses:
-    - efficiency_track
-    - efficiency_geo
-    - fake_rate_track
-    - fake_rate_geo
-    - merge_rate
-    - split_rate
-    - resolution
-    - plot_histogram
-    - track_pull
-    - vertex_pull
 
 # =========================
 # Algorithm parameters
@@ -58,16 +47,3 @@ algorithm:
   merge_vertices: true  # true: merge close vertices after fitting
   nsigma_merge: 5       # merge threshold: chi2_zt < nsigma^2 = 25 in (z,t) space
 
-  # Matching
-  recall_threshold: 0.7
-  purity_threshold: 0.7
-
-  # Geo Elliptical matching scales in (z, t): sigma_z = z_scale * m_r / 2, sigma_t = t_scale * m_r / 2
-  z_scale: 1.5
-  t_scale: 0.06
-  m_r: 0.8
-  nsigma: 3.0
-
-  plot_event_id: 0
-  draw_fixed_ellipses: false
-  draw_fitted_ellipses: true

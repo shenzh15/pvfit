@@ -1,0 +1,38 @@
+# Evaluation settings only. Supply HDF5 input and output with CLI options.
+# Optional paths.input_hdf5 / paths.output_dir are relative to the working directory.
+analysis:
+  method_name: PVfit
+  analyses:
+    - efficiency_track
+    - efficiency_geo
+    - fake_rate_track
+    - fake_rate_geo
+    - merge_rate
+    - split_rate
+    - resolution
+    - plot_histogram
+    - track_pull
+    - vertex_pull
+
+  # Reconstructed-to-true vertex matching for performance evaluation.
+  recall_threshold: 0.7
+  purity_threshold: 0.7
+  z_scale: 1.5
+  t_scale: 0.06
+  m_r: 0.8
+  nsigma: 3.0
+
+  # Existing vertex-resolution selection; not a track-pull cut.
+  x_residual_range: 0.1  # mm
+  y_residual_range: 0.1  # mm
+  z_residual_range: 0.7  # mm
+  t_residual_range: 0.06 # ns
+
+  # Track-multiplicity binning of the performance plots.
+  plot_min_ntracks: 4
+  plot_max_ntracks: 200
+  plot_bin_width_ntracks: 5
+
+  plot_event_id: 0
+  draw_fixed_ellipses: false
+  draw_fitted_ellipses: true

@@ -17,17 +17,17 @@ from .utils import find_best_match
 
 def analyze_vertex_resolution(
     hdf5_path,
-    output_dir="output",
-    recall_threshold=0.7,
-    purity_threshold=0.7,
-    plot_min_ntracks=4,
-    plot_max_ntracks=200,
-    plot_bin_width_ntracks=5,
-    x_residual_range=0.1,
-    y_residual_range=0.1,
-    z_residual_range=0.7,
-    t_residual_range=0.06,
-    method_name="PVfit_Track_Based",
+    output_dir,
+    recall_threshold,
+    purity_threshold,
+    plot_min_ntracks,
+    plot_max_ntracks,
+    plot_bin_width_ntracks,
+    x_residual_range,
+    y_residual_range,
+    z_residual_range,
+    t_residual_range,
+    method_name,
 ):
     """Analyze vertex position resolution from HDF5 results.
 
@@ -707,96 +707,3 @@ def _save_resolution_to_csv(
         overall_path = output_path / f"resolution_{coord}_overall_{method_slug}.csv"
         summary_df.to_csv(overall_path, index=False)
         print(f"Saved {coord.upper()} overall resolution to: {overall_path}")
-
-
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Analyze vertex position resolution from HDF5 results file"
-    )
-    parser.add_argument(
-        "--hdf5_path",
-        type=str,
-        required=True,
-        help="Path to the HDF5 file containing rec_vertices and true_vertices",
-    )
-    parser.add_argument(
-        "--output_dir",
-        type=str,
-        default="output",
-        help="Output directory for plots and CSV files",
-    )
-    parser.add_argument(
-        "--recall_threshold",
-        type=float,
-        default=0.7,
-        help="Recall threshold for matching (default: 0.7)",
-    )
-    parser.add_argument(
-        "--purity_threshold",
-        type=float,
-        default=0.7,
-        help="Purity threshold for matching (default: 0.7)",
-    )
-    parser.add_argument(
-        "--plot_min_ntracks",
-        type=int,
-        default=4,
-        help="Minimum nTracks for binning/plots",
-    )
-    parser.add_argument(
-        "--plot_max_ntracks",
-        type=int,
-        default=200,
-        help="Maximum nTracks for binning/plots",
-    )
-    parser.add_argument(
-        "--plot_bin_width_ntracks", type=int, default=5, help="Bin width in nTracks"
-    )
-    parser.add_argument(
-        "--x_residual_range",
-        type=float,
-        default=0.1,
-        help="X residual range limit in mm (default: 0.1)",
-    )
-    parser.add_argument(
-        "--y_residual_range",
-        type=float,
-        default=0.1,
-        help="Y residual range limit in mm (default: 0.1)",
-    )
-    parser.add_argument(
-        "--z_residual_range",
-        type=float,
-        default=0.7,
-        help="Z residual range limit in mm (default: 0.7)",
-    )
-    parser.add_argument(
-        "--t_residual_range",
-        type=float,
-        default=0.06,
-        help="T residual range limit in ns (default: 0.06)",
-    )
-    parser.add_argument(
-        "--method_name",
-        type=str,
-        default="PVfit_Track_Based",
-        help="Method name for plots and CSV files",
-    )
-    args = parser.parse_args()
-
-    analyze_vertex_resolution(
-        hdf5_path=args.hdf5_path,
-        output_dir=args.output_dir,
-        recall_threshold=args.recall_threshold,
-        purity_threshold=args.purity_threshold,
-        plot_min_ntracks=args.plot_min_ntracks,
-        plot_max_ntracks=args.plot_max_ntracks,
-        plot_bin_width_ntracks=args.plot_bin_width_ntracks,
-        x_residual_range=args.x_residual_range,
-        y_residual_range=args.y_residual_range,
-        z_residual_range=args.z_residual_range,
-        t_residual_range=args.t_residual_range,
-        method_name=args.method_name,
-    )

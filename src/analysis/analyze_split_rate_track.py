@@ -10,12 +10,12 @@ from .utils import calculate_clopper_pearson_errors
 
 def analyze_vertex_split_rate(
     hdf5_path,
-    output_dir="output",
-    purity_threshold=0.7,
-    plot_min_ntracks=4,
-    plot_max_ntracks=200,
-    plot_bin_width_ntracks=5,
-    method_name="HepATTn",
+    output_dir,
+    purity_threshold,
+    plot_min_ntracks,
+    plot_max_ntracks,
+    plot_bin_width_ntracks,
+    method_name,
 ):
     """Analyze vertex split rate from HDF5 results.
 
@@ -584,61 +584,3 @@ def _save_split_rate_to_csv(
     )
     summary_df.to_csv(summary_path, index=False)
     print(f"Saved overall split-rate statistics to: {summary_path}")
-
-
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Analyze vertex split rate from HDF5 predictions file"
-    )
-    parser.add_argument(
-        "--hdf5_path",
-        type=str,
-        required=True,
-        help="Path to the HDF5 file containing predictions and targets",
-    )
-    parser.add_argument(
-        "--output_dir",
-        type=str,
-        default="output",
-        help="Output directory for plots and CSV files",
-    )
-    parser.add_argument(
-        "--purity_threshold",
-        type=float,
-        default=0.7,
-        help="Purity threshold for split definition",
-    )
-    parser.add_argument(
-        "--plot_min_ntracks",
-        type=int,
-        default=4,
-        help="Minimum nTracks for binning/plots",
-    )
-    parser.add_argument(
-        "--plot_max_ntracks",
-        type=int,
-        default=200,
-        help="Maximum nTracks for binning/plots",
-    )
-    parser.add_argument(
-        "--plot_bin_width_ntracks", type=int, default=5, help="Bin width in nTracks"
-    )
-    parser.add_argument(
-        "--method_name",
-        type=str,
-        default="HepATTn",
-        help="Method name for plots and CSV files",
-    )
-    args = parser.parse_args()
-
-    analyze_vertex_split_rate(
-        hdf5_path=args.hdf5_path,
-        output_dir=args.output_dir,
-        purity_threshold=args.purity_threshold,
-        plot_min_ntracks=args.plot_min_ntracks,
-        plot_max_ntracks=args.plot_max_ntracks,
-        plot_bin_width_ntracks=args.plot_bin_width_ntracks,
-        method_name=args.method_name,
-    )

@@ -12,13 +12,13 @@ from .utils import calculate_clopper_pearson_errors, find_best_match
 
 def analyze_vertex_efficiency(
     hdf5_path,
-    output_dir="output",
-    recall_threshold=0.7,
-    purity_threshold=0.7,
-    plot_min_ntracks=4,
-    plot_max_ntracks=200,
-    plot_bin_width_ntracks=5,
-    method_name="HepATTn",
+    output_dir,
+    recall_threshold,
+    purity_threshold,
+    plot_min_ntracks,
+    plot_max_ntracks,
+    plot_bin_width_ntracks,
+    method_name,
 ):
     """Analyze vertex reconstruction efficiency from HDF5 results.
 
@@ -543,68 +543,3 @@ def _save_efficiency_to_csv(
     overall_path = output_path / f"efficiency_overall_true_binned_{method_slug}.csv"
     summary_df.to_csv(overall_path, index=False)
     print(f"Saved overall efficiency statistics to: {overall_path}")
-
-
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Analyze vertex reconstruction efficiency from HDF5 results file"
-    )
-    parser.add_argument(
-        "--hdf5_path",
-        type=str,
-        required=True,
-        help="Path to the HDF5 file containing rec_vertices and true_vertices",
-    )
-    parser.add_argument(
-        "--output_dir",
-        type=str,
-        default="output",
-        help="Output directory for plots and CSV files",
-    )
-    parser.add_argument(
-        "--recall_threshold",
-        type=float,
-        default=0.7,
-        help="Recall threshold for matching (default: 0.7)",
-    )
-    parser.add_argument(
-        "--purity_threshold",
-        type=float,
-        default=0.7,
-        help="Purity threshold for matching (default: 0.7)",
-    )
-    parser.add_argument(
-        "--plot_min_ntracks",
-        type=int,
-        default=4,
-        help="Minimum nTracks for binning/plots",
-    )
-    parser.add_argument(
-        "--plot_max_ntracks",
-        type=int,
-        default=200,
-        help="Maximum nTracks for binning/plots",
-    )
-    parser.add_argument(
-        "--plot_bin_width_ntracks", type=int, default=5, help="Bin width in nTracks"
-    )
-    parser.add_argument(
-        "--method_name",
-        type=str,
-        default="HepATTn",
-        help="Method name for comparison plots and CSV files",
-    )
-    args = parser.parse_args()
-
-    analyze_vertex_efficiency(
-        hdf5_path=args.hdf5_path,
-        output_dir=args.output_dir,
-        recall_threshold=args.recall_threshold,
-        purity_threshold=args.purity_threshold,
-        plot_min_ntracks=args.plot_min_ntracks,
-        plot_max_ntracks=args.plot_max_ntracks,
-        plot_bin_width_ntracks=args.plot_bin_width_ntracks,
-        method_name=args.method_name,
-    )
