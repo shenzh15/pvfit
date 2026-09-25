@@ -146,18 +146,6 @@ def _add_toy_options(parser):
     )
     parser.add_argument("--seed", type=int, default=20260922, help="Random seed")
     parser.add_argument(
-        "--with-histograms",
-        action="store_true",
-        help="Also store PVfit-made histogram and seed trees in the file",
-    )
-    parser.add_argument(
-        "--config",
-        "-c",
-        type=Path,
-        default=Path("configs/reconstruction.yaml"),
-        help="Reconstruction YAML giving the histogram binning for --with-histograms",
-    )
-    parser.add_argument(
         "--debug", action="store_true", help="Show tracebacks on failure"
     )
 
@@ -281,10 +269,7 @@ def _run_toy(args):
         if args.profile
         else default_profile()
     )
-    params = None
-    if args.with_histograms:
-        params = ReconstructionConfig.from_yaml(args.config).as_params()
-    summary = generate_sample(profile, args.output, args.events, args.seed, params)
+    summary = generate_sample(profile, args.output, args.events, args.seed)
     print(json.dumps(summary, indent=2))
 
 

@@ -359,7 +359,7 @@ def generate_event(rng, profile, event):
     return tracks, vertices
 
 
-def generate_sample(profile, output, events=10, seed=20260922, histogram_params=None):
+def generate_sample(profile, output, events=10, seed=20260922):
     output = Path(output)
     if output.exists() or output.is_symlink():
         raise FileExistsError(
@@ -385,10 +385,6 @@ def generate_sample(profile, output, events=10, seed=20260922, histogram_params=
                 "seed": seed,
                 "events": events,
                 "profile": profile,
-                "histogram_source": "PVfit Python (not Allen)"
-                if histogram_params
-                else None,
-                "histogram_parameters": histogram_params,
             }
         )
         for event in range(events):
@@ -414,55 +410,8 @@ def generate_sample(profile, output, events=10, seed=20260922, histogram_params=
                         "track_keys": "var * int64",
                     },
                 )
-                if histogram_params:
-                    root.mktree(
-                        "pv_beamline_histo/histo_tree",
-                        {
-                            "event_number": "int64",
-                            "z_bin": "float64",
-                            "t_bin": "float64",
-                            "weight": "float64",
-                        },
-                    )
-                    root.mktree(
-                        "pv_beamline_peak/peak_tree",
-                        {
-                            "event_number": "int64",
-                            "z_peak": "float64",
-                            "t_peak": "float64",
-                        },
-                    )
             root["velo_kalman_filter/monitor_tree"].extend(arrays)
             root["mc_pv_dumper/MCPV_effective_tree"].extend(pv_arrays)
-            if histogram_params:
-                from ..fit.seedings_finder import (
-                    fill_histogram_for_seedings,
-                    find_seedings,
-                )
-                from ..fit.truth_matching import select_tracks
-
-                h = fill_histogram_for_seedings(
-                    select_tracks(tracks, histogram_params), histogram_params
-                )
-                iz, it = np.nonzero(h)
-                root["pv_beamline_histo/histo_tree"].extend(
-                    {
-                        "event_number": np.full(len(iz), event, dtype=np.int64),
-                        "z_bin": histogram_params["zmin"]
-                        + (iz + 0.5) * histogram_params["bin_size_z"],
-                        "t_bin": histogram_params["tmin"]
-                        + (it + 0.5) * histogram_params["bin_size_t"],
-                        "weight": h[iz, it],
-                    }
-                )
-                peaks = np.asarray(find_seedings(h, histogram_params)).reshape(-1, 2)
-                root["pv_beamline_peak/peak_tree"].extend(
-                    {
-                        "event_number": np.full(len(peaks), event, dtype=np.int64),
-                        "z_peak": peaks[:, 0],
-                        "t_peak": peaks[:, 1],
-                    }
-                )
             n_tracks += len(tracks)
             n_vertices += len(vertices)
     return {

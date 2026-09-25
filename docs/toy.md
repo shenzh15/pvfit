@@ -13,11 +13,7 @@ uv run pvfit run --config configs/reconstruction.yaml --input input/toy_sample.r
 `pvfit toy` refuses to overwrite an existing file: pass another `--output` and
 give that path to `pvfit run --input`. `--seed` and
 `--events` choose the sample; the default seed is `20260922` and event numbers
-start at zero. `--with-histograms` additionally stores the histogram and seed
-trees PVfit itself computes (`pv_beamline_histo`, `pv_beamline_peak`), in the
-layout the reference samples use for Allen's; they come from the same Python
-code, so agreement with them is a workflow check, not an independent
-validation.
+start at zero.
 
 ## Model
 
@@ -42,7 +38,7 @@ event records. All vertices, tracks and keys are generated afresh from the seed.
   effective-PV lists, not necessarily a fake detector track.
 
 `toy_metadata` in the ROOT file identifies it as `synthetic_parametric_toy`
-and records the model, seed and histogram configuration.
+and records the model and seed.
 
 ## Scope and limitations
 
