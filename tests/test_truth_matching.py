@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 import pandas as pd
 
-from src.fit.truth_matching import build_true_vertex_info, select_tracks
+from pvfit.fit.truth_matching import build_true_vertex_info, select_tracks
 
 
 class TruthMatchingTests(unittest.TestCase):

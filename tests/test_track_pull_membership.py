@@ -10,9 +10,9 @@ import h5py
 import numpy as np
 import pandas as pd
 
-from src.analysis.analyze_track_pull import analyze_track_pull
-from src.fit.save_results_to_hdf5 import save_all_events_to_hdf5
-from src.fit.truth_matching import build_true_vertex_info
+from pvfit.analysis.analyze_track_pull import analyze_track_pull
+from pvfit.fit.save_results_to_hdf5 import save_all_events_to_hdf5
+from pvfit.fit.truth_matching import build_true_vertex_info
 
 
 class TrackPullMembershipTests(unittest.TestCase):
@@ -43,7 +43,7 @@ class TrackPullMembershipTests(unittest.TestCase):
                 tracks[name] = values
 
     def analyze(self):
-        with patch("src.analysis.analyze_track_pull._plot_track_pulls") as plot:
+        with patch("pvfit.analysis.analyze_track_pull._plot_track_pulls") as plot:
             summary = analyze_track_pull(self.path, self.directory.name)
         plot.assert_called_once()
         return summary, plot.call_args.args[0]

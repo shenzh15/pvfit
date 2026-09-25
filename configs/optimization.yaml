@@ -8,7 +8,7 @@ study:
   sampler_seed: 42
 
 execution:
-  backend: pvfit  # reconstruction program each trial runs (src/optimize/backends)
+  backend: pvfit  # reconstruction program each trial runs (pvfit/optimize/backends)
   # Config references are relative to THIS YAML file.
   reconstruction_config: reconstruction.yaml
   analysis_config: analysis.yaml

@@ -38,10 +38,8 @@ dependencies = [
 [project.scripts]
 pvfit = "pvfit.cli:main"
 
-# Keep the current source tree while installing it under the public name pvfit.
 [tool.setuptools]
 packages = ["pvfit", "pvfit.fit", "pvfit.analysis", "pvfit.optimize", "pvfit.optimize.backends"]
-package-dir = {pvfit = "src"}
 
 [project.urls]
 Repository = "https://github.com/OWNER/pvfit"

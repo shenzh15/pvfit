@@ -1,4 +1,3 @@
-# src/fit/event_processing.py
 
 """
 Event-level processing for PVfit (track-based version).

@@ -1,4 +1,3 @@
-# src/fit/run_fit.py
 
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed

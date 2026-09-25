@@ -11,11 +11,11 @@ from unittest.mock import patch
 import optuna
 import yaml
 
-from src.optimize.backends import get_backend
-from src.optimize.config import check_study_configuration, load_optimization_settings
-from src.optimize.constants import AUDIT_SPECS, OBJECTIVE_SPECS, REQUIRED_ANALYSES
-from src.optimize.export import export_results
-from src.optimize.trial import make_objective
+from pvfit.optimize.backends import get_backend
+from pvfit.optimize.config import check_study_configuration, load_optimization_settings
+from pvfit.optimize.constants import AUDIT_SPECS, OBJECTIVE_SPECS, REQUIRED_ANALYSES
+from pvfit.optimize.export import export_results
+from pvfit.optimize.trial import make_objective
 
 
 class OptimizationConfigTests(unittest.TestCase):
@@ -145,7 +145,7 @@ class OptimizationConfigTests(unittest.TestCase):
             search_space=settings["search_space"],
         )
         with patch(
-            "src.optimize.backends.base.subprocess.run", side_effect=execute
+            "pvfit.optimize.backends.base.subprocess.run", side_effect=execute
         ) as run:
             self.assertEqual(objective(trial), (0.5, 0.5, 0.5, 0.5))
         self.assertEqual(run.call_count, 2)

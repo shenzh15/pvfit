@@ -13,8 +13,8 @@ from unittest.mock import patch
 
 import yaml
 
-from src.cli import main, parse_args
-from src.config_loader import AnalysisConfig, ReconstructionConfig
+from pvfit.cli import main, parse_args
+from pvfit.config_loader import AnalysisConfig, ReconstructionConfig
 
 
 class CLITests(unittest.TestCase):
@@ -77,8 +77,8 @@ class CLITests(unittest.TestCase):
 
     def test_analysis_runs_without_config_or_reconstruction(self):
         with (
-            patch("src.cli._run_fit") as fit,
-            patch("src.cli._run_analysis") as analyze,
+            patch("pvfit.cli._run_fit") as fit,
+            patch("pvfit.cli._run_analysis") as analyze,
         ):
             code, _, stderr = self.invoke(
                 [
@@ -109,7 +109,7 @@ class CLITests(unittest.TestCase):
                 }
             }
         )
-        with patch("src.cli._run_analysis") as analyze:
+        with patch("pvfit.cli._run_analysis") as analyze:
             code, _, _ = self.invoke(
                 [
                     "analyze",
@@ -140,7 +140,7 @@ class CLITests(unittest.TestCase):
                 "analysis": {"purity_threshold": 0.9, "analyses": ["efficiency_track"]},
             }
         )
-        with patch("src.cli._run_analysis") as analyze:
+        with patch("pvfit.cli._run_analysis") as analyze:
             code, _, _ = self.invoke(["analyze", "-c", str(self.config)])
         self.assertEqual(code, 0)
         options = analyze.call_args.args[0]
@@ -151,8 +151,8 @@ class CLITests(unittest.TestCase):
     def test_fit_overrides_and_sorted_inputs(self):
         self.write_config(self.fit_config())
         with (
-            patch("src.cli._run_fit", return_value="saved.h5") as fit,
-            patch("src.cli._run_analysis") as analyze,
+            patch("pvfit.cli._run_fit", return_value="saved.h5") as fit,
+            patch("pvfit.cli._run_analysis") as analyze,
         ):
             code, _, _ = self.invoke(
                 [
@@ -180,8 +180,8 @@ class CLITests(unittest.TestCase):
     def test_run_passes_actual_fit_output_to_analysis(self):
         self.write_config(self.fit_config())
         with (
-            patch("src.cli._run_fit", return_value=str(self.input)) as fit,
-            patch("src.cli._run_analysis") as analyze,
+            patch("pvfit.cli._run_fit", return_value=str(self.input)) as fit,
+            patch("pvfit.cli._run_analysis") as analyze,
         ):
             code, _, _ = self.invoke(
                 [
@@ -207,7 +207,7 @@ class CLITests(unittest.TestCase):
         self.analysis_config.write_text(
             yaml.safe_dump({"analysis": {"analyses": ["typo"]}})
         )
-        with patch("src.cli._run_fit") as fit:
+        with patch("pvfit.cli._run_fit") as fit:
             code, _, stderr = self.invoke(
                 [
                     "run",
@@ -246,7 +246,7 @@ class CLITests(unittest.TestCase):
         config = self.fit_config()
         config["workflow"]["max_workers"] = 0
         self.write_config(config)
-        with patch("src.cli._run_fit") as fit:
+        with patch("pvfit.cli._run_fit") as fit:
             code, _, stderr = self.invoke(["fit", "-c", str(self.config)])
         self.assertEqual(code, 2)
         self.assertIn("positive integer", stderr)
@@ -257,7 +257,7 @@ class CLITests(unittest.TestCase):
         marker = self.output / "analysis.done"
         marker.touch()
         with patch(
-            "src.cli._run_analysis", side_effect=RuntimeError("cannot read result")
+            "pvfit.cli._run_analysis", side_effect=RuntimeError("cannot read result")
         ):
             code, _, stderr = self.invoke(
                 ["analyze", "--input", str(self.input), "--output", str(self.output)]
@@ -267,7 +267,7 @@ class CLITests(unittest.TestCase):
         self.assertFalse(marker.exists())
 
     def test_debug_retains_traceback(self):
-        with patch("src.cli._run_analysis", side_effect=RuntimeError("test failure")):
+        with patch("pvfit.cli._run_analysis", side_effect=RuntimeError("test failure")):
             with self.assertRaisesRegex(RuntimeError, "test failure"):
                 self.invoke(
                     [
@@ -295,8 +295,8 @@ class CLITests(unittest.TestCase):
             )
         )
         with (
-            patch("src.cli._run_fit", return_value=str(self.input)) as fit,
-            patch("src.cli._run_analysis") as analyze,
+            patch("pvfit.cli._run_fit", return_value=str(self.input)) as fit,
+            patch("pvfit.cli._run_analysis") as analyze,
         ):
             code, _, _ = self.invoke(
                 [
@@ -318,7 +318,7 @@ class CLITests(unittest.TestCase):
     def test_fit_does_not_load_analysis_configuration(self):
         self.write_config(self.fit_config())
         self.analysis_config.unlink()
-        with patch("src.cli._run_fit", return_value=str(self.input)) as fit:
+        with patch("pvfit.cli._run_fit", return_value=str(self.input)) as fit:
             code, _, _ = self.invoke(["fit", "-c", str(self.config)])
         self.assertEqual(code, 0)
         fit.assert_called_once()
@@ -326,7 +326,7 @@ class CLITests(unittest.TestCase):
     def test_run_rejects_missing_analysis_config_before_fitting(self):
         self.write_config(self.fit_config())
         self.analysis_config.unlink()
-        with patch("src.cli._run_fit") as fit:
+        with patch("pvfit.cli._run_fit") as fit:
             code, _, _ = self.invoke(
                 [
                     "run",
@@ -341,7 +341,7 @@ class CLITests(unittest.TestCase):
 
     def test_analysis_rejects_reconstruction_yaml(self):
         self.write_config(self.fit_config())
-        with patch("src.cli._run_analysis") as analyze:
+        with patch("pvfit.cli._run_analysis") as analyze:
             code, _, stderr = self.invoke(
                 ["analyze", "--input", str(self.input), "-c", str(self.config)]
             )
@@ -379,7 +379,7 @@ class CLITests(unittest.TestCase):
             [
                 sys.executable,
                 "-c",
-                'import sys,json; import src.cli; print(json.dumps([m for m in sys.modules if m.startswith(("src.fit", "src.analysis", "src.optimize", "matplotlib", "optuna"))]))',
+                'import sys,json; import pvfit.cli; print(json.dumps([m for m in sys.modules if m.startswith(("pvfit.fit", "pvfit.analysis", "pvfit.optimize", "matplotlib", "optuna"))]))',
             ],
             cwd=Path(__file__).parents[1],
             capture_output=True,

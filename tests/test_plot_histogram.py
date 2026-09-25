@@ -8,9 +8,9 @@ import h5py
 import numpy as np
 import pandas as pd
 
-from src.analysis.plot_histogram import load_event_histogram, plot_event_histogram
-from src.config_loader import AnalysisConfig
-from src.fit.save_results_to_hdf5 import save_all_events_to_hdf5
+from pvfit.analysis.plot_histogram import load_event_histogram, plot_event_histogram
+from pvfit.config_loader import AnalysisConfig
+from pvfit.fit.save_results_to_hdf5 import save_all_events_to_hdf5
 
 
 class PlotHistogramTests(unittest.TestCase):

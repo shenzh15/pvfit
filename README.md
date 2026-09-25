@@ -223,10 +223,10 @@ The following `paths`, `workflow` and `algorithm` sections belong to
 > `bin_size_z = 0.5` mm and `bin_size_t = 0.025` ns (that is, `z: 800` bins over
 > `[-200, 200]` and `t: 56` bins over `[-0.6, 0.8]`), so that a peak threshold
 > stays physically comparable when the binning changes. At the reference binning
-> the factor is exactly 1. See `src/config_loader.py`.
+> the factor is exactly 1. See `pvfit/config_loader.py`.
 
 Both files are read into a dataclass (`ReconstructionConfig`, `AnalysisConfig` in
-`src/config_loader.py`) that holds every default and derived value in one place.
+`pvfit/config_loader.py`) that holds every default and derived value in one place.
 A key the dataclass does not know is an error, not a silent no-op, so typos are
 caught before anything runs.
 
@@ -391,7 +391,7 @@ Eight parameters are varied together: `minTracks`, `smear_window_size`, `bins_z`
 Their bounds, steps and types are in `search_space`.
 
 `execution.backend` names the reconstruction program each trial runs. A backend
-(`src/optimize/backends/`) turns the sampled parameters into that program's
+(`pvfit/optimize/backends/`) turns the sampled parameters into that program's
 configuration and produces an HDF5 file in the PVFit layout; the trial then
 scores it with `pvfit analyze`, so every backend is evaluated by the same code.
 `pvfit` is the only backend today. Adding one (for example a GPU reconstruction)
@@ -432,7 +432,7 @@ analysis configuration retains its thresholds and runs the four required metric
 modules.
 
 `analysis_optuna.ipynb` is a notebook for inspecting those results; it builds on
-the helpers in `src/optimize/analysis.py`. Notebook outputs are stripped in the
+the helpers in `pvfit/optimize/analysis.py`. Notebook outputs are stripped in the
 repository — run the cells yourself.
 
 ## Layout
@@ -446,7 +446,7 @@ pvfit/
 │   ├── analysis.yaml       # independent evaluation and plots
 │   └── optimization.yaml   # study, search space and stage config references
 ├── Snakefile                # fit -> analysis workflow
-├── src/
+├── pvfit/
 │   ├── cli.py               # fit / analyze / run commands
 │   ├── __main__.py          # python -m pvfit forwards to the same CLI
 │   ├── config_loader.py     # config parsing and derived parameters
@@ -460,7 +460,7 @@ pvfit/
 ## Derivations
 
 `docs/derivations/` records the math the implementation rests on. These are
-reference material, not part of the pipeline, and nothing in `src/` imports them.
+reference material, not part of the pipeline, and nothing in `pvfit/` imports them.
 
 | File                                 | Topic                                                                |
 | ------------------------------------ | -------------------------------------------------------------------- |
