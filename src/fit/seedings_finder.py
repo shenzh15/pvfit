@@ -103,22 +103,22 @@ def fill_histogram_for_seedings(event_data, params):
     bin_size_z = params["bin_size_z"]
     bin_size_t = params["bin_size_t"]
     smear_window_size = params["smear_window_size"]
-    beamline_chi2_cut = params.get("beamline_chi2_cut", False)
-    max_track_bl_chi2 = params.get("max_track_bl_chi2", 10.0)
-    z0_err_cut = params.get("z0_err_cut", False)
-    pp_max_track_z0_err = params.get("pp_max_track_z0_err", 1.5)
+    beamline_chi2_cut = params["beamline_chi2_cut"]
+    max_track_bl_chi2 = params["max_track_bl_chi2"]
+    z0_err_cut = params["z0_err_cut"]
+    pp_max_track_z0_err = params["pp_max_track_z0_err"]
 
-    # Get data
-    z = event_data["beamPOCA_z"]
-    t = event_data["beamPOCA_t"]
-    W_00 = 1.0 / event_data["c00"]
-    W_11 = 1.0 / event_data["c11"]
-    c55 = event_data["c55"]
-    tx = event_data["beamPOCA_tx"]
-    ty = event_data["beamPOCA_ty"]
+    # Track columns as positional arrays (original dtypes kept)
+    z = event_data["beamPOCA_z"].to_numpy()
+    t = event_data["beamPOCA_t"].to_numpy()
+    W_00 = (1.0 / event_data["c00"]).to_numpy()
+    W_11 = (1.0 / event_data["c11"]).to_numpy()
+    c55 = event_data["c55"].to_numpy()
+    tx = event_data["beamPOCA_tx"].to_numpy()
+    ty = event_data["beamPOCA_ty"].to_numpy()
     if beamline_chi2_cut:
-        x = event_data["beamPOCA_x"]
-        y = event_data["beamPOCA_y"]
+        x = event_data["beamPOCA_x"].to_numpy()
+        y = event_data["beamPOCA_y"].to_numpy()
 
     # Create histogram
     H = np.zeros((Nbins_z, Nbins_t))
@@ -126,21 +126,21 @@ def fill_histogram_for_seedings(event_data, params):
     for i in range(len(z)):
         # Optional beamline chi2 cut to filter tracks far from beamline
         if beamline_chi2_cut:
-            blchi2 = x.iloc[i] ** 2 * W_00.iloc[i] + y.iloc[i] ** 2 * W_11.iloc[i]
+            blchi2 = x[i] ** 2 * W_00[i] + y[i] ** 2 * W_11[i]
             if blchi2 >= max_track_bl_chi2:
                 continue
 
-        zbin = (z.iloc[i] - zmin) / bin_size_z
-        tbin = (t.iloc[i] - tmin) / bin_size_t
+        zbin = (z[i] - zmin) / bin_size_z
+        tbin = (t[i] - tmin) / bin_size_t
 
         # Debug: check for problematic values
-        weight_term = W_00.iloc[i] * tx.iloc[i] ** 2 + W_11.iloc[i] * ty.iloc[i] ** 2
+        weight_term = W_00[i] * tx[i] ** 2 + W_11[i] * ty[i] ** 2
         if weight_term <= 0:
             print(f"Warning: Non-positive weight term at index {i}: {weight_term}")
             continue
 
         zerr = 1 / np.sqrt(weight_term)
-        terr = np.sqrt(c55.iloc[i])
+        terr = np.sqrt(c55[i])
 
         if z0_err_cut and zerr >= pp_max_track_z0_err:
             continue
@@ -154,7 +154,7 @@ def fill_histogram_for_seedings(event_data, params):
         # calculate the integral of the gaussian function for z
         cache_integral_z_list = []
         for zBinp in range(minbin_z, maxbin_z + 1):
-            renorm_z = (zmin + (zBinp) * bin_size_z - z.iloc[i]) / zerr
+            renorm_z = (zmin + (zBinp) * bin_size_z - z[i]) / zerr
             this_integral_z = gauss_integral(renorm_z)
             cache_integral_z_list.append(this_integral_z)
         cache_integral_z_diffs = []
@@ -165,7 +165,7 @@ def fill_histogram_for_seedings(event_data, params):
         # calculate the integral of the gaussian function for t
         cache_integral_t_list = []
         for tBinp in range(minbin_t, maxbin_t + 1):
-            renorm_t = (tmin + (tBinp) * bin_size_t - t.iloc[i]) / terr
+            renorm_t = (tmin + (tBinp) * bin_size_t - t[i]) / terr
             this_integral_t = gauss_integral(renorm_t)
             cache_integral_t_list.append(this_integral_t)
         cache_integral_t_diffs = []

@@ -1,31 +1,49 @@
 """
 vertex_fitter.py - Vertex fitting functions for PVfit
+
+The loops and formulas mirror the GPU implementation on purpose (including the
+closed-form 4x4 inverse). Track columns are read once into numpy arrays and
+indexed positionally; every arithmetic step is the same as before.
 """
 
 import numpy as np
-import pandas as pd
 
 from .utils import getTukeyWeight
 
+# Track columns the fit reads, keyed by the short names used in the formulas.
+_TRACK_COLUMNS = {
+    "backward": "backward",
+    "tx": "beamPOCA_tx",
+    "ty": "beamPOCA_ty",
+    "z": "beamPOCA_z",
+    "x": "beamPOCA_x",
+    "y": "beamPOCA_y",
+    "t": "beamPOCA_t",
+    "c00": "c00",
+    "c11": "c11",
+    "c55": "c55",
+}
+_CACHE_KEYS = (
+    "HWH00_cache",
+    "HWH11_cache",
+    "HWH22_cache",
+    "HWH02_cache",
+    "HWH12_cache",
+    "HWH23_cache",
+    "HWH33_cache",
+)
 
-def extract_track_info_for_chi2(event_data, track_index):
-    """Extract track parameters and covariance elements for chi2 calculation."""
+
+def track_arrays(event_data):
+    """Positional numpy views of the track columns, original dtypes kept."""
     return {
-        "backward": event_data["backward"].iloc[track_index],
-        "tx": event_data["beamPOCA_tx"].iloc[track_index],
-        "ty": event_data["beamPOCA_ty"].iloc[track_index],
-        "z": event_data["beamPOCA_z"].iloc[track_index],
-        "x": event_data["beamPOCA_x"].iloc[track_index],
-        "y": event_data["beamPOCA_y"].iloc[track_index],
-        "t": event_data["beamPOCA_t"].iloc[track_index],
-        "c00": event_data["c00"].iloc[track_index],
-        "c22": event_data["c22"].iloc[track_index],
-        "c20": event_data["c20"].iloc[track_index],
-        "c11": event_data["c11"].iloc[track_index],
-        "c33": event_data["c33"].iloc[track_index],
-        "c31": event_data["c31"].iloc[track_index],
-        "c55": event_data["c55"].iloc[track_index],
+        name: event_data[column].to_numpy() for name, column in _TRACK_COLUMNS.items()
     }
+
+
+def extract_track_info_for_chi2(tracks, track_index):
+    """Track parameters and covariance elements of one track, for chi2."""
+    return {name: values[track_index] for name, values in tracks.items()}
 
 
 def calculate_track_vertex_chi2(track_info, vertex_info):
@@ -48,11 +66,7 @@ def calculate_track_vertex_chi2(track_info, vertex_info):
     track_y = track_info["y"]
     track_t = track_info["t"]
     c00 = track_info["c00"]  # x_x covariance
-    # c22 = track_info['c22'] # tx_tx covariance
-    # c20 = track_info['c20'] # tx_x covariance
     c11 = track_info["c11"]  # y_y covariance
-    # c33 = track_info['c33'] # ty_ty covariance
-    # c31 = track_info['c31'] # ty_y covariance
     c55 = track_info["c55"]  # t_t covariance
 
     vertex_rec_z = vertex_info["rec_z"]
@@ -70,12 +84,8 @@ def calculate_track_vertex_chi2(track_info, vertex_info):
     res_y = track_y - vertex_rec_y + delta_z * ty
     res_t = track_t - vertex_rec_t + delta_z * tb_tmp
 
-    # Calculate track covariances
-    # Switch 1: extrapolate the error to the vertex
-    # Track_cov_xx = c00 + delta_z**2 * c22 + 2 * delta_z * c20
-    # Track_cov_yy = c11 + delta_z**2 * c33 + 2 * delta_z * c31
-    # Track_cov_tt = c55
-    # Switch 2: not extrapolate the error to the vertex
+    # Track covariances are not extrapolated to the vertex (the GPU code's
+    # "switch 2"); c22/c20/c33/c31 would enter here otherwise.
     Track_cov_xx = c00
     Track_cov_yy = c11
     Track_cov_tt = c55
@@ -97,124 +107,83 @@ def calculate_track_vertex_chi2(track_info, vertex_info):
     }
 
 
-def _assign_track_to_closest_vertex(
-    event_data_selected, i, vertex_rec_info, max_chi2, cache
-):
+def _new_cache(n_tracks):
+    cache = {"trackvtxchi2_cache": np.full(n_tracks, np.inf)}
+    for key in _CACHE_KEYS:
+        cache[key] = np.zeros(n_tracks)
+    return cache
+
+
+def _fill_cache(cache, tracks, i, result):
+    """Store the chi2 and the HWH matrix elements of track i."""
+    tb_tmp = result["tb_tmp"]
+    c00, c11, c55 = tracks["c00"][i], tracks["c11"][i], tracks["c55"][i]
+    tx, ty = tracks["tx"][i], tracks["ty"][i]
+    cache["trackvtxchi2_cache"][i] = result["chi2"]
+    cache["HWH00_cache"][i] = 1 / c00
+    cache["HWH11_cache"][i] = 1 / c11
+    cache["HWH22_cache"][i] = tx**2 / c00 + ty**2 / c11 + tb_tmp**2 / c55
+    cache["HWH02_cache"][i] = -tx / c00
+    cache["HWH12_cache"][i] = -ty / c11
+    cache["HWH23_cache"][i] = -tb_tmp / c55
+    cache["HWH33_cache"][i] = 1 / c55
+
+
+def _assign_track_to_closest_vertex(tracks, i, vertex_rec_info, max_chi2, cache):
     """Find closest vertex for track i, assign it, and update cache.
 
     Returns True if the track was assigned, False otherwise.
     """
-    c00 = event_data_selected["c00"]
-    c11 = event_data_selected["c11"]
-    c55 = event_data_selected["c55"]
-    tx = event_data_selected["beamPOCA_tx"]
-    ty = event_data_selected["beamPOCA_ty"]
-
-    if c00.iloc[i] <= 0 or c11.iloc[i] <= 0 or c55.iloc[i] <= 0:
+    c00, c11, c55 = tracks["c00"][i], tracks["c11"][i], tracks["c55"][i]
+    if c00 <= 0 or c11 <= 0 or c55 <= 0:
         print(
-            f"Warning: Non-positive covariance at index {i}: c00={c00.iloc[i]}, c11={c11.iloc[i]}, c55={c55.iloc[i]}"
+            f"Warning: Non-positive covariance at index {i}: c00={c00}, c11={c11}, c55={c55}"
         )
         return False
 
-    vertex_index_closest = None
+    track_info = extract_track_info_for_chi2(tracks, i)
+    vertex_closest = None
+    result_closest = None
     trackvtxchi2_min = max_chi2
 
     for vertex in vertex_rec_info:
-        track_info = extract_track_info_for_chi2(event_data_selected, i)
         result = calculate_track_vertex_chi2(track_info, vertex)
         if result["chi2"] < trackvtxchi2_min:
             trackvtxchi2_min = result["chi2"]
-            vertex_index_closest = vertex["rec_vertex_id"]
+            vertex_closest = vertex
+            result_closest = result
 
-    if vertex_index_closest is None:
+    if vertex_closest is None:
         return False
 
-    for vertex in vertex_rec_info:
-        if vertex["rec_vertex_id"] == vertex_index_closest:
-            vertex["track_index"].append(i)
-            track_info = extract_track_info_for_chi2(event_data_selected, i)
-            result = calculate_track_vertex_chi2(track_info, vertex)
-            cache["trackvtxchi2_cache"].iloc[i] = result["chi2"]
-            tb_tmp = result["tb_tmp"]
-            cache["HWH00_cache"].iloc[i] = 1 / c00.iloc[i]
-            cache["HWH11_cache"].iloc[i] = 1 / c11.iloc[i]
-            cache["HWH22_cache"].iloc[i] = (
-                tx.iloc[i] ** 2 / c00.iloc[i]
-                + ty.iloc[i] ** 2 / c11.iloc[i]
-                + tb_tmp**2 / c55.iloc[i]
-            )
-            cache["HWH02_cache"].iloc[i] = -tx.iloc[i] / c00.iloc[i]
-            cache["HWH12_cache"].iloc[i] = -ty.iloc[i] / c11.iloc[i]
-            cache["HWH23_cache"].iloc[i] = -tb_tmp / c55.iloc[i]
-            cache["HWH33_cache"].iloc[i] = 1 / c55.iloc[i]
-            break
-
+    vertex_closest["track_index"].append(i)
+    _fill_cache(cache, tracks, i, result_closest)
     return True
 
 
-def _build_cache_for_vertex(event_data_selected, vertex):
+def _build_cache_for_vertex(tracks, vertex):
     """Build HWH cache for a single vertex using its existing track_index.
 
     Unlike assign_tracks_to_vertices, this does NOT re-assign tracks.
     It only computes the cached matrix elements needed by fit_vertices.
-
-    Args:
-        event_data_selected: DataFrame with filtered track data
-        vertex: vertex dict with 'track_index' already set
-
-    Returns:
-        dict: Cache containing chi2 values and HWH matrices
     """
-    z = event_data_selected["beamPOCA_z"]
-    c00 = event_data_selected["c00"]
-    c11 = event_data_selected["c11"]
-    c55 = event_data_selected["c55"]
-    tx = event_data_selected["beamPOCA_tx"]
-    ty = event_data_selected["beamPOCA_ty"]
-
-    cache = {
-        "trackvtxchi2_cache": pd.Series(np.full(len(z), np.inf), index=z.index),
-        "HWH00_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH11_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH22_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH02_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH12_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH23_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH33_cache": pd.Series(np.zeros(len(z)), index=z.index),
-    }
-
+    cache = _new_cache(len(tracks["z"]))
     for i in vertex["track_index"]:
-        if c00.iloc[i] <= 0 or c11.iloc[i] <= 0 or c55.iloc[i] <= 0:
+        if tracks["c00"][i] <= 0 or tracks["c11"][i] <= 0 or tracks["c55"][i] <= 0:
             continue
-
-        track_info = extract_track_info_for_chi2(event_data_selected, i)
-        result = calculate_track_vertex_chi2(track_info, vertex)
-        tb_tmp = result["tb_tmp"]
-
-        cache["trackvtxchi2_cache"].iloc[i] = result["chi2"]
-        cache["HWH00_cache"].iloc[i] = 1 / c00.iloc[i]
-        cache["HWH11_cache"].iloc[i] = 1 / c11.iloc[i]
-        cache["HWH22_cache"].iloc[i] = (
-            tx.iloc[i] ** 2 / c00.iloc[i]
-            + ty.iloc[i] ** 2 / c11.iloc[i]
-            + tb_tmp**2 / c55.iloc[i]
-        )
-        cache["HWH02_cache"].iloc[i] = -tx.iloc[i] / c00.iloc[i]
-        cache["HWH12_cache"].iloc[i] = -ty.iloc[i] / c11.iloc[i]
-        cache["HWH23_cache"].iloc[i] = -tb_tmp / c55.iloc[i]
-        cache["HWH33_cache"].iloc[i] = 1 / c55.iloc[i]
-
+        track_info = extract_track_info_for_chi2(tracks, i)
+        _fill_cache(cache, tracks, i, calculate_track_vertex_chi2(track_info, vertex))
     return cache
 
 
 def assign_tracks_to_vertices(
-    event_data_selected, vertex_rec_info, max_chi2=10, drop_low_track_seeds=True
+    tracks, vertex_rec_info, max_chi2=10, drop_low_track_seeds=True
 ):
     """
     Assign tracks to closest vertices using chi2 distance.
 
     Args:
-        event_data_selected: DataFrame with filtered track data
+        tracks: track arrays from track_arrays()
         vertex_rec_info: List of reconstructed vertex dictionaries
         max_chi2: Maximum chi2 threshold for track-vertex matching
         drop_low_track_seeds: If True, remove seeds with < 4 tracks and reassign
@@ -223,25 +192,12 @@ def assign_tracks_to_vertices(
     Returns:
         dict: Cache containing chi2 values and HWH matrices for fitting
     """
-    z = event_data_selected["beamPOCA_z"]
-
-    # Initialize cache
-    cache = {
-        "trackvtxchi2_cache": pd.Series(np.full(len(z), np.inf), index=z.index),
-        "HWH00_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH11_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH22_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH02_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH12_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH23_cache": pd.Series(np.zeros(len(z)), index=z.index),
-        "HWH33_cache": pd.Series(np.zeros(len(z)), index=z.index),
-    }
+    n_tracks = len(tracks["z"])
+    cache = _new_cache(n_tracks)
 
     # Initial track-to-vertex assignment
-    for i in range(len(z)):
-        _assign_track_to_closest_vertex(
-            event_data_selected, i, vertex_rec_info, max_chi2, cache
-        )
+    for i in range(n_tracks):
+        _assign_track_to_closest_vertex(tracks, i, vertex_rec_info, max_chi2, cache)
 
     # Remove vertices with < 4 tracks, reassign orphaned tracks
     if drop_low_track_seeds:
@@ -253,29 +209,21 @@ def assign_tracks_to_vertices(
 
         # Clear cache and reassign orphaned tracks to remaining vertices
         for i in orphaned_tracks:
-            cache["trackvtxchi2_cache"].iloc[i] = np.inf
-            for key in (
-                "HWH00_cache",
-                "HWH11_cache",
-                "HWH22_cache",
-                "HWH02_cache",
-                "HWH12_cache",
-                "HWH23_cache",
-                "HWH33_cache",
-            ):
-                cache[key].iloc[i] = 0
+            cache["trackvtxchi2_cache"][i] = np.inf
+            for key in _CACHE_KEYS:
+                cache[key][i] = 0
 
         if vertex_rec_info:
             for i in orphaned_tracks:
                 _assign_track_to_closest_vertex(
-                    event_data_selected, i, vertex_rec_info, max_chi2, cache
+                    tracks, i, vertex_rec_info, max_chi2, cache
                 )
 
     return cache
 
 
 def fit_vertices(
-    event_data_selected,
+    tracks,
     vertex_rec_info,
     cache_data,
     max_chi2=10,
@@ -285,7 +233,7 @@ def fit_vertices(
     Fit vertex parameters using assigned tracks with Tukey reweighting.
 
     Args:
-        event_data_selected: DataFrame with filtered track data
+        tracks: track arrays from track_arrays()
         vertex_rec_info: List of reconstructed vertex dictionaries
         cache_data: Dictionary with cached chi2 values and HWH matrices
         max_chi2: Maximum chi2 threshold for Tukey weight
@@ -295,7 +243,6 @@ def fit_vertices(
     Returns:
         None: Modifies vertex_rec_info in-place with fitted parameters
     """
-    # Extract cached data from dictionary
     trackvtxchi2_cache = cache_data["trackvtxchi2_cache"]
     HWH00_cache = cache_data["HWH00_cache"]
     HWH11_cache = cache_data["HWH11_cache"]
@@ -305,12 +252,11 @@ def fit_vertices(
     HWH23_cache = cache_data["HWH23_cache"]
     HWH33_cache = cache_data["HWH33_cache"]
 
-    # Get event data columns (needed for fit_vertices function)
-    c00 = event_data_selected["c00"]
-    c11 = event_data_selected["c11"]
-    c55 = event_data_selected["c55"]
-    tx = event_data_selected["beamPOCA_tx"]
-    ty = event_data_selected["beamPOCA_ty"]
+    c00 = tracks["c00"]
+    c11 = tracks["c11"]
+    c55 = tracks["c55"]
+    tx = tracks["tx"]
+    ty = tracks["ty"]
 
     for vertex in vertex_rec_info:
         Params_rec_x = vertex["rec_x"]  # Initial values
@@ -327,6 +273,7 @@ def fit_vertices(
         Iter = 0
         maxDeltaZ = 0.0005
         converged = False
+        cov_00 = cov_11 = cov_22 = cov_33 = None
 
         # Iterative fitting
         while Iter < minIter or (Iter < maxIter and (not converged)):
@@ -344,44 +291,42 @@ def fit_vertices(
             halfDChi2DX_3 = 0
             totol_chi2 = 0
 
+            vertex_data = {
+                "rec_z": Params_rec_z,
+                "rec_x": Params_rec_x,
+                "rec_y": Params_rec_y,
+                "rec_t": Params_rec_t,
+            }
             for i in vertex[
                 "track_index"
             ]:  # Loop over all tracks assigned to the vertex
-                track_data = extract_track_info_for_chi2(event_data_selected, i)
-                vertex_data = {
-                    "rec_z": Params_rec_z,
-                    "rec_x": Params_rec_x,
-                    "rec_y": Params_rec_y,
-                    "rec_t": Params_rec_t,
-                }
+                track_data = extract_track_info_for_chi2(tracks, i)
                 result = calculate_track_vertex_chi2(track_data, vertex_data)
 
                 if is_adaptive_tukey:
                     weight = getTukeyWeight(result["chi2"], max_chi2=max_chi2)
                 else:
-                    weight = getTukeyWeight(
-                        trackvtxchi2_cache.iloc[i], max_chi2=max_chi2
-                    )
+                    weight = getTukeyWeight(trackvtxchi2_cache[i], max_chi2=max_chi2)
                 sum_weight += weight
                 totol_chi2 += weight * result["chi2"]
 
-                halfD2Chi2DX2_00 += weight * HWH00_cache.iloc[i]
-                halfD2Chi2DX2_02 += weight * HWH02_cache.iloc[i]
-                halfD2Chi2DX2_11 += weight * HWH11_cache.iloc[i]
-                halfD2Chi2DX2_12 += weight * HWH12_cache.iloc[i]
-                halfD2Chi2DX2_22 += weight * HWH22_cache.iloc[i]
-                halfD2Chi2DX2_23 += weight * HWH23_cache.iloc[i]
-                halfD2Chi2DX2_33 += weight * HWH33_cache.iloc[i]
+                halfD2Chi2DX2_00 += weight * HWH00_cache[i]
+                halfD2Chi2DX2_02 += weight * HWH02_cache[i]
+                halfD2Chi2DX2_11 += weight * HWH11_cache[i]
+                halfD2Chi2DX2_12 += weight * HWH12_cache[i]
+                halfD2Chi2DX2_22 += weight * HWH22_cache[i]
+                halfD2Chi2DX2_23 += weight * HWH23_cache[i]
+                halfD2Chi2DX2_33 += weight * HWH33_cache[i]
 
                 # Calculate gradient
-                halfDChi2DX_0 += weight * (-result["res_x"] / c00.iloc[i])
-                halfDChi2DX_1 += weight * (-result["res_y"] / c11.iloc[i])
+                halfDChi2DX_0 += weight * (-result["res_x"] / c00[i])
+                halfDChi2DX_1 += weight * (-result["res_y"] / c11[i])
                 halfDChi2DX_2 += weight * (
-                    result["res_y"] * ty.iloc[i] / c11.iloc[i]
-                    + result["res_x"] * tx.iloc[i] / c00.iloc[i]
-                    + result["res_t"] * result["tb_tmp"] / c55.iloc[i]
+                    result["res_y"] * ty[i] / c11[i]
+                    + result["res_x"] * tx[i] / c00[i]
+                    + result["res_t"] * result["tb_tmp"] / c55[i]
                 )
-                halfDChi2DX_3 += weight * (-result["res_t"] / c55.iloc[i])
+                halfDChi2DX_3 += weight * (-result["res_t"] / c55[i])
 
             # Matrix inversion
             a00 = halfD2Chi2DX2_00
@@ -443,6 +388,10 @@ def fit_vertices(
             converged = abs(delta_z) < maxDeltaZ
             Iter += 1
 
+        if cov_00 is None:
+            # Singular on the first iteration: no fit result for this seed.
+            continue
+
         # Save fitted parameters
         vertex["Params_rec_x"] = Params_rec_x
         vertex["Params_rec_y"] = Params_rec_y
@@ -475,16 +424,15 @@ def fit_reconstructed_vertices(
     Returns:
         None: Modifies vertex_rec_info in-place with fitted parameters
     """
+    tracks = track_arrays(event_data_selected)
 
     # Step 1: Assign tracks to vertices, we cache some data here for fitting
     cache_data = assign_tracks_to_vertices(
-        event_data_selected, vertex_rec_info, max_chi2, drop_low_track_seeds
+        tracks, vertex_rec_info, max_chi2, drop_low_track_seeds
     )
 
     # Step 2: Fit vertices
-    fit_vertices(
-        event_data_selected, vertex_rec_info, cache_data, max_chi2, is_adaptive_tukey
-    )
+    fit_vertices(tracks, vertex_rec_info, cache_data, max_chi2, is_adaptive_tukey)
 
 
 def merge_close_vertices(
@@ -552,6 +500,8 @@ def merge_close_vertices(
     if not pairs_to_merge:
         return
 
+    tracks = track_arrays(event_data_selected)
+
     # ------------------------------------------------------------------
     # Merge each pair: combine tracks, keep the one with more tracks as seed
     # ------------------------------------------------------------------
@@ -592,7 +542,5 @@ def merge_close_vertices(
         already_merged.add(vj["rec_vertex_id"])
 
         # Re-fit only this merged vertex
-        cache_data = _build_cache_for_vertex(event_data_selected, merged)
-        fit_vertices(
-            event_data_selected, [merged], cache_data, max_chi2, is_adaptive_tukey
-        )
+        cache_data = _build_cache_for_vertex(tracks, merged)
+        fit_vertices(tracks, [merged], cache_data, max_chi2, is_adaptive_tukey)
