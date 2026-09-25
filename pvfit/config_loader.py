@@ -35,7 +35,7 @@ DEFAULT_PERFORMANCE_ANALYSES = (
     "split_rate",
 )
 
-# Reference bin sizes: z ∈ [-200, 200] / 800 and t ∈ [-0.6, 0.8] / 56.
+# Reference bin sizes: z ∈ [-200, 200] / 800 and t ∈ [-0.8, 0.8] / 64.
 REF_BIN_SIZE_Z = 0.5  # mm
 REF_BIN_SIZE_T = 0.025  # ns
 
@@ -104,10 +104,10 @@ class ReconstructionConfig:
     # algorithm: histogram
     z_min: float = -200.0
     z_max: float = 200.0
-    t_min: float = -0.6
+    t_min: float = -0.8
     t_max: float = 0.8
     bins_z: int = 800
-    bins_t: int = 56
+    bins_t: int = 64
 
     # algorithm: vertex fitting and merging
     max_chi2: float = 10.0

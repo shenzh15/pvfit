@@ -32,11 +32,11 @@ algorithm:
     min: -200
     max: 200
   t_range:
-    min: -0.6
+    min: -0.8
     max: 0.8
   bins:
     z: 800
-    t: 56
+    t: 64
 
   # Vertex fitting
   max_chi2: 10  # Tukey weight threshold also threshold for track-vertex matching

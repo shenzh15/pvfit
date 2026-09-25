@@ -226,8 +226,8 @@ The following `paths`, `workflow` and `algorithm` sections belong to
 | `max_track_bl_chi2`    | `10.0`                               | threshold for that cut                                                  |
 | `z0_err_cut`           | `true`                               | apply a max`z0` error cut before filling                              |
 | `pp_max_track_z0_err`  | `1.5`                                | threshold for that cut, in mm                                           |
-| `z_range`, `t_range` | `[-200, 200]` mm, `[-0.6, 0.8]` ns | histogram extent; also the track acceptance                             |
-| `bins`                 | `z: 800`, `t: 56`                  | histogram binning                                                       |
+| `z_range`, `t_range` | `[-200, 200]` mm, `[-0.8, 0.8]` ns | histogram extent; also the track acceptance                             |
+| `bins`                 | `z: 800`, `t: 64`                  | histogram binning                                                       |
 | `max_chi2`             | `10`                                 | Tukey weight threshold, and the track-vertex matching cut               |
 | `is_adaptive_tukey`    | `true`                               | recompute chi2 each iteration instead of reusing the initial assignment |
 | `drop_low_track_seeds` | `true`                               | drop seeds with < 4 tracks and reassign their tracks                    |
@@ -237,7 +237,7 @@ The following `paths`, `workflow` and `algorithm` sections belong to
 > **`minTracks` is rescaled, and the value you write is not the value used.**
 > The threshold is multiplied by the bin area relative to a reference binning of
 > `bin_size_z = 0.5` mm and `bin_size_t = 0.025` ns (that is, `z: 800` bins over
-> `[-200, 200]` and `t: 56` bins over `[-0.6, 0.8]`), so that a peak threshold
+> `[-200, 200]` and `t: 64` bins over `[-0.8, 0.8]`), so that a peak threshold
 > stays physically comparable when the binning changes. At the reference binning
 > the factor is exactly 1. See `pvfit/config_loader.py`.
 

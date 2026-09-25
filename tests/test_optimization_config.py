@@ -153,7 +153,7 @@ class OptimizationConfigTests(unittest.TestCase):
             trial.user_attrs["derived_m_minTracks"],
             trial.params["minTracks"]
             * (400 / trial.params["bins_z"])
-            * (1.4 / trial.params["bins_t"])
+            * (1.6 / trial.params["bins_t"])
             / (0.5 * 0.025),
         )
         self.assertEqual(self.analysis, original)
