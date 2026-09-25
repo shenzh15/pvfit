@@ -83,9 +83,16 @@ def run_analysis(hdf5_file: str, output_dir: str, settings: AnalysisConfig):
             hdf5_file, bins, settings.recall_threshold, settings.purity_threshold
         )
     if "fake_rate_geo" in analyses:
-        results += analyze_vertex_fake_rate_geo(
-            hdf5_file, bins, settings.m_r, settings.z_scale, settings.t_scale
+        geo_results = analyze_vertex_fake_rate_geo(
+            hdf5_file,
+            bins,
+            settings.m_r,
+            settings.z_scale,
+            settings.t_scale,
+            settings.nsigma,
         )
+        results += geo_results
+        comparisons.append(("geo_vs_reso", geo_results))
     if "merge_rate" in analyses:
         results += analyze_vertex_merge_rate_track(
             hdf5_file, bins, settings.recall_threshold

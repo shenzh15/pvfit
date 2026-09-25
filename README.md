@@ -328,9 +328,9 @@ present, so other producers can write just the parts they have. Files without
 | Analysis key         | Module                          | Description                                              |
 | -------------------- | ------------------------------- | -------------------------------------------------------- |
 | `efficiency_track` | `analyze_efficiency_track.py` | reconstruction efficiency, track-based matching          |
-| `efficiency_geo`   | `analyze_efficiency_geo.py`   | reconstruction efficiency, elliptical`(z, t)` matching |
+| `efficiency_geo`   | `analyze_efficiency_geo.py`   | reconstruction efficiency, fixed and resolution-scaled `(z, t)` ellipses |
 | `fake_rate_track`  | `analyze_fake_rate_track.py`  | fake vertex rate, track-based matching                   |
-| `fake_rate_geo`    | `analyze_fake_rate_geo.py`    | fake vertex rate, elliptical matching                    |
+| `fake_rate_geo`    | `analyze_fake_rate_geo.py`    | fake vertex rate, fixed and resolution-scaled `(z, t)` ellipses |
 | `merge_rate`       | `analyze_merge_rate_track.py` | vertex merge rate                                        |
 | `split_rate`       | `analyze_split_rate_track.py` | vertex split rate                                        |
 | `resolution`       | `analyze_resolution.py`       | position resolution vs track multiplicity                |
