@@ -9,6 +9,8 @@ analysis:
     - fake_rate_geo
     - merge_rate
     - split_rate
+    - merge_rate_geo
+    - split_rate_geo
     - resolution
     - plot_histogram
     - track_pull

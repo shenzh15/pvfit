@@ -18,13 +18,22 @@ ANALYSIS_NAMES = (
     "fake_rate_geo",
     "merge_rate",
     "split_rate",
+    "merge_rate_geo",
+    "split_rate_geo",
     "resolution",
     "plot_histogram",
     "track_pull",
     "vertex_pull",
 )
 # Analyses run when neither the YAML nor the command line selects any.
-DEFAULT_PERFORMANCE_ANALYSES = ANALYSIS_NAMES[:6]
+DEFAULT_PERFORMANCE_ANALYSES = (
+    "efficiency_track",
+    "efficiency_geo",
+    "fake_rate_track",
+    "fake_rate_geo",
+    "merge_rate",
+    "split_rate",
+)
 
 # Reference bin sizes: z ∈ [-200, 200] / 800 and t ∈ [-0.6, 0.8] / 56.
 REF_BIN_SIZE_Z = 0.5  # mm

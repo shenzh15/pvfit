@@ -333,6 +333,8 @@ present, so other producers can write just the parts they have. Files without
 | `fake_rate_geo`    | `analyze_fake_rate_geo.py`    | fake vertex rate, fixed and resolution-scaled `(z, t)` ellipses |
 | `merge_rate`       | `analyze_merge_rate_track.py` | vertex merge rate                                        |
 | `split_rate`       | `analyze_split_rate_track.py` | vertex split rate                                        |
+| `merge_rate_geo`   | `analyze_merge_split_geo.py`  | merge rate, true vertices inside one rec ellipse (fixed and resolution-scaled) |
+| `split_rate_geo`   | `analyze_merge_split_geo.py`  | split rate, one true vertex inside several rec ellipses (fixed and resolution-scaled) |
 | `resolution`       | `analyze_resolution.py`       | position resolution vs track multiplicity                |
 | `track_pull`       | `analyze_track_pull.py`       | input track pulls, track vs true vertex                  |
 | `vertex_pull`      | `analyze_vertex_pull.py`      | fitted vertex pulls, rec vs true vertex                  |

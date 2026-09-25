@@ -24,6 +24,12 @@ from .analyze_fake_rate_track import (
 from .analyze_merge_rate_track import (
     analyze_vertex_merge_rate as analyze_vertex_merge_rate_track,
 )
+from .analyze_merge_split_geo import (
+    analyze_vertex_merge_rate as analyze_vertex_merge_rate_geo,
+)
+from .analyze_merge_split_geo import (
+    analyze_vertex_split_rate as analyze_vertex_split_rate_geo,
+)
 from .analyze_resolution import analyze_vertex_resolution
 from .analyze_split_rate_track import (
     analyze_vertex_split_rate as analyze_vertex_split_rate_track,
@@ -101,6 +107,21 @@ def run_analysis(hdf5_file: str, output_dir: str, settings: AnalysisConfig):
         results += analyze_vertex_split_rate_track(
             hdf5_file, bins, settings.purity_threshold
         )
+    ellipses = (settings.m_r, settings.z_scale, settings.t_scale, settings.nsigma)
+    for name, analyze in (
+        ("merge_rate_geo", analyze_vertex_merge_rate_geo),
+        ("split_rate_geo", analyze_vertex_split_rate_geo),
+    ):
+        if name in analyses:
+            geo_results = analyze(hdf5_file, bins, *ellipses)
+            results += geo_results
+            for binned_by in ("true", "rec"):
+                comparisons.append(
+                    (
+                        f"geo_vs_reso_{binned_by}",
+                        [r for r in geo_results if r.binned_by == binned_by],
+                    )
+                )
 
     for result in results:
         print(result.summary_line(settings.method_name))
