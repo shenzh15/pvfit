@@ -22,11 +22,11 @@ algorithm:
     min: -200
     max: 200
   t_range:
-    min: -0.6
+    min: -0.8
     max: 0.8
   bins:
     z: 800
-    t: 56
+    t: 64  # keeps the 0.025 ns bin width of configs/reconstruction.yaml
   max_chi2: 10
   is_adaptive_tukey: true
   drop_low_track_seeds: true
