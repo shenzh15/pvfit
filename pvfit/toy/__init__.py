@@ -1,10 +1,13 @@
 """Independent parametric toy data for exercising the PVfit workflow.
 
-Profiles contain aggregate quantiles and correlations, never original events.
-Track states obey the same straight-line transport used by the PV fitter.
+Profiles contain aggregate quantiles and correlations, never original events;
+the bundled one (profile.json, loaded by default_profile) was fitted to a
+100-event reference sample with calibrate_profile. Track states obey the same
+straight-line transport used by the PV fitter.
 """
 
 import json
+from importlib import resources
 from pathlib import Path
 
 import awkward as ak
@@ -14,9 +17,16 @@ import uproot
 from scipy.special import ndtr, ndtri
 from scipy.stats import rankdata
 
-from .fit.truth_matching import read_mcpv_dataframe
+from ..fit.truth_matching import read_mcpv_dataframe
 
 C_MM_PER_NS = 299.792458
+
+
+def default_profile():
+    """The profile shipped with the package."""
+    return json.loads(resources.files(__package__).joinpath("profile.json").read_text())
+
+
 MOMENTUM_BIN_EDGES = np.array([0, 500, 1000, 2000, 5000, 10000, np.inf])
 PROBABILITIES = np.array(
     [
@@ -425,11 +435,11 @@ def generate_sample(profile, output, events=10, seed=20260922, histogram_params=
             root["velo_kalman_filter/monitor_tree"].extend(arrays)
             root["mc_pv_dumper/MCPV_effective_tree"].extend(pv_arrays)
             if histogram_params:
-                from .fit.seedings_finder import (
+                from ..fit.seedings_finder import (
                     fill_histogram_for_seedings,
                     find_seedings,
                 )
-                from .fit.truth_matching import select_tracks
+                from ..fit.truth_matching import select_tracks
 
                 h = fill_histogram_for_seedings(
                     select_tracks(tracks, histogram_params), histogram_params

@@ -124,8 +124,8 @@ def _add_toy_options(parser):
     parser.add_argument(
         "--profile",
         type=Path,
-        default=Path("examples/toy_profile.json"),
-        help="Aggregate toy profile (default: examples/toy_profile.json)",
+        default=None,
+        help="Aggregate toy profile JSON (default: the one shipped with pvfit)",
     )
     parser.add_argument(
         "--output",
@@ -147,7 +147,7 @@ def _add_toy_options(parser):
         "--config",
         "-c",
         type=Path,
-        default=Path("examples/toy_config.yaml"),
+        default=Path("configs/toy.yaml"),
         help="Reconstruction YAML giving the histogram binning for --with-histograms",
     )
     parser.add_argument(
@@ -266,9 +266,13 @@ def _run_analysis(options):
 def _run_toy(args):
     import json
 
-    from .toy import generate_sample
+    from .toy import default_profile, generate_sample
 
-    profile = json.loads(Path(args.profile).read_text())
+    profile = (
+        json.loads(Path(args.profile).read_text())
+        if args.profile
+        else default_profile()
+    )
     params = None
     if args.with_histograms:
         params = ReconstructionConfig.from_yaml(args.config).as_params()

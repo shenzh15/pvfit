@@ -9,6 +9,7 @@ import uproot
 
 from pvfit.fit.truth_matching import build_true_vertex_info, read_mcpv_dataframe
 from pvfit.toy import (
+    default_profile,
     fit_momentum_distribution,
     generate_event,
     generate_sample,
@@ -19,9 +20,7 @@ from pvfit.toy import (
 class ToyTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.profile = json.loads(
-            (Path(__file__).parents[1] / "examples/toy_profile.json").read_text()
-        )
+        cls.profile = default_profile()
 
     def test_seed_is_reproducible(self):
         a, av = generate_event(np.random.default_rng(12), self.profile, 0)
@@ -134,7 +133,7 @@ class ToyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             work = Path(directory)
             sample = work / "toy.root"
-            config = yaml.safe_load((root / "examples/toy_config.yaml").read_text())
+            config = yaml.safe_load((root / "configs/toy.yaml").read_text())
             config["paths"]["input_root"] = str(sample)
             config["paths"]["output_dir"] = str(work / "out")
             config["workflow"]["max_workers"] = 1
@@ -145,8 +144,6 @@ class ToyTests(unittest.TestCase):
                 code = main(
                     [
                         "toy",
-                        "--profile",
-                        str(root / "examples/toy_profile.json"),
                         "--output",
                         str(sample),
                         "--events",

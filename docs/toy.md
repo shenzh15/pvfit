@@ -6,12 +6,12 @@ filesystem. From the project root:
 ```bash
 uv sync --locked
 uv run pvfit toy --events 10                        # writes input/toy_sample.root
-uv run pvfit run --config examples/toy_config.yaml \
-  --analysis-config configs/analysis.yaml            # writes output/toy/
+uv run pvfit run --config configs/toy.yaml \
+  --analysis-config configs/analysis.yaml    # writes output/toy/
 ```
 
 `pvfit toy` refuses to overwrite an existing file: pass another `--output` and
-point `paths.input_root` in `examples/toy_config.yaml` at it. `--seed` and
+point `paths.input_root` in `configs/toy.yaml` at it. `--seed` and
 `--events` choose the sample; the default seed is `20260922` and event numbers
 start at zero. `--with-histograms` additionally stores the histogram and seed
 trees PVfit itself computes (`pv_beamline_histo`, `pv_beamline_peak`), in the
@@ -21,7 +21,7 @@ validation.
 
 ## Model
 
-`toy_profile.json` holds aggregate statistics fitted to a 100-event reference
+`pvfit/toy/profile.json` holds aggregate statistics fitted to a 100-event reference
 sample by `pvfit.toy.calibrate_profile`: quantiles and correlations only, no
 event records. All vertices, tracks and keys are generated afresh from the seed.
 

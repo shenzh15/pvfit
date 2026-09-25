@@ -40,7 +40,10 @@ dependencies = [
 pvfit = "pvfit.cli:main"
 
 [tool.setuptools]
-packages = ["pvfit", "pvfit.fit", "pvfit.analysis", "pvfit.optimize", "pvfit.optimize.backends"]
+packages = ["pvfit", "pvfit.fit", "pvfit.analysis", "pvfit.optimize", "pvfit.optimize.backends", "pvfit.toy"]
+
+[tool.setuptools.package-data]
+pvfit = ["toy/profile.json"]
 
 [project.urls]
 Repository = "https://github.com/OWNER/pvfit"

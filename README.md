@@ -102,15 +102,15 @@ Consequences worth knowing:
 
 `pvfit toy` writes a synthetic ROOT sample with the same trees and keys as the
 reference data, generated from aggregate statistics in
-[`examples/toy_profile.json`](examples/toy_profile.json); the whole pipeline
+`pvfit/toy/profile.json`; the whole pipeline
 then runs on it:
 
 ```bash
 uv run pvfit toy --events 10
-uv run pvfit run --config examples/toy_config.yaml --analysis-config configs/analysis.yaml
+uv run pvfit run --config configs/toy.yaml --analysis-config configs/analysis.yaml
 ```
 
-See [`examples/README.md`](examples/README.md) for the model and its limits.
+See [`docs/toy.md`](docs/toy.md) for the model and its limits.
 Toy results demonstrate the workflow; they are not detector performance.
 
 ## Running
@@ -190,6 +190,7 @@ Each stage owns its configuration:
 | [`configs/reconstruction.yaml`](configs/reconstruction.yaml) | ROOT input, reconstruction output, workers/events, histogram and fit parameters    | `pvfit fit`; reconstruction stage of `pvfit run` |
 | [`configs/analysis.yaml`](configs/analysis.yaml)             | analysis selection, truth matching, plotting and resolution settings               | `pvfit analyze`; analysis stage of `pvfit run`   |
 | [`configs/optimization.yaml`](configs/optimization.yaml)     | study settings, concurrency, search ranges and references to the two stage configs | `pvfit optimize --config ...`                      |
+| [`configs/toy.yaml`](configs/toy.yaml)                       | reconstruction settings for the synthetic sample written by `pvfit toy`           | `pvfit run --config configs/toy.yaml`              |
 
 The former root `config.yaml` has been replaced by these files. Put analysis
 settings under `analysis:` in the analysis file, not under reconstruction's
@@ -467,7 +468,6 @@ repository — run the cells yourself.
 ```
 pvfit/
 ├── pyproject.toml           # package metadata and installed pvfit command
-├── examples/                # synthetic sample: toy_profile.json, toy_config.yaml
 ├── notebooks/               # optimization result inspection (analysis_optuna.ipynb)
 ├── configs/
 │   ├── reconstruction.yaml # inputs, reconstruction settings and output
@@ -478,7 +478,7 @@ pvfit/
 │   ├── cli.py               # fit / analyze / run commands
 │   ├── __main__.py          # python -m pvfit forwards to the same CLI
 │   ├── config_loader.py     # config parsing and derived parameters
-│   ├── toy.py               # synthetic sample generator (pvfit toy)
+│   ├── toy/                 # synthetic sample generator (pvfit toy) and its profile
 │   ├── fit/                 # ROOT -> seeding -> vertex fit -> HDF5
 │   ├── analysis/            # HDF5 -> plots and tables
 │   └── optimize/            # trials, backends/, export, post-hoc analysis
