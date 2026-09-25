@@ -22,6 +22,7 @@ PARAM_COLS = [
 ]
 INT_PARAMETERS = {"smear_window_size", "bins_z", "bins_t"}
 
+
 class PVFitBackend(Backend):
     name = "pvfit"
 

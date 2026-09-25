@@ -12,10 +12,7 @@ def trial_columns(trials) -> tuple[list[str], list[str]]:
     """Sampled parameter and backend-derived columns, in first-seen order."""
     params = {key: None for t in trials for key in t.params}
     derived = {
-        key: None
-        for t in trials
-        for key in t.user_attrs
-        if key.startswith("derived_")
+        key: None for t in trials for key in t.user_attrs if key.startswith("derived_")
     }
     return list(params), list(derived)
 

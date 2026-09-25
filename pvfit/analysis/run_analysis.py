@@ -57,11 +57,6 @@ def run_analysis(hdf5_file: str, output_dir: str, settings: AnalysisConfig):
         settings.plot_max_ntracks,
         settings.plot_bin_width_ntracks,
     )
-    binning = dict(
-        plot_min_ntracks=settings.plot_min_ntracks,
-        plot_max_ntracks=settings.plot_max_ntracks,
-        plot_bin_width_ntracks=settings.plot_bin_width_ntracks,
-    )
     track_based = f"{settings.method_name}_Track_Based"
 
     # ------------------------------------------------------------
@@ -141,11 +136,10 @@ def run_analysis(hdf5_file: str, output_dir: str, settings: AnalysisConfig):
             output_dir=output_dir,
             recall_threshold=settings.recall_threshold,
             purity_threshold=settings.purity_threshold,
-            **binning,
-            x_residual_range=settings.x_residual_range,
-            y_residual_range=settings.y_residual_range,
-            z_residual_range=settings.z_residual_range,
-            t_residual_range=settings.t_residual_range,
+            bins=bins,
+            residual_ranges={
+                coord: getattr(settings, f"{coord}_residual_range") for coord in "xyzt"
+            },
             method_name=track_based,
         )
 

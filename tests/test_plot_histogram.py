@@ -28,7 +28,12 @@ class PlotHistogramTests(unittest.TestCase):
             ds = event.create_dataset("histogram", data=histogram)
             n_z, n_t = n_bins or histogram.shape
             ds.attrs.update(
-                z_min=-10.0, z_max=10.0, t_min=-1.0, t_max=1.0, n_bins_z=n_z, n_bins_t=n_t
+                z_min=-10.0,
+                z_max=10.0,
+                t_min=-1.0,
+                t_max=1.0,
+                n_bins_z=n_z,
+                n_bins_t=n_t,
             )
             for name, fields in (groups or {}).items():
                 group = event.create_group(name)
@@ -47,9 +52,22 @@ class PlotHistogramTests(unittest.TestCase):
             {
                 name: np.zeros(1)
                 for name in (
-                    "beamPOCA_x", "beamPOCA_y", "beamPOCA_z", "beamPOCA_t",
-                    "beamPOCA_tx", "beamPOCA_ty", "c00", "c11", "c55",
-                    "ovtx_x", "ovtx_y", "ovtx_z", "ovtx_t", "p", "pt", "chi2",
+                    "beamPOCA_x",
+                    "beamPOCA_y",
+                    "beamPOCA_z",
+                    "beamPOCA_t",
+                    "beamPOCA_tx",
+                    "beamPOCA_ty",
+                    "c00",
+                    "c11",
+                    "c55",
+                    "ovtx_x",
+                    "ovtx_y",
+                    "ovtx_z",
+                    "ovtx_t",
+                    "p",
+                    "pt",
+                    "chi2",
                 )
             }
             | {"mc_key": [1], "backward": [False], "fromPV": [True]}
@@ -93,7 +111,12 @@ class PlotHistogramTests(unittest.TestCase):
         self.write(
             np.ones((4, 2)),
             groups={
-                "rec_vertices": {"z": [1.5], "t": [0.05], "z_seed": [1.0], "t_seed": [0.0]}
+                "rec_vertices": {
+                    "z": [1.5],
+                    "t": [0.05],
+                    "z_seed": [1.0],
+                    "t_seed": [0.0],
+                }
             },
         )
         data = load_event_histogram(self.path, 0)

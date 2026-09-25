@@ -1,18 +1,18 @@
-"""Resolution analysis for vertex reconstruction using track-based matching.
+"""Vertex position resolution (RMS of residuals) with overlap matching.
 
-This module calculates vertex position resolution (RMS) by analyzing residuals
-between reconstructed and true vertices, using track-based matching criteria.
+Residuals of matched reconstructed-true pairs are binned by the true vertex's
+track count; each coordinate keeps only residuals inside its window.
 """
 
 from pathlib import Path
 
-import h5py
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 
-from .utils import find_best_match
+from .binned_rate import find_bin, iter_events, track_matched_pairs
+
+COORDS = ("x", "y", "z", "t")
 
 
 def analyze_vertex_resolution(
@@ -20,167 +20,65 @@ def analyze_vertex_resolution(
     output_dir,
     recall_threshold,
     purity_threshold,
-    plot_min_ntracks,
-    plot_max_ntracks,
-    plot_bin_width_ntracks,
-    x_residual_range,
-    y_residual_range,
-    z_residual_range,
-    t_residual_range,
+    bins,
+    residual_ranges,
     method_name,
 ):
-    """Analyze vertex position resolution from HDF5 results.
-
-    Uses track-based matching to pair reconstructed vertices with true vertices,
-    then calculates position resolution (RMS of residuals) binned by true vertex
-    track count.
+    """Resolution per coordinate vs true-vertex track count; plots and CSVs.
 
     Args:
-        hdf5_path: Path to the HDF5 file containing rec_vertices and true_vertices
-        output_dir: Output directory for plots and CSV files
-        recall_threshold: Recall threshold for matching (intersection / num_true_tracks)
-        purity_threshold: Purity threshold for matching (intersection / num_rec_tracks)
-        plot_min_ntracks: Minimum nTracks for binning/plots
-        plot_max_ntracks: Maximum nTracks for binning/plots
-        plot_bin_width_ntracks: Bin width in nTracks
-        x_residual_range: X residual range limit in mm (default: 0.1)
-        y_residual_range: Y residual range limit in mm (default: 0.1)
-        z_residual_range: Z residual range limit in mm (default: 0.7)
-        t_residual_range: T residual range limit in ns (default: 0.06)
-        method_name: Name of the method for plots and CSV files
-
-    Returns:
-        None: Saves resolution plots and CSV files to output directory
+        hdf5_path: HDF5 file with rec_vertices and true_vertices
+        output_dir: where plots and CSVs go
+        recall_threshold, purity_threshold: overlap matching thresholds
+        bins: (start, end) track-multiplicity bins (binned_rate.make_bins)
+        residual_ranges: {"x", "y", "z", "t"}: half-width of the residual
+            window kept per coordinate (mm, mm, mm, ns)
+        method_name: label used in file names
     """
-    # Create equal-width bins for track count
-    num_bins = (plot_max_ntracks - plot_min_ntracks) // plot_bin_width_ntracks + 1
-    bins = [
-        (
-            plot_min_ntracks + i * plot_bin_width_ntracks,
-            plot_min_ntracks + (i + 1) * plot_bin_width_ntracks - 1,
-        )
-        for i in range(num_bins)
-    ]
+    bin_residuals = {coord: {bin_: [] for bin_ in bins} for coord in COORDS}
+    for event in iter_events(hdf5_path):
+        for true_id, rec_id in track_matched_pairs(
+            event, recall_threshold, purity_threshold
+        ):
+            bin_ = find_bin(bins, len(event.true_tracks[true_id]))
+            if bin_ is None:
+                continue
+            for coord in COORDS:
+                residual = (
+                    getattr(event, f"rec_{coord}")[rec_id]
+                    - getattr(event, f"true_{coord}")[true_id]
+                )
+                if -residual_ranges[coord] <= residual <= residual_ranges[coord]:
+                    bin_residuals[coord][bin_].append(residual)
 
-    # Initialize dictionaries to store residuals for each bin
-    bin_residuals = {
-        "x": {bin_tuple: [] for bin_tuple in bins},
-        "y": {bin_tuple: [] for bin_tuple in bins},
-        "z": {bin_tuple: [] for bin_tuple in bins},
-        "t": {bin_tuple: [] for bin_tuple in bins},
-    }
-
-    print(f"Loading HDF5 file: {hdf5_path}")
-
-    with h5py.File(hdf5_path, "r") as f:
-        event_ids = sorted(int(key) for key in f)
-        print(f"Found {len(event_ids)} events")
-
-        for event_id in tqdm(event_ids, desc="Processing events"):
-            event_group = f[str(event_id)]
-
-            # Extract true vertices
-            true_verts = event_group["true_vertices"]
-            true_x = true_verts["x"][:]
-            true_y = true_verts["y"][:]
-            true_z = true_verts["z"][:]
-            true_t = true_verts["t"][:]
-            true_track_indices = true_verts["track_indices"][:]
-
-            # Extract reconstructed vertices
-            rec_verts = event_group["rec_vertices"]
-            rec_x = rec_verts["x"][:]
-            rec_y = rec_verts["y"][:]
-            rec_z = rec_verts["z"][:]
-            rec_t = rec_verts["t"][:]
-            rec_track_indices = rec_verts["track_indices"][:]
-
-            # Build true vertex info
-            true_vertex_info = {}
-            for vertex_idx, track_indices in enumerate(true_track_indices):
-                true_vertex_info[vertex_idx] = {
-                    "track_indices": set(track_indices),
-                    "num_tracks": len(track_indices),
-                    "x": true_x[vertex_idx],
-                    "y": true_y[vertex_idx],
-                    "z": true_z[vertex_idx],
-                    "t": true_t[vertex_idx],
-                }
-
-            # Match rec vertices to true vertices and collect residuals
-            _collect_residuals_by_bin(
-                true_vertex_info,
-                rec_x,
-                rec_y,
-                rec_z,
-                rec_t,
-                rec_track_indices,
-                recall_threshold,
-                purity_threshold,
-                bins,
-                bin_residuals,
-                x_residual_range,
-                y_residual_range,
-                z_residual_range,
-                t_residual_range,
-            )
-
-    # Calculate resolutions and errors for each coordinate
     resolutions = {}
     resolution_errors = {}
-    for coord in ["x", "y", "z", "t"]:
+    for coord in COORDS:
         resolutions[coord], resolution_errors[coord] = _calculate_resolutions(
             bins, bin_residuals[coord]
         )
-
-    # Calculate overall resolutions
     overall_stats = _calculate_overall_resolution(bin_residuals)
 
-    # Prepare plotting data
-    plot_data = _prepare_plot_data(bins, resolutions, resolution_errors, bin_residuals)
+    for coord in COORDS:
+        stats = overall_stats[coord]
+        unit = "ns" if coord == "t" else "mm"
+        print(
+            f"resolution  {coord}  {stats['resolution']:.4f} ± {stats['error']:.4f} {unit}"
+            f"  ({stats['n_vertices']} vertices)"
+        )
 
+    plot_data = _prepare_plot_data(bins, resolutions, resolution_errors, bin_residuals)
     if plot_data is None:
         print("No resolution data to plot")
         return
 
-    # Create and save resolution plots
+    ranges = tuple(residual_ranges[coord] for coord in COORDS)
     _create_resolution_plots(
-        plot_data,
-        recall_threshold,
-        purity_threshold,
-        x_residual_range,
-        y_residual_range,
-        z_residual_range,
-        t_residual_range,
-        output_dir,
-        method_name,
+        plot_data, recall_threshold, purity_threshold, *ranges, output_dir, method_name
     )
-
-    # Create residual histograms
     _create_residual_histograms(
-        bins,
-        bin_residuals,
-        resolutions,
-        x_residual_range,
-        y_residual_range,
-        z_residual_range,
-        t_residual_range,
-        output_dir,
-        method_name,
+        bins, bin_residuals, resolutions, *ranges, output_dir, method_name
     )
-
-    # Print summary results
-    _print_results(
-        recall_threshold,
-        purity_threshold,
-        overall_stats,
-        resolutions,
-        resolution_errors,
-        bins,
-        bin_residuals,
-    )
-
-    # Save results to CSV
     _save_resolution_to_csv(
         bins,
         plot_data,
@@ -195,177 +93,44 @@ def analyze_vertex_resolution(
     )
 
 
-def _collect_residuals_by_bin(
-    true_vertex_info,
-    rec_x,
-    rec_y,
-    rec_z,
-    rec_t,
-    rec_track_indices,
-    recall_threshold,
-    purity_threshold,
-    bins,
-    bin_residuals,
-    x_residual_range,
-    y_residual_range,
-    z_residual_range,
-    t_residual_range,
-):
-    """Match rec vertices to true vertices and collect residuals by bin.
+def rms_with_error(residuals):
+    """Sample RMS (ddof=1) and its uncertainty from the fourth central moment.
 
-    For each reconstructed vertex, finds the best matching true vertex
-    (if any) and calculates position residuals, storing them in the
-    appropriate track count bin.
-
-    Args:
-        true_vertex_info: Dict of vertex_id to {track_indices, num_tracks, x, y, z, t}
-        rec_x, rec_y, rec_z, rec_t: Arrays of reconstructed vertex positions
-        rec_track_indices: Variable-length array of track indices per rec vertex
-        recall_threshold: Recall threshold for matching
-        purity_threshold: Purity threshold for matching
-        bins: List of (bin_start, bin_end) tuples
-        bin_residuals: Dict to update with residuals per coordinate per bin
-        x_residual_range: X residual range limit in mm
-        y_residual_range: Y residual range limit in mm
-        z_residual_range: Z residual range limit in mm
-        t_residual_range: T residual range limit in ns
+    Var(s²) ≈ (1/n)[m4 − ((n−3)/(n−1)) s⁴] and Var(s) ≈ Var(s²)/(4 s²).
+    Fewer than two values give (0.0, 0.0).
     """
-    for rec_idx, track_indices in enumerate(rec_track_indices):
-        rec_track_set = set(track_indices)
-
-        if not rec_track_set:
-            continue
-
-        # Find best matching true vertex
-        best_match_id = find_best_match(
-            rec_track_set, true_vertex_info, recall_threshold, purity_threshold
-        )
-
-        if best_match_id is not None:
-            # Get true vertex info
-            true_vertex = true_vertex_info[best_match_id]
-            num_tracks = true_vertex["num_tracks"]
-
-            # Calculate residuals
-            x_residual = rec_x[rec_idx] - true_vertex["x"]
-            y_residual = rec_y[rec_idx] - true_vertex["y"]
-            z_residual = rec_z[rec_idx] - true_vertex["z"]
-            t_residual = rec_t[rec_idx] - true_vertex["t"]
-
-            # Find which bin this vertex belongs to and store residuals
-            for bin_start, bin_end in bins:
-                if bin_start <= num_tracks <= bin_end:
-                    bin_tuple = (bin_start, bin_end)
-
-                    # Only store residuals if they are within the specified ranges
-                    if -x_residual_range <= x_residual <= x_residual_range:
-                        bin_residuals["x"][bin_tuple].append(x_residual)
-                    if -y_residual_range <= y_residual <= y_residual_range:
-                        bin_residuals["y"][bin_tuple].append(y_residual)
-                    if -z_residual_range <= z_residual <= z_residual_range:
-                        bin_residuals["z"][bin_tuple].append(z_residual)
-                    if -t_residual_range <= t_residual <= t_residual_range:
-                        bin_residuals["t"][bin_tuple].append(t_residual)
-                    break
+    if len(residuals) < 2:
+        return 0.0, 0.0
+    values = np.array(residuals)
+    n = len(values)
+    sample_var = np.var(values, ddof=1)
+    centered = values - np.mean(values)
+    m4 = np.mean(centered**4)
+    var_of_sample_var = (1 / n) * (m4 - ((n - 3) / (n - 1)) * sample_var**2)
+    if sample_var > 0 and var_of_sample_var > 0:
+        return np.sqrt(sample_var), np.sqrt(var_of_sample_var / (4 * sample_var))
+    return np.sqrt(sample_var), 0.0
 
 
 def _calculate_resolutions(bins, bin_residuals_coord):
-    """Calculate resolution (RMS) and uncertainties for each bin.
-
-    Uses the statistical formulas:
-    - Resolution = RMS = sqrt(sample_variance with ddof=1)
-    - Var(s^2) ≈ (1/n)[m4 - ((n-3)/(n-1))s^4]
-    - Error on std: sqrt(Var(s^2)/(4s^2))
-
-    Args:
-        bins: List of (bin_start, bin_end) tuples
-        bin_residuals_coord: Dict of bin_tuple to list of residuals for one coordinate
-
-    Returns:
-        tuple: (resolutions_dict, errors_dict)
-    """
-    resolutions = {}
-    errors = {}
-
-    for bin_tuple in bins:
-        residuals = bin_residuals_coord[bin_tuple]
-
-        if len(residuals) > 1:  # Need at least 2 points for variance
-            residuals_array = np.array(residuals)
-            n = len(residuals_array)
-
-            # Calculate sample variance (unbiased estimator)
-            sample_var = np.var(residuals_array, ddof=1)
-            resolutions[bin_tuple] = np.sqrt(sample_var)
-
-            # Calculate variance of sample variance using:
-            # Var(s^2) ≈ (1/n) [ m4 - ((n-3)/(n-1)) s^4 ]
-            mean_residual = np.mean(residuals_array)
-            centered_residuals = residuals_array - mean_residual
-            m4 = np.mean(centered_residuals**4)  # Fourth central moment
-
-            var_of_sample_var = (1 / n) * (m4 - ((n - 3) / (n - 1)) * sample_var**2)
-
-            # Error on standard deviation: Var(s) ≈ Var(s^2) / (4s^2)
-            if sample_var > 0 and var_of_sample_var > 0:
-                errors[bin_tuple] = np.sqrt(var_of_sample_var / (4 * sample_var))
-            else:
-                errors[bin_tuple] = 0.0
-        else:
-            resolutions[bin_tuple] = 0.0
-            errors[bin_tuple] = 0.0
-
+    """Resolution and its error per bin for one coordinate."""
+    resolutions, errors = {}, {}
+    for bin_ in bins:
+        resolutions[bin_], errors[bin_] = rms_with_error(bin_residuals_coord[bin_])
     return resolutions, errors
 
 
 def _calculate_overall_resolution(bin_residuals):
-    """Calculate overall resolution for each coordinate.
-
-    Args:
-        bin_residuals: Dict of coordinate to dict of bin_tuple to residuals
-
-    Returns:
-        dict: Dictionary containing overall resolution statistics per coordinate
-    """
+    """Resolution, error and vertex count per coordinate over all bins."""
     overall_stats = {}
-
-    for coord in ["x", "y", "z", "t"]:
-        # Collect all residuals across bins
-        all_residuals = []
-        for residuals in bin_residuals[coord].values():
-            all_residuals.extend(residuals)
-
-        if len(all_residuals) > 1:
-            residuals_array = np.array(all_residuals)
-            n = len(residuals_array)
-
-            # Calculate sample variance (unbiased estimator)
-            sample_var = np.var(residuals_array, ddof=1)
-            resolution = np.sqrt(sample_var)
-
-            # Calculate error using fourth moment
-            mean_residual = np.mean(residuals_array)
-            centered_residuals = residuals_array - mean_residual
-            m4 = np.mean(centered_residuals**4)
-            var_of_sample_var = (1 / n) * (m4 - ((n - 3) / (n - 1)) * sample_var**2)
-
-            if sample_var > 0 and var_of_sample_var > 0:
-                error = np.sqrt(var_of_sample_var / (4 * sample_var))
-            else:
-                error = 0.0
-
-            overall_stats[coord] = {
-                "resolution": resolution,
-                "error": error,
-                "n_vertices": len(all_residuals),
-            }
-        else:
-            overall_stats[coord] = {
-                "resolution": 0.0,
-                "error": 0.0,
-                "n_vertices": 0,
-            }
-
+    for coord in COORDS:
+        residuals = [r for values in bin_residuals[coord].values() for r in values]
+        resolution, error = rms_with_error(residuals)
+        overall_stats[coord] = {
+            "resolution": resolution,
+            "error": error,
+            "n_vertices": len(residuals) if len(residuals) > 1 else 0,
+        }
     return overall_stats
 
 
@@ -376,7 +141,7 @@ def _prepare_plot_data(bins, resolutions, resolution_errors, bin_residuals):
     # Prepare data for each coordinate
     plot_data = {coord: {} for coord in ["x", "y", "z", "t"]}
 
-    for coord in ["x", "y", "z", "t"]:
+    for coord in COORDS:
         x_values, res_values, err_values, n_vertices_list = [], [], [], []
 
         for idx, bin_tuple in enumerate(bins):
@@ -598,48 +363,6 @@ def _create_residual_histograms(
         print(f"Saved {coord.upper()} residual histograms to: {hist_file}")
 
 
-def _print_results(
-    recall_threshold,
-    purity_threshold,
-    overall_stats,
-    resolutions,
-    resolution_errors,
-    bins,
-    bin_residuals,
-):
-    """Print resolution analysis summary to console."""
-    print(f"\n{'-' * 60}")
-    print("RESOLUTION ANALYSIS SUMMARY - HDF5 DATA")
-    print(f"{'-' * 60}")
-    print(
-        f"Matching criteria: Recall ≥ {recall_threshold}, Purity ≥ {purity_threshold}"
-    )
-
-    for coord in ["x", "y", "z", "t"]:
-        stats = overall_stats[coord]
-        unit = "ns" if coord == "t" else "mm"
-        print(
-            f"\nOverall {coord.upper()} Resolution: {stats['resolution']:.4f} ± {stats['error']:.4f} {unit} "
-            f"({stats['n_vertices']} vertices)"
-        )
-
-    # Print per-bin results
-    for coord in ["x", "y", "z", "t"]:
-        unit = "ns" if coord == "t" else "mm"
-        print(f"\n{coord.upper()} Resolution by bin ({unit}):")
-        for bin_tuple in bins:
-            n_vertices = len(bin_residuals[coord][bin_tuple])
-            if n_vertices > 1:
-                bin_start, bin_end = bin_tuple
-                res = resolutions[coord][bin_tuple]
-                err = resolution_errors[coord][bin_tuple]
-                print(
-                    f"  [{bin_start}, {bin_end}]: {res:.4f} ± {err:.4f} {unit} (n={n_vertices} vertices)"
-                )
-
-    print(f"{'-' * 60}\n")
-
-
 def _save_resolution_to_csv(
     bins,
     plot_data,
@@ -658,7 +381,7 @@ def _save_resolution_to_csv(
     method_slug = method_name.lower().replace(" ", "_")
 
     # Save per-bin results for each coordinate
-    for coord in ["x", "y", "z", "t"]:
+    for coord in COORDS:
         bin_data = []
         unit = "ns" if coord == "t" else "mm"
 
@@ -683,10 +406,9 @@ def _save_resolution_to_csv(
         df = pd.DataFrame(bin_data)
         csv_path = output_path / f"resolution_{coord}_binned_{method_slug}.csv"
         df.to_csv(csv_path, index=False)
-        print(f"Saved {coord.upper()} bin-level resolution to: {csv_path}")
 
     # Save overall summary for each coordinate
-    for coord in ["x", "y", "z", "t"]:
+    for coord in COORDS:
         stats = overall_stats[coord]
         unit = "ns" if coord == "t" else "mm"
 
@@ -706,4 +428,3 @@ def _save_resolution_to_csv(
 
         overall_path = output_path / f"resolution_{coord}_overall_{method_slug}.csv"
         summary_df.to_csv(overall_path, index=False)
-        print(f"Saved {coord.upper()} overall resolution to: {overall_path}")

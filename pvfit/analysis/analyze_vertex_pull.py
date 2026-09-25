@@ -2,11 +2,10 @@
 
 from pathlib import Path
 
-import h5py
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .utils import find_best_match
+from .binned_rate import iter_events, track_matched_pairs
 
 
 def analyze_vertex_pull(hdf5_path, output_dir, recall_threshold, purity_threshold):
@@ -24,8 +23,6 @@ def analyze_vertex_pull(hdf5_path, output_dir, recall_threshold, purity_threshol
     Returns:
         None: Saves vertex pull analysis plots to output directory
     """
-    print("\nStarting fitted vertex pull analysis...")
-
     # Initialize storage for pull data
     pull_data = {
         "pull_x": [],
@@ -42,100 +39,29 @@ def analyze_vertex_pull(hdf5_path, output_dir, recall_threshold, purity_threshol
         "residual_t": [],
     }
 
-    with h5py.File(hdf5_path, "r") as f:
-        n_events = f.attrs["n_events"]
-        print(f"Processing {n_events} events...")
-
-        for event_id_str in f.keys():
-            event_group = f[event_id_str]
-
-            # Load true vertices
-            true_verts = event_group["true_vertices"]
-            true_x = true_verts["x"][:]
-            true_y = true_verts["y"][:]
-            true_z = true_verts["z"][:]
-            true_t = true_verts["t"][:]
-            true_track_indices = true_verts["track_indices"][:]
-
-            # Load reconstructed vertices
-            rec_verts = event_group["rec_vertices"]
-            rec_x = rec_verts["x"][:]
-            rec_y = rec_verts["y"][:]
-            rec_z = rec_verts["z"][:]
-            rec_t = rec_verts["t"][:]
-            rec_x_err = rec_verts["x_err"][:]
-            rec_y_err = rec_verts["y_err"][:]
-            rec_z_err = rec_verts["z_err"][:]
-            rec_t_err = rec_verts["t_err"][:]
-            rec_track_indices = rec_verts["track_indices"][:]
-
-            # Build true_vertex_info dict
-            true_vertex_info = {}
-            for idx, track_indices in enumerate(true_track_indices):
-                true_vertex_info[idx] = {"track_indices": set(track_indices)}
-
-            # Match each reconstructed vertex to its best true vertex
-            for rec_idx, track_indices in enumerate(rec_track_indices):
-                rec_track_set = set(track_indices)
-                if not rec_track_set:
-                    continue
-
-                true_idx = find_best_match(
-                    rec_track_set, true_vertex_info, recall_threshold, purity_threshold
+    for event in iter_events(hdf5_path):
+        for true_id, rec_id in track_matched_pairs(
+            event, recall_threshold, purity_threshold
+        ):
+            errors = {
+                coord: getattr(event, f"rec_{coord}_err")[rec_id] for coord in "xyzt"
+            }
+            if any(err <= 0 or np.isnan(err) for err in errors.values()):
+                continue
+            for coord, err in errors.items():
+                residual = (
+                    getattr(event, f"rec_{coord}")[rec_id]
+                    - getattr(event, f"true_{coord}")[true_id]
                 )
-                if true_idx is None:
-                    continue
-
-                # Calculate residuals
-                res_x = rec_x[rec_idx] - true_x[true_idx]
-                res_y = rec_y[rec_idx] - true_y[true_idx]
-                res_z = rec_z[rec_idx] - true_z[true_idx]
-                res_t = rec_t[rec_idx] - true_t[true_idx]
-
-                # Get fitted errors
-                err_x = rec_x_err[rec_idx]
-                err_y = rec_y_err[rec_idx]
-                err_z = rec_z_err[rec_idx]
-                err_t = rec_t_err[rec_idx]
-
-                # Check error validity
-                if (
-                    err_x <= 0
-                    or err_y <= 0
-                    or err_z <= 0
-                    or err_t <= 0
-                    or np.isnan(err_x)
-                    or np.isnan(err_y)
-                    or np.isnan(err_z)
-                    or np.isnan(err_t)
-                ):
-                    continue
-
-                # Calculate pulls
-                pull_x = res_x / err_x
-                pull_y = res_y / err_y
-                pull_z = res_z / err_z
-                pull_t = res_t / err_t
-
-                # Store results
-                pull_data["pull_x"].append(pull_x)
-                pull_data["pull_y"].append(pull_y)
-                pull_data["pull_z"].append(pull_z)
-                pull_data["pull_t"].append(pull_t)
-                pull_data["error_x"].append(err_x)
-                pull_data["error_y"].append(err_y)
-                pull_data["error_z"].append(err_z)
-                pull_data["error_t"].append(err_t)
-                pull_data["residual_x"].append(res_x)
-                pull_data["residual_y"].append(res_y)
-                pull_data["residual_z"].append(res_z)
-                pull_data["residual_t"].append(res_t)
+                pull_data[f"residual_{coord}"].append(residual)
+                pull_data[f"error_{coord}"].append(err)
+                pull_data[f"pull_{coord}"].append(residual / err)
 
     # Convert to numpy arrays
     for key in pull_data:
         pull_data[key] = np.array(pull_data[key])
 
-    print(f"Collected {len(pull_data['pull_x'])} valid matched vertices for analysis")
+    print(f"vertex_pull  {len(pull_data['pull_x'])} matched vertices with valid errors")
 
     if len(pull_data["pull_x"]) == 0:
         print("No valid matched vertices found for pull analysis")
@@ -143,8 +69,6 @@ def analyze_vertex_pull(hdf5_path, output_dir, recall_threshold, purity_threshol
 
     # Create plots
     _plot_vertex_pulls(pull_data, output_dir)
-
-    print(f"Fitted vertex pull analysis complete. Plots saved to {output_dir}/")
 
 
 def _plot_vertex_pulls(pull_data, output_dir):

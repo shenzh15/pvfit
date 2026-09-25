@@ -1,4 +1,3 @@
-
 """
 Event-level processing for PVfit (track-based version).
 

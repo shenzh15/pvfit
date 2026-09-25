@@ -158,7 +158,9 @@ def sample_params(trial: optuna.Trial, search_space: dict) -> dict:
 
 def write_trial_analysis_config(analysis_cfg: dict, trial_dir: Path) -> Path:
     """Keep evaluation thresholds fixed while varying reconstruction parameters."""
-    settings = replace(AnalysisConfig.from_mapping(analysis_cfg), analyses=REQUIRED_ANALYSES)
+    settings = replace(
+        AnalysisConfig.from_mapping(analysis_cfg), analyses=REQUIRED_ANALYSES
+    )
     path = trial_dir / "analysis.yaml"
     path.write_text(yaml.safe_dump(settings.to_mapping(), sort_keys=False))
     return path
@@ -281,7 +283,9 @@ def make_objective(
             obj_values = read_metrics(
                 analysis_dir, analysis_cfg, OBJECTIVE_SPECS, "objective"
             )
-            audit_values = read_metrics(analysis_dir, analysis_cfg, AUDIT_SPECS, "audit")
+            audit_values = read_metrics(
+                analysis_dir, analysis_cfg, AUDIT_SPECS, "audit"
+            )
 
             # Store audit metrics as user attrs so they survive to export
             for k, v in audit_values.items():
