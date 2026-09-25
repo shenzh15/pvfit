@@ -1,0 +1,27 @@
+# Study settings and search ranges; reconstruction/evaluation have their own files.
+study:
+  name: pvfit_nsga2_v1
+  output_dir: output/optuna  # relative to the working directory
+  n_trials: 200
+  n_jobs: 3
+  population_size: 50
+  sampler_seed: 42
+
+execution:
+  backend: pvfit  # reconstruction program each trial runs (src/optimize/backends)
+  # Config references are relative to THIS YAML file.
+  reconstruction_config: reconstruction.yaml
+  analysis_config: analysis.yaml
+  trial_workers: 20
+  all_input_files: false  # false: use only the first matching file
+
+# The current PVFit optimizer varies these eight reconstruction parameters.
+search_space:
+  minTracks: {type: float, low: 1.0, high: 3.0}
+  smear_window_size: {type: int, low: 1, high: 4}
+  bins_z: {type: int, low: 400, high: 1200, step: 40}
+  bins_t: {type: int, low: 42, high: 140, step: 7}
+  max_chi2: {type: float, low: 4.0, high: 15.0, step: 0.5}
+  nsigma_merge: {type: float, low: 3.0, high: 8.0, step: 0.5}
+  max_track_bl_chi2: {type: float, low: 5.0, high: 20.0, step: 1.0}
+  pp_max_track_z0_err: {type: float, low: 0.5, high: 3.0, step: 0.25}

@@ -47,22 +47,6 @@ AUDIT_SPECS = [
     ),
 ]
 
-# Reference bin sizes (from baseline: z ∈ [-200,200]/800, t ∈ [-0.6,0.8]/56)
-REF_BIN_SIZE_Z = (200 - (-200)) / 800  # 0.5 mm
-REF_BIN_SIZE_T = (0.8 - (-0.6)) / 56  # 0.025
-SAMPLER_SEED = 42
-
-PARAM_COLS = [
-    "minTracks",
-    "smear_window_size",
-    "bins_z",
-    "bins_t",
-    "max_chi2",
-    "nsigma_merge",
-    "max_track_bl_chi2",
-    "pp_max_track_z0_err",
-]
-
 # ── Derived from OBJECTIVE_SPECS — used by both optimize.py and notebooks ────
 OBJ_COLS = [spec[2] for spec in OBJECTIVE_SPECS]
 OBJ_LABELS = [

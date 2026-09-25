@@ -5,10 +5,24 @@ from pathlib import Path
 
 import optuna
 
-from .constants import AUDIT_SPECS, OBJECTIVE_SPECS, PARAM_COLS
+from .constants import AUDIT_SPECS, OBJECTIVE_SPECS
 
 
-def _trial_to_row(t: optuna.trial.FrozenTrial) -> dict:
+def trial_columns(trials) -> tuple[list[str], list[str]]:
+    """Sampled parameter and backend-derived columns, in first-seen order."""
+    params = {key: None for t in trials for key in t.params}
+    derived = {
+        key: None
+        for t in trials
+        for key in t.user_attrs
+        if key.startswith("derived_")
+    }
+    return list(params), list(derived)
+
+
+def _trial_to_row(
+    t: optuna.trial.FrozenTrial, param_cols: list[str], derived_cols: list[str]
+) -> dict:
     """Flatten a trial into the export row dict."""
     row: dict = {
         "trial_number": t.number,
@@ -27,10 +41,10 @@ def _trial_to_row(t: optuna.trial.FrozenTrial) -> dict:
         row[export_col] = t.user_attrs.get(export_col, "")
 
     # Sampled params
-    for col in PARAM_COLS:
+    for col in param_cols:
         row[col] = t.params.get(col, "")
-
-    row["derived_m_minTracks"] = t.user_attrs.get("derived_m_minTracks", "")
+    for col in derived_cols:
+        row[col] = t.user_attrs.get(col, "")
     row["trial_output_dir"] = t.user_attrs.get("trial_output_dir", "")
     row["trial_input_root"] = t.user_attrs.get("trial_input_root", "")
     row["generation"] = t.user_attrs.get("generation", "")
@@ -49,7 +63,7 @@ def export_generation_summary(
     grouped: dict[int, list[dict]] = {}
     for row in generation_rows:
         generation = row["generation"]
-        if generation == "":
+        if generation in ("", None):
             continue
         grouped.setdefault(int(generation), []).append(row)
 
@@ -101,14 +115,15 @@ def export_results(study: optuna.Study, study_dir: Path):
 
     all_trials = study.trials
     completed = [t for t in all_trials if t.state == optuna.trial.TrialState.COMPLETE]
+    param_cols, derived_cols = trial_columns(all_trials)
 
     header = (
         ["trial_number", "state"]
         + [c for _, _, c in OBJECTIVE_SPECS]
         + [c for _, _, c in AUDIT_SPECS]
-        + PARAM_COLS
+        + param_cols
+        + derived_cols
         + [
-            "derived_m_minTracks",
             "trial_output_dir",
             "trial_input_root",
             "generation",
@@ -124,7 +139,7 @@ def export_results(study: optuna.Study, study_dir: Path):
         writer = csv.DictWriter(f, fieldnames=header)
         writer.writeheader()
         for t in all_trials:
-            row = _trial_to_row(t)
+            row = _trial_to_row(t, param_cols, derived_cols)
             all_rows.append(row)
             writer.writerow(row)
     print(f"All trials ({len(all_trials)}, {len(completed)} complete) → {all_path}")
@@ -136,7 +151,7 @@ def export_results(study: optuna.Study, study_dir: Path):
         writer = csv.DictWriter(f, fieldnames=header)
         writer.writeheader()
         for t in pareto:
-            writer.writerow(_trial_to_row(t))
+            writer.writerow(_trial_to_row(t, param_cols, derived_cols))
     print(f"Pareto front ({len(pareto)} trials) → {pareto_path}")
 
     # Console summary
