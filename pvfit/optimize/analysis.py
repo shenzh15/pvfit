@@ -115,7 +115,7 @@ def normalize_objectives(
         ref_df = df
 
     result = pd.DataFrame(index=df.index)
-    for col, direction in zip(obj_cols, obj_dirs):
+    for col, direction in zip(obj_cols, obj_dirs, strict=True):
         vmin, vmax = ref_df[col].min(), ref_df[col].max()
         span = vmax - vmin
         if span == 0:

@@ -27,7 +27,7 @@ def _trial_to_row(
     }
     # Objectives (only present for COMPLETE trials)
     if t.values is not None:
-        for (_, _, export_col), val in zip(OBJECTIVE_SPECS, t.values):
+        for (_, _, export_col), val in zip(OBJECTIVE_SPECS, t.values, strict=True):
             row[export_col] = val
     else:
         for _, _, export_col in OBJECTIVE_SPECS:

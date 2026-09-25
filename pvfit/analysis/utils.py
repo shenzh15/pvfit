@@ -1,7 +1,5 @@
 """Utility functions for vertex reconstruction performance analysis."""
 
-from typing import Dict, List, Optional
-
 import numpy as np
 from scipy.stats import beta
 
@@ -30,8 +28,8 @@ def calculate_clopper_pearson_errors(k, n, rate):
 
 
 def match_vertices_elliptical_zt(
-    rec_vertices: List[Dict],
-    true_vertices: List[Dict],
+    rec_vertices: list[dict],
+    true_vertices: list[dict],
     m_r: float,
     z_scale: float = 1.5,
     t_scale: float = 0.06,
@@ -91,7 +89,7 @@ def match_vertices_elliptical_zt(
         rec_t = rec["rec_t"]
 
         matched = []
-        closest: Optional[Dict] = None
+        closest: dict | None = None
         min_dist = float("inf")
 
         for tru in true_vertices:
@@ -114,8 +112,8 @@ def match_vertices_elliptical_zt(
 
 
 def match_vertices_resolution_zt(
-    rec_vertices: List[Dict],
-    true_vertices: List[Dict],
+    rec_vertices: list[dict],
+    true_vertices: list[dict],
     nsigma: float = 5.0,
 ) -> None:
     """
@@ -167,7 +165,7 @@ def match_vertices_resolution_zt(
         sigma_t = nsigma * t_err
 
         matched = []
-        closest: Optional[Dict] = None
+        closest: dict | None = None
         min_dist = float("inf")
 
         for tru in true_vertices:

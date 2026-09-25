@@ -199,7 +199,7 @@ def _create_resolution_plots(
     scale_factors = [1000, 1000, 1000, 1000]  # mm to μm, ns to ps
 
     for idx, (coord, color, res_range, unit, scale) in enumerate(
-        zip(coords, colors, residual_ranges, units, scale_factors)
+        zip(coords, colors, residual_ranges, units, scale_factors, strict=True)
     ):
         ax = axes[idx]
 
@@ -259,7 +259,7 @@ def _create_resolution_plots(
 
         # Add annotations
         max_res = max(resolution_scaled) if resolution_scaled else 1
-        for x_pos, res, n_vtx in zip(x, resolution_scaled, n_vertices):
+        for x_pos, res, n_vtx in zip(x, resolution_scaled, n_vertices, strict=True):
             if n_vtx > 0:
                 ax.text(
                     x_pos,
@@ -309,7 +309,9 @@ def _create_residual_histograms(
     ]
     units = ["mm", "mm", "mm", "ns"]
 
-    for coord, color, res_range, unit in zip(coords, colors, residual_ranges, units):
+    for coord, color, res_range, unit in zip(
+        coords, colors, residual_ranges, units, strict=True
+    ):
         # Count bins with data
         bins_with_data = [
             bin_tuple for bin_tuple in bins if len(bin_residuals[coord][bin_tuple]) > 0

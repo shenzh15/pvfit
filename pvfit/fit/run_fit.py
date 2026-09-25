@@ -89,7 +89,7 @@ def run_fit(
         track_data = []
         mcpv_data = []
         event_offset = 0
-        for track_df, mcpv_df in zip(all_track_data, all_mcpv_data):
+        for track_df, mcpv_df in zip(all_track_data, all_mcpv_data, strict=True):
             track_df = track_df.copy()
             mcpv_df = mcpv_df.copy()
             track_df["event_number"] += event_offset

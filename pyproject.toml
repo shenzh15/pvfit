@@ -61,8 +61,4 @@ target-version = "py312"
 extend-exclude = ["docs/derivations", "*.ipynb"]
 
 [tool.ruff.lint]
-# The tree is clean under these today, so CI stays green.
-select = ["E4", "E7", "E9", "F", "I"]
-# Next steps, each needing a manual pass rather than a blanket --fix:
-#   "B"   -> B905 (zip strict=) is a per-call-site physics judgement, 22 sites
-#   "UP"  -> typing modernisation (typing.List -> list, Optional -> | None)
+select = ["E4", "E7", "E9", "F", "I", "B", "UP"]

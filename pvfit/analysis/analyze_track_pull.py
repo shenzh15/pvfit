@@ -52,7 +52,7 @@ def _collect_track_pulls(hdf5_path):
                     "(pvfit fit --config <your-config.yaml>)."
                 )
 
-            def state(name):
+            def state(name, tracks=tracks, indices=indices):
                 # Promote saved float32 states before transport and subtraction.
                 return tracks[name][:][indices].astype(np.float64)
 

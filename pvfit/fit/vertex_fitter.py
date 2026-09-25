@@ -507,7 +507,7 @@ def merge_close_vertices(
     # ------------------------------------------------------------------
     already_merged = set()  # rec_vertex_id's that have been consumed
 
-    for vi, vj, chi2 in sorted(pairs_to_merge, key=lambda x: x[2]):
+    for vi, vj, _chi2 in sorted(pairs_to_merge, key=lambda x: x[2]):
         if (
             vi["rec_vertex_id"] in already_merged
             or vj["rec_vertex_id"] in already_merged

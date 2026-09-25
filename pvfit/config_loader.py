@@ -41,7 +41,7 @@ REF_BIN_SIZE_T = 0.025  # ns
 
 
 def load_config(config_file):
-    with open(config_file, "r") as f:
+    with open(config_file) as f:
         config = yaml.safe_load(f)
     if not isinstance(config, dict):
         raise ValueError(f"Configuration must be a YAML mapping: {config_file}")

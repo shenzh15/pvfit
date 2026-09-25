@@ -15,7 +15,6 @@ def _true_vertices(event):
         for i, (z, t, tracks) in enumerate(
             zip(event.true_z, event.true_t, event.true_tracks, strict=True)
         )
-        if len(tracks) > 0
     ]
 
 

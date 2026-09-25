@@ -202,7 +202,7 @@ The following `paths`, `workflow` and `algorithm` sections belong to
 
 ### `algorithm`
 
-| Key                      | Default                                | Meaning                                                                 |
+| Key                      | Shipped value                          | Meaning                                                                 |
 | ------------------------ | -------------------------------------- | ----------------------------------------------------------------------- |
 | `minTracks`            | `2.5`                                | seed peak threshold —**see the scaling note below**              |
 | `smear_window_size`    | `2`                                  | histogram smoothing window                                              |
@@ -234,7 +234,7 @@ caught before anything runs.
 
 These keys belong to `analysis:` in `configs/analysis.yaml`:
 
-| Key                                                                                    | Default                                   | Meaning                                                                                                                                                        |
+| Key                                                                                    | Shipped value                             | Meaning                                                                                                                                                        |
 | -------------------------------------------------------------------------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `analyses`                                                                           | list in the shipped YAML                  | analysis modules to run                                                                                                                                        |
 | `method_name`                                                                        | `PVfit`                                 | labels and output filename prefix                                                                                                                              |

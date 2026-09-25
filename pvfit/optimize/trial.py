@@ -228,7 +228,7 @@ def make_objective(
                 obj_values = {
                     export_col: val
                     for (_, _, export_col), val in zip(
-                        OBJECTIVE_SPECS, duplicate_trial.values
+                        OBJECTIVE_SPECS, duplicate_trial.values, strict=True
                     )
                 }
                 audit_values = {
