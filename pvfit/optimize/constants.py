@@ -9,26 +9,27 @@ REQUIRED_ANALYSES = [
 ]
 
 # ── Objective CSV specs ──────────────────────────────────────────────────────
-# Each tuple: (filename, column_name, export_column_name)
+# Each tuple: (filename, column_name, export_column_name); every overall CSV
+# has the same columns (see analysis/binned_rate.py), so the column is 'rate'.
 OBJECTIVE_SPECS = [
     (
         "efficiency_overall_true_binned_pvfit_track_based.csv",
-        "overall_efficiency",
+        "rate",
         "efficiency_true_overall",
     ),
     (
         "fake_rate_overall_rec_binned_pvfit_track_based.csv",
-        "overall_fake_rate",
+        "rate",
         "fake_rate_rec_overall",
     ),
     (
         "merge_rate_overall_true_binned_pvfit_track_based.csv",
-        "overall_merge_rate",
+        "rate",
         "merge_rate_true_overall",
     ),
     (
         "split_rate_overall_rec_binned_pvfit_track_based.csv",
-        "overall_split_rate",
+        "rate",
         "split_rate_rec_overall",
     ),
 ]
@@ -37,12 +38,12 @@ OBJECTIVE_SPECS = [
 AUDIT_SPECS = [
     (
         "merge_rate_overall_rec_binned_pvfit_track_based.csv",
-        "overall_merge_rate",
+        "rate",
         "merge_rate_rec_overall",
     ),
     (
         "split_rate_overall_true_binned_pvfit_track_based.csv",
-        "overall_split_rate",
+        "rate",
         "split_rate_true_overall",
     ),
 ]

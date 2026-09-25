@@ -9,9 +9,7 @@ import numpy as np
 from .utils import find_best_match
 
 
-def analyze_vertex_pull(
-    hdf5_path, output_dir, recall_threshold, purity_threshold
-):
+def analyze_vertex_pull(hdf5_path, output_dir, recall_threshold, purity_threshold):
     """Analyze fitted vertex pulls by comparing fitted parameters to true vertices.
 
     For each matched reconstructed-true vertex pair, calculates residuals and pulls

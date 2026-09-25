@@ -86,8 +86,12 @@ def load_event_histogram(hdf5_path, event_id=None):
             "event_id": event_id,
             "source": source.decode() if isinstance(source, bytes) else source,
             "histogram": H,
-            "z_edges": np.linspace(hist_attrs["z_min"], hist_attrs["z_max"], z_bins + 1),
-            "t_edges": np.linspace(hist_attrs["t_min"], hist_attrs["t_max"], t_bins + 1),
+            "z_edges": np.linspace(
+                hist_attrs["z_min"], hist_attrs["z_max"], z_bins + 1
+            ),
+            "t_edges": np.linspace(
+                hist_attrs["t_min"], hist_attrs["t_max"], t_bins + 1
+            ),
             "true": _read_points(
                 event_group, "true_vertices", "vertex_id", "track_indices"
             ),

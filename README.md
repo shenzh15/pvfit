@@ -265,10 +265,9 @@ output/<experiment>/
 │   └── analysis.log
 └── analysis/
     ├── analysis.done
-    ├── efficiency_true_binned_*.pdf   / .csv
-    ├── fake_rate_rec_binned_*.pdf     / .csv
-    ├── merge_rate_true_binned_*.pdf   / .csv
-    ├── split_rate_rec_binned_*.pdf    / .csv
+    ├── <metric>_<true|rec>_binned_<method>.pdf / .csv   # one per rate result
+    ├── <metric>_overall_<true|rec>_binned_<method>.csv
+    ├── efficiency_comparison_geo_vs_reso_*.pdf / efficiency_ratio_geo_vs_reso_*.pdf
     ├── resolution_*.pdf
     ├── pull_analysis_input_track.pdf / .png
     ├── pull_analysis_input_track_summary.json
@@ -338,6 +337,17 @@ present, so other producers can write just the parts they have. Files without
 | `track_pull`       | `analyze_track_pull.py`       | input track pulls, track vs true vertex                  |
 | `vertex_pull`      | `analyze_vertex_pull.py`      | fitted vertex pulls, rec vs true vertex                  |
 | `plot_histogram`   | `plot_histogram.py`           | 2D`(z, t)` histogram with vertex overlays              |
+
+The six rate analyses only decide which vertices count as successes and return
+`RateResult` objects; `binned_rate.py` holds the shared bins, counters,
+Clopper-Pearson errors and the writers `run_analysis` applies to each result.
+Every rate is written the same way. `<metric>_<true|rec>_binned_<method>.csv`
+has one row per track-multiplicity bin with `bin_start, bin_end, bin_center,
+rate, error_lower, error_upper, denominator, numerator`; the matching
+`<metric>_overall_<true|rec>_binned_<method>.csv` has one row with `numerator,
+denominator, rate, error_lower, error_upper`, the matching parameters and
+`method_name`. `<method>` is `<method_name>_Track_Based`, `_Geo_Based` or
+`_Reso_Based` after the matching used.
 
 ## Input track residual diagnostics
 
