@@ -98,6 +98,21 @@ Consequences worth knowing:
   denominators. It never reaches the histogram, the seed finder or the vertex
   fit, so it cannot change reconstructed objects.
 
+## Try it without the reference data
+
+`pvfit toy` writes a synthetic ROOT sample with the same trees and keys as the
+reference data, generated from aggregate statistics in
+[`examples/toy_profile.json`](examples/toy_profile.json); the whole pipeline
+then runs on it:
+
+```bash
+uv run pvfit toy --events 10
+uv run pvfit run --config examples/toy_config.yaml --analysis-config configs/analysis.yaml
+```
+
+See [`examples/README.md`](examples/README.md) for the model and its limits.
+Toy results demonstrate the workflow; they are not detector performance.
+
 ## Running
 
 ### Via Snakemake
@@ -452,6 +467,7 @@ repository — run the cells yourself.
 ```
 pvfit/
 ├── pyproject.toml           # package metadata and installed pvfit command
+├── examples/                # synthetic sample: toy_profile.json, toy_config.yaml
 ├── notebooks/               # optimization result inspection (analysis_optuna.ipynb)
 ├── configs/
 │   ├── reconstruction.yaml # inputs, reconstruction settings and output
@@ -462,6 +478,7 @@ pvfit/
 │   ├── cli.py               # fit / analyze / run commands
 │   ├── __main__.py          # python -m pvfit forwards to the same CLI
 │   ├── config_loader.py     # config parsing and derived parameters
+│   ├── toy.py               # synthetic sample generator (pvfit toy)
 │   ├── fit/                 # ROOT -> seeding -> vertex fit -> HDF5
 │   ├── analysis/            # HDF5 -> plots and tables
 │   └── optimize/            # trials, backends/, export, post-hoc analysis

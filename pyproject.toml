@@ -23,6 +23,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
 ]
 dependencies = [
+    "awkward>=2.8",
     "h5py>=3.15.1",
     "matplotlib>=3.10.5",
     "numpy>=2.0",

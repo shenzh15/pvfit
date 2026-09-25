@@ -120,6 +120,41 @@ def _add_optimize_options(parser):
     )
 
 
+def _add_toy_options(parser):
+    parser.add_argument(
+        "--profile",
+        type=Path,
+        default=Path("examples/toy_profile.json"),
+        help="Aggregate toy profile (default: examples/toy_profile.json)",
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        type=Path,
+        default=Path("input/toy_sample.root"),
+        help="ROOT file to write; refuses to overwrite (default: input/toy_sample.root)",
+    )
+    parser.add_argument(
+        "--events", type=_positive_int, default=10, help="Events to generate"
+    )
+    parser.add_argument("--seed", type=int, default=20260922, help="Random seed")
+    parser.add_argument(
+        "--with-histograms",
+        action="store_true",
+        help="Also store PVfit-made histogram and seed trees in the file",
+    )
+    parser.add_argument(
+        "--config",
+        "-c",
+        type=Path,
+        default=Path("examples/toy_config.yaml"),
+        help="Reconstruction YAML giving the histogram binning for --with-histograms",
+    )
+    parser.add_argument(
+        "--debug", action="store_true", help="Show tracebacks on failure"
+    )
+
+
 def build_parser():
     parser = argparse.ArgumentParser(
         prog="pvfit",
@@ -133,12 +168,15 @@ def build_parser():
         ("analyze", "Analyze existing HDF5 results without running reconstruction"),
         ("run", "Run reconstruction followed by analysis"),
         ("optimize", "Run an NSGA-II parameter study over a reconstruction backend"),
+        ("toy", "Generate a synthetic ROOT sample that needs no reference data"),
     ):
         command = commands.add_parser(
             name, help=help_text, description=help_text, allow_abbrev=False
         )
         if name == "optimize":
             _add_optimize_options(command)
+        elif name == "toy":
+            _add_toy_options(command)
         else:
             _add_options(command, name)
     return parser
@@ -225,6 +263,19 @@ def _run_analysis(options):
     return run_analysis(**options)
 
 
+def _run_toy(args):
+    import json
+
+    from .toy import generate_sample
+
+    profile = json.loads(Path(args.profile).read_text())
+    params = None
+    if args.with_histograms:
+        params = ReconstructionConfig.from_yaml(args.config).as_params()
+    summary = generate_sample(profile, args.output, args.events, args.seed, params)
+    print(json.dumps(summary, indent=2))
+
+
 def _run_optimization(args):
     from .optimize.run import run_optimization
 
@@ -238,6 +289,9 @@ def main(argv=None):
     try:
         if args.command == "optimize":
             _run_optimization(args)
+            return 0
+        if args.command == "toy":
+            _run_toy(args)
             return 0
         fit_options, analysis_options = _prepare(args)
     except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError) as exc:
