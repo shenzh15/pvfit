@@ -6,12 +6,12 @@ filesystem. From the project root:
 ```bash
 uv sync --locked
 uv run pvfit toy --events 10                        # writes input/toy_sample.root
-uv run pvfit run --config configs/toy.yaml \
-  --analysis-config configs/analysis.yaml    # writes output/toy/
+uv run pvfit run --config configs/reconstruction.yaml --input input/toy_sample.root \
+  --output-dir output/toy --analysis-config configs/analysis.yaml   # writes output/toy/
 ```
 
 `pvfit toy` refuses to overwrite an existing file: pass another `--output` and
-point `paths.input_root` in `configs/toy.yaml` at it. `--seed` and
+give that path to `pvfit run --input`. `--seed` and
 `--events` choose the sample; the default seed is `20260922` and event numbers
 start at zero. `--with-histograms` additionally stores the histogram and seed
 trees PVfit itself computes (`pv_beamline_histo`, `pv_beamline_peak`), in the

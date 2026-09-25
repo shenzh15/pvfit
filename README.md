@@ -107,7 +107,8 @@ then runs on it:
 
 ```bash
 uv run pvfit toy --events 10
-uv run pvfit run --config configs/toy.yaml --analysis-config configs/analysis.yaml
+uv run pvfit run --config configs/reconstruction.yaml --input input/toy_sample.root \
+  --output-dir output/toy --analysis-config configs/analysis.yaml
 ```
 
 See [`docs/toy.md`](docs/toy.md) for the model and its limits.
@@ -190,7 +191,6 @@ Each stage owns its configuration:
 | [`configs/reconstruction.yaml`](configs/reconstruction.yaml) | ROOT input, reconstruction output, workers/events, histogram and fit parameters    | `pvfit fit`; reconstruction stage of `pvfit run` |
 | [`configs/analysis.yaml`](configs/analysis.yaml)             | analysis selection, truth matching, plotting and resolution settings               | `pvfit analyze`; analysis stage of `pvfit run`   |
 | [`configs/optimization.yaml`](configs/optimization.yaml)     | study settings, concurrency, search ranges and references to the two stage configs | `pvfit optimize --config ...`                      |
-| [`configs/toy.yaml`](configs/toy.yaml)                       | reconstruction settings for the synthetic sample written by `pvfit toy`           | `pvfit run --config configs/toy.yaml`              |
 
 The former root `config.yaml` has been replaced by these files. Put analysis
 settings under `analysis:` in the analysis file, not under reconstruction's

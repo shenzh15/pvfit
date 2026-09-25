@@ -75,7 +75,14 @@ def _add_options(parser, command):
         )
     if command == "analyze":
         parser.add_argument(
-            "--input", type=Path, help="Existing HDF5 reconstruction output"
+            "--input", "-i", type=Path, help="Existing HDF5 reconstruction output"
+        )
+    else:
+        parser.add_argument(
+            "--input",
+            "-i",
+            type=Path,
+            help="Input ROOT file or glob (overrides paths.input_root)",
         )
     if command != "fit":
         parser.add_argument(
@@ -147,7 +154,7 @@ def _add_toy_options(parser):
         "--config",
         "-c",
         type=Path,
-        default=Path("configs/toy.yaml"),
+        default=Path("configs/reconstruction.yaml"),
         help="Reconstruction YAML giving the histogram binning for --with-histograms",
     )
     parser.add_argument(
@@ -195,6 +202,7 @@ def _prepare(args):
         overrides = {
             name: value
             for name, value in (
+                ("input_root", args.input and str(args.input)),
                 ("max_workers", args.max_workers),
                 ("event_number", args.event_number),
                 ("output_dir", args.output_dir and str(args.output_dir)),

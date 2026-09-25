@@ -125,21 +125,12 @@ class ToyTests(unittest.TestCase):
         import contextlib
         import io
 
-        import yaml
-
         from pvfit.cli import main
 
         root = Path(__file__).parents[1]
         with tempfile.TemporaryDirectory() as directory:
             work = Path(directory)
             sample = work / "toy.root"
-            config = yaml.safe_load((root / "configs/toy.yaml").read_text())
-            config["paths"]["input_root"] = str(sample)
-            config["paths"]["output_dir"] = str(work / "out")
-            config["workflow"]["max_workers"] = 1
-            (work / "reco.yaml").write_text(yaml.safe_dump(config))
-            analysis = yaml.safe_load((root / "configs/analysis.yaml").read_text())
-            (work / "analysis.yaml").write_text(yaml.safe_dump(analysis))
             with contextlib.redirect_stdout(io.StringIO()):
                 code = main(
                     [
@@ -157,9 +148,15 @@ class ToyTests(unittest.TestCase):
                     [
                         "run",
                         "--config",
-                        str(work / "reco.yaml"),
+                        str(root / "configs/reconstruction.yaml"),
+                        "--input",
+                        str(sample),
+                        "--output-dir",
+                        str(work / "out"),
+                        "--max-workers",
+                        "1",
                         "--analysis-config",
-                        str(work / "analysis.yaml"),
+                        str(root / "configs/analysis.yaml"),
                     ]
                 )
             self.assertEqual(code, 0)
