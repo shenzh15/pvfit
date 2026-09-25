@@ -1,11 +1,13 @@
 """Independent parametric toy data for exercising the PVfit workflow.
 
 Profiles contain aggregate quantiles and correlations, never original events;
-the bundled one (profile.json, loaded by default_profile) was fitted to a
-100-event reference sample with calibrate_profile. Track states obey the same
-straight-line transport used by the PV fitter.
+the bundled one (profile.json, loaded by default_profile) was fitted with
+calibrate_profile to 10 000 reference events (1.0e34 luminosity, 50 ps
+timing, beam at 0, 0).
+Track states obey the same straight-line transport used by the PV fitter.
 """
 
+import glob
 import json
 from importlib import resources
 from pathlib import Path
@@ -180,12 +182,34 @@ def track_features(tracks):
     )
 
 
-def calibrate_profile(input_path):
-    with uproot.open(input_path) as root:
-        tracks = pd.DataFrame(
-            root["velo_kalman_filter/monitor_tree"].arrays(library="np")
-        )
-        vertices = read_mcpv_dataframe(root["mc_pv_dumper/MCPV_effective_tree"])
+def load_reference(input_paths):
+    """Tracks and effective vertices of one file, a glob, or a list of files.
+
+    Event numbers restart in every file, so each file's events are offset to
+    keep them distinct.
+    """
+    if isinstance(input_paths, (str, Path)):
+        paths = sorted(glob.glob(str(input_paths))) or [str(input_paths)]
+    else:
+        paths = [str(p) for p in input_paths]
+    tracks, vertices, offset = [], [], 0
+    for path in paths:
+        with uproot.open(path) as root:
+            t = pd.DataFrame(
+                root["velo_kalman_filter/monitor_tree"].arrays(library="np")
+            )
+            v = read_mcpv_dataframe(root["mc_pv_dumper/MCPV_effective_tree"])
+        t["event_number"] = t["event_number"].astype(np.int64) + offset
+        v["event_number"] = v["event_number"].astype(np.int64) + offset
+        offset = int(max(t["event_number"].max(), v["event_number"].max())) + 1
+        tracks.append(t)
+        vertices.append(v)
+    return pd.concat(tracks, ignore_index=True), pd.concat(vertices, ignore_index=True)
+
+
+def calibrate_profile(input_paths):
+    """Aggregate statistics of a reference sample (a file, glob or list)."""
+    tracks, vertices = load_reference(input_paths)
     owners = {
         (int(event), int(key))
         for event, keys in zip(vertices.event_number, vertices.track_keys, strict=False)
@@ -238,7 +262,11 @@ def calibrate_profile(input_path):
         ],
     }
     features = track_features(tracks)
-    for label, mask in [("prompt", prompt), ("background", ~prompt)]:
+    # A track with zero slope, momentum or error has an infinite feature; such
+    # rows are rare and cannot enter the copulas, so they are left out.
+    finite = np.isfinite(features).all(axis=1)
+    profile["calibration_tracks_dropped_nonfinite"] = int((~finite).sum())
+    for label, mask in [("prompt", prompt & finite), ("background", ~prompt & finite)]:
         subset = {"backward_fraction": float(tracks.loc[mask, "backward"].mean())}
         for backward in (False, True):
             subset["backward" if backward else "forward"] = fit_momentum_distribution(

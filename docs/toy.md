@@ -17,9 +17,10 @@ start at zero.
 
 ## Model
 
-`pvfit/toy/profile.json` holds aggregate statistics fitted to a 100-event reference
-sample by `pvfit.toy.calibrate_profile`: quantiles and correlations only, no
-event records. All vertices, tracks and keys are generated afresh from the seed.
+`pvfit/toy/profile.json` holds aggregate statistics fitted by
+`pvfit.toy.calibrate_profile` to 10 000 reference events (100 files of the
+1.0e34 luminosity, 50 ps, beam-at-origin sample): quantiles and correlations only, no event
+records. All vertices, tracks and keys are generated afresh from the seed.
 
 - A correlated Gaussian describes the luminous region in x, y, z and t.
 - Negative-binomial counts describe vertices per event and tracks per vertex.
@@ -51,5 +52,5 @@ detector performance.
 
 The bundled profile uses schema version 2; other profiles fail explicitly. To
 refit one from another reference sample, call
-`pvfit.toy.calibrate_profile(path_to_reference_root)` and write the returned
+`pvfit.toy.calibrate_profile(path_or_glob_or_list)` and write the returned
 dict as JSON; every nonempty momentum band needs at least ten tracks.
