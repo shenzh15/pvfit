@@ -32,7 +32,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 ```bash
-git clone https://github.com/OWNER/pvfit.git
+git clone https://github.com/shenzh15/pvfit.git
 cd pvfit
 ```
 

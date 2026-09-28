@@ -46,8 +46,8 @@ packages = ["pvfit", "pvfit.fit", "pvfit.analysis", "pvfit.optimize", "pvfit.opt
 pvfit = ["toy/profile.json"]
 
 [project.urls]
-Repository = "https://github.com/OWNER/pvfit"
-Issues = "https://github.com/OWNER/pvfit/issues"
+Repository = "https://github.com/shenzh15/pvfit"
+Issues = "https://github.com/shenzh15/pvfit/issues"
 
 [dependency-groups]
 dev = [
