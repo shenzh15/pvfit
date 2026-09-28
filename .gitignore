@@ -32,6 +32,3 @@ temp/
 
 # Logs
 *.log
-
-# Frozen reconstruction fixtures (see tests/data/make_fit_golden.py)
-!tests/data/*.h5
