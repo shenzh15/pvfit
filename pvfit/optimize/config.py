@@ -1,10 +1,60 @@
 """Read the optimizer's own settings and resolve references to stage configs."""
 
+import copy
+import glob
+import hashlib
 import math
+from importlib import metadata
 from pathlib import Path
 
 from ..config_loader import load_config
 from .backends import get_backend
+
+# What a study's recorded configuration must contain before trials are reused.
+FINGERPRINT_KEYS = ("inputs", "implementation")
+
+
+def input_fingerprint(input_pattern, root):
+    """Identity of the ROOT files ``input_pattern`` resolves to right now.
+
+    The path string alone does not tell whether a file was regenerated in
+    place or whether a glob picked up new files, so size and modification time
+    of every matched file are recorded too.
+    """
+    matches = sorted(glob.glob(str(Path(root) / Path(input_pattern).expanduser())))
+    if not matches:
+        raise FileNotFoundError(f"No ROOT files matched input_root: {input_pattern}")
+    files = []
+    for match in matches:
+        path = Path(match).resolve()
+        stat = path.stat()
+        try:
+            shown = str(path.relative_to(Path(root).resolve()))
+        except ValueError:
+            shown = str(path)
+        files.append(
+            {"path": shown, "size": stat.st_size, "mtime_ns": stat.st_mtime_ns}
+        )
+    return files
+
+
+def implementation_fingerprint():
+    """Version and source digest of the pvfit package that scores the trials.
+
+    Any change to reconstruction, analysis or the bundled toy profile changes
+    the digest, so metrics from an older code state are not mixed in.
+    """
+    package = Path(__file__).resolve().parents[1]
+    digest = hashlib.sha256()
+    for path in sorted(package.rglob("*")):
+        if path.suffix in (".py", ".json") and "__pycache__" not in path.parts:
+            digest.update(str(path.relative_to(package)).encode())
+            digest.update(path.read_bytes())
+    try:
+        version = metadata.version("pvfit")
+    except metadata.PackageNotFoundError:
+        version = "unknown"
+    return {"pvfit_version": version, "source_sha256": digest.hexdigest()}
 
 
 def validate_search_space(space, backend):
@@ -97,19 +147,38 @@ def load_optimization_settings(config_path, overrides=None):
 
 
 def check_study_configuration(study, configuration):
-    """Do not reuse metrics obtained with a different input or evaluation setup."""
+    """Do not reuse metrics obtained with a different input or evaluation setup.
+
+    ``configuration`` must carry the input file identities and the pvfit
+    implementation fingerprint (see :func:`input_fingerprint` and
+    :func:`implementation_fingerprint`); a study recorded without them cannot
+    prove its trials were scored on the same data and code, so it is not
+    resumed.
+    """
+    missing = [key for key in FINGERPRINT_KEYS if key not in configuration]
+    if missing:
+        raise ValueError(f"task configuration lacks {', '.join(missing)}")
     previous = study.user_attrs.get("task_configuration")
     if previous is None:
         if study.trials:
             raise ValueError(
                 "This study predates separate configs; use a new study name"
             )
-        study.set_user_attr("task_configuration", configuration)
+        study.set_user_attr("task_configuration", copy.deepcopy(configuration))
         return
     # Studies recorded before backends existed were all run with PVFit.
     previous = {"backend": "pvfit", **previous}
-    if previous != configuration:
+    if any(key not in previous for key in FINGERPRINT_KEYS):
         raise ValueError(
-            "Backend, reconstruction, analysis, input or search space changed; "
-            "use a new study name"
+            "This study predates input and code fingerprinting, so its trials "
+            "cannot be checked against the current data; use a new study name"
+        )
+    changed = sorted(
+        key
+        for key in set(previous) | set(configuration)
+        if previous.get(key) != configuration.get(key)
+    )
+    if changed:
+        raise ValueError(
+            f"Study configuration changed ({', '.join(changed)}); use a new study name"
         )

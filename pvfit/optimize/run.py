@@ -6,7 +6,12 @@ import optuna
 
 from ..config_loader import AnalysisConfig, load_config
 from .backends import get_backend
-from .config import check_study_configuration, load_optimization_settings
+from .config import (
+    check_study_configuration,
+    implementation_fingerprint,
+    input_fingerprint,
+    load_optimization_settings,
+)
 from .export import export_results
 from .trial import get_study_dir, make_objective, resolve_trial_input_root
 
@@ -67,6 +72,8 @@ def run_optimization(config_path, overrides):
             "reconstruction": base_cfg,
             "analysis": analysis_cfg,
             "input_root": trial_input_root,
+            "inputs": input_fingerprint(trial_input_root, root),
+            "implementation": implementation_fingerprint(),
             "working_directory": str(root),
             "search_space": settings["search_space"],
         },

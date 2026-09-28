@@ -462,15 +462,20 @@ uv run pvfit optimize --config configs/optimization.yaml --export-only
 
 Studies are resumable: the same study name continues the same SQLite study and
 keeps completed trials. Backend, reconstruction, analysis, input and search-space
-settings are recorded with the study; changing them requires a new study name. Studies
-created before this configuration split can still be exported, but must not be
-resumed for new trials without a new name. Changing the additional trial count
+settings are recorded with the study, together with the identity (path, size,
+modification time) of every input ROOT file the pattern resolves to and a digest
+of the `pvfit` source that scores the trials. Changing any of them, including
+regenerating an input file in place or adding a file a glob now matches,
+requires a new study name; the error names what changed. Studies created before
+this configuration split, or before input and code fingerprinting, can still be
+exported but are not resumed for new trials. Changing the additional trial count
 or worker/job counts is allowed.
 
 > Optuna preserves the study state across a resume but **not** the NSGA-II
 > sampler RNG state, so a resumed run can re-suggest a point it already sampled.
 > `pvfit optimize` detects exact duplicate parameter signatures and reuses the
-> stored objective values instead of re-running the pipeline.
+> stored objective values instead of re-running the pipeline. That reuse is safe
+> only because the study's inputs and code are pinned as described above.
 
 Results land in `output/optuna/<study_name>/`, with `all_trials.csv`,
 `pareto_front.csv`, `generation_summary.csv` and a `trial_N/` directory per trial

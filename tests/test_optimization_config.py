@@ -12,7 +12,12 @@ import optuna
 import yaml
 
 from pvfit.optimize.backends import get_backend
-from pvfit.optimize.config import check_study_configuration, load_optimization_settings
+from pvfit.optimize.config import (
+    check_study_configuration,
+    implementation_fingerprint,
+    input_fingerprint,
+    load_optimization_settings,
+)
 from pvfit.optimize.constants import AUDIT_SPECS, OBJECTIVE_SPECS, REQUIRED_ANALYSES
 from pvfit.optimize.export import export_results
 from pvfit.optimize.trial import make_objective
@@ -175,13 +180,22 @@ class OptimizationConfigTests(unittest.TestCase):
         with (self.root / "generation_summary.csv").open() as handle:
             self.assertEqual(list(csv.DictReader(handle)), [])
 
-    def test_resume_rejects_changed_evaluation_or_search_configuration(self):
-        study = optuna.create_study()
-        configuration = {
+    def configuration(self):
+        sample = self.root / "sample.root"
+        if not sample.exists():
+            sample.write_bytes(b"root")
+        return {
             "backend": "pvfit",
             "analysis": self.analysis,
             "search_space": self.config["search_space"],
+            "input_root": "sample.root",
+            "inputs": input_fingerprint("sample.root", self.root),
+            "implementation": implementation_fingerprint(),
         }
+
+    def test_resume_rejects_changed_evaluation_or_search_configuration(self):
+        study = optuna.create_study()
+        configuration = self.configuration()
         check_study_configuration(study, configuration)
         check_study_configuration(study, copy.deepcopy(configuration))
         # A study recorded before backends existed still resumes with PVFit.
@@ -190,21 +204,77 @@ class OptimizationConfigTests(unittest.TestCase):
             {key: value for key, value in configuration.items() if key != "backend"},
         )
         check_study_configuration(study, copy.deepcopy(configuration))
-        with self.assertRaisesRegex(ValueError, "new study name"):
+        with self.assertRaisesRegex(ValueError, "changed \\(backend\\)"):
             check_study_configuration(study, {**configuration, "backend": "allen"})
         for key in ("analysis", "search_space"):
             with self.subTest(key=key):
                 changed = copy.deepcopy(configuration)
                 changed[key] = {}
-                with self.assertRaisesRegex(ValueError, "new study name"):
+                with self.assertRaisesRegex(ValueError, f"changed \\({key}\\)"):
                     check_study_configuration(study, changed)
+
+    def test_resume_rejects_inputs_regenerated_at_the_same_path(self):
+        study = optuna.create_study()
+        configuration = self.configuration()
+        check_study_configuration(study, configuration)
+        trial = study.ask()
+        study.tell(trial, 1.0)
+        # Same pathname, different content: the recorded metrics no longer
+        # describe this file.
+        (self.root / "sample.root").write_bytes(b"regenerated")
+        with self.assertRaisesRegex(ValueError, "changed \\(inputs\\)"):
+            check_study_configuration(study, self.configuration())
+        # A glob that now matches an extra file is a changed input too.
+        (self.root / "sample.root").write_bytes(b"root")
+        pattern = {**self.configuration(), "input_root": "*.root"}
+        pattern["inputs"] = input_fingerprint("*.root", self.root)
+        study = optuna.create_study()
+        check_study_configuration(study, pattern)
+        (self.root / "extra.root").write_bytes(b"more")
+        pattern["inputs"] = input_fingerprint("*.root", self.root)
+        with self.assertRaisesRegex(ValueError, "changed \\(inputs\\)"):
+            check_study_configuration(study, pattern)
+
+    def test_resume_rejects_changed_implementation(self):
+        study = optuna.create_study()
+        configuration = self.configuration()
+        check_study_configuration(study, configuration)
+        changed = copy.deepcopy(configuration)
+        changed["implementation"]["source_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "changed \\(implementation\\)"):
+            check_study_configuration(study, changed)
+        fingerprint = implementation_fingerprint()
+        self.assertEqual(len(fingerprint["source_sha256"]), 64)
+        self.assertEqual(fingerprint, implementation_fingerprint())
+
+    def test_study_without_fingerprints_is_not_resumed(self):
+        study = optuna.create_study()
+        configuration = self.configuration()
+        study.set_user_attr(
+            "task_configuration",
+            {
+                key: value
+                for key, value in configuration.items()
+                if key not in ("inputs", "implementation")
+            },
+        )
+        with self.assertRaisesRegex(ValueError, "predates input and code"):
+            check_study_configuration(study, configuration)
+        with self.assertRaisesRegex(ValueError, "lacks inputs, implementation"):
+            check_study_configuration(
+                optuna.create_study(), {"analysis": self.analysis}
+            )
+
+    def test_input_fingerprint_needs_a_match(self):
+        with self.assertRaises(FileNotFoundError):
+            input_fingerprint("missing.root", self.root)
 
     def test_old_study_with_trials_cannot_silently_reuse_unrecorded_configuration(self):
         study = optuna.create_study()
         trial = study.ask()
         study.tell(trial, 1.0)
         with self.assertRaisesRegex(ValueError, "predates separate configs"):
-            check_study_configuration(study, {"analysis": self.analysis})
+            check_study_configuration(study, self.configuration())
 
 
 if __name__ == "__main__":
