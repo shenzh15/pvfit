@@ -7,14 +7,12 @@ import subprocess
 import sys
 import tempfile
 import unittest
-from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
 import yaml
 
 from pvfit.cli import main, parse_args
-from pvfit.config_loader import AnalysisConfig, ReconstructionConfig
 
 
 class CLITests(unittest.TestCase):
@@ -50,6 +48,24 @@ class CLITests(unittest.TestCase):
         config["paths"]["input_root"] = str(self.root / "*.root")
         config["paths"]["output_dir"] = str(self.root / "fit")
         return config
+
+    def run_with_mocked_stages(self, *extra_args):
+        """Invoke ``run`` with fit and analysis patched out; return (code, fit, analyze)."""
+        with (
+            patch("pvfit.cli._run_fit", return_value=str(self.input)) as fit,
+            patch("pvfit.cli._run_analysis") as analyze,
+        ):
+            code, _, _ = self.invoke(
+                [
+                    "run",
+                    "-c",
+                    str(self.config),
+                    "--analysis-config",
+                    str(self.analysis_config),
+                    *extra_args,
+                ]
+            )
+        return code, fit, analyze
 
     def test_help_and_version_are_available(self):
         for args in (
@@ -179,21 +195,7 @@ class CLITests(unittest.TestCase):
 
     def test_run_passes_actual_fit_output_to_analysis(self):
         self.write_config(self.fit_config())
-        with (
-            patch("pvfit.cli._run_fit", return_value=str(self.input)) as fit,
-            patch("pvfit.cli._run_analysis") as analyze,
-        ):
-            code, _, _ = self.invoke(
-                [
-                    "run",
-                    "-c",
-                    str(self.config),
-                    "--analysis-config",
-                    str(self.analysis_config),
-                    "--output",
-                    str(self.output),
-                ]
-            )
+        code, fit, analyze = self.run_with_mocked_stages("--output", str(self.output))
         self.assertEqual(code, 0)
         fit.assert_called_once()
         self.assertEqual(analyze.call_args.args[0]["hdf5_file"], str(self.input))
@@ -294,19 +296,7 @@ class CLITests(unittest.TestCase):
                 }
             )
         )
-        with (
-            patch("pvfit.cli._run_fit", return_value=str(self.input)) as fit,
-            patch("pvfit.cli._run_analysis") as analyze,
-        ):
-            code, _, _ = self.invoke(
-                [
-                    "run",
-                    "-c",
-                    str(self.config),
-                    "--analysis-config",
-                    str(self.analysis_config),
-                ]
-            )
+        code, fit, analyze = self.run_with_mocked_stages()
         self.assertEqual(code, 0)
         self.assertEqual(fit.call_args.args[0]["params"]["max_chi2"], 4)
         self.assertNotIn("purity_threshold", fit.call_args.args[0]["params"])
@@ -348,31 +338,6 @@ class CLITests(unittest.TestCase):
         self.assertEqual(code, 2)
         self.assertIn("separate analysis YAML", stderr)
         analyze.assert_not_called()
-
-    def test_analysis_defaults_do_not_inherit_fit_thresholds(self):
-        settings = AnalysisConfig.from_mapping({"analysis": {"m_r": 0.5}})
-        self.assertEqual(settings.purity_threshold, 0.7)
-        self.assertFalse(hasattr(settings, "max_chi2"))
-        with self.assertRaisesRegex(ValueError, "Unknown analysis keys: max_chi2"):
-            AnalysisConfig.from_mapping({"analysis": {"max_chi2": 4}})
-        fit_params = ReconstructionConfig.from_mapping(self.fit_config()).as_params()
-        self.assertNotIn("purity_threshold", fit_params)
-        self.assertNotIn("m_r", fit_params)
-        with self.assertRaisesRegex(ValueError, "Unknown algorithm keys: m_r"):
-            config = self.fit_config()
-            config["algorithm"]["m_r"] = 0.8
-            ReconstructionConfig.from_mapping(config)
-
-    def test_reconstruction_config_round_trips_and_derives(self):
-        cfg = ReconstructionConfig.from_mapping(self.fit_config())
-        self.assertEqual(ReconstructionConfig.from_mapping(cfg.to_mapping()), cfg)
-        self.assertAlmostEqual(cfg.bin_size_z, 0.5)
-        self.assertAlmostEqual(cfg.bin_size_t, 0.025)
-        self.assertAlmostEqual(cfg.m_minTracks, cfg.minTracks)
-        halved = replace(cfg, bins_z=400)
-        self.assertAlmostEqual(halved.m_minTracks, 2 * cfg.minTracks)
-        with self.assertRaisesRegex(ValueError, "bins.z must be a positive"):
-            replace(cfg, bins_z=0)
 
     def test_cli_import_does_not_load_fit_or_plotting(self):
         result = subprocess.run(

@@ -196,6 +196,13 @@ callable Python modules.
 
 ## Configuration
 
+Values are validated when a configuration is loaded: numbers must be finite,
+flags must be real YAML booleans (`true`/`false`, not the strings `"true"` or
+`"false"` and not `0`/`1`), thresholds such as `recall_threshold` and
+`purity_threshold` must lie in `[0, 1]`, and scales, windows and cuts must be
+positive. A value outside these rules stops the run with a message naming the
+key rather than silently producing an empty or distorted result.
+
 Each stage owns its configuration:
 
 | File                                                          | Contents                                                                           | Consumer                                             |

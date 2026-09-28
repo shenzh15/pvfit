@@ -5,6 +5,7 @@ Each stage has one frozen dataclass. Its fields carry the defaults, its
 and ``to_mapping`` writes that layout back. Everything else asks the dataclass.
 """
 
+import math
 import multiprocessing as mp
 from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
@@ -66,7 +67,30 @@ def _is_int(value):
 
 
 def _is_number(value):
-    return isinstance(value, (int, float)) and not isinstance(value, bool)
+    """A finite int or float; NaN and infinities are not numbers here."""
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(value)
+    )
+
+
+def _is_bool(value):
+    return isinstance(value, bool)
+
+
+def _check_bools(config, names, section):
+    """Flags must be real booleans: the string "false" would count as true."""
+    for name in names:
+        if not _is_bool(getattr(config, name)):
+            raise ValueError(f"{section}.{name} must be true or false")
+
+
+def _check_positive(config, names, section):
+    for name in names:
+        value = getattr(config, name)
+        if not _is_number(value) or value <= 0:
+            raise ValueError(f"{section}.{name} must be a positive finite number")
 
 
 def _check_path(value, name):
@@ -163,15 +187,28 @@ class ReconstructionConfig:
             raise ValueError(
                 "algorithm.smear_window_size must be a nonnegative integer"
             )
-        for name in (
-            "minTracks",
-            "max_track_bl_chi2",
-            "pp_max_track_z0_err",
-            "max_chi2",
-            "nsigma_merge",
-        ):
-            if not _is_number(getattr(self, name)) or getattr(self, name) <= 0:
-                raise ValueError(f"algorithm.{name} must be a positive number")
+        _check_positive(
+            self,
+            (
+                "minTracks",
+                "max_track_bl_chi2",
+                "pp_max_track_z0_err",
+                "max_chi2",
+                "nsigma_merge",
+            ),
+            "algorithm",
+        )
+        _check_bools(
+            self,
+            (
+                "beamline_chi2_cut",
+                "z0_err_cut",
+                "is_adaptive_tukey",
+                "drop_low_track_seeds",
+                "merge_vertices",
+            ),
+            "algorithm",
+        )
 
     @classmethod
     def from_mapping(cls, config):
@@ -331,11 +368,36 @@ class AnalysisConfig:
                 f"Unknown analyses: {unknown}; choose from {', '.join(ANALYSIS_NAMES)}"
             )
         object.__setattr__(self, "analyses", analyses)
+        if not isinstance(self.method_name, str) or not self.method_name.strip():
+            raise ValueError("analysis.method_name must be a nonempty string")
+        for name in ("recall_threshold", "purity_threshold"):
+            value = getattr(self, name)
+            if not _is_number(value) or not 0.0 <= value <= 1.0:
+                raise ValueError(f"analysis.{name} must be a number between 0 and 1")
+        _check_positive(
+            self,
+            (
+                "m_r",
+                "nsigma",
+                "z_scale",
+                "t_scale",
+                "x_residual_range",
+                "y_residual_range",
+                "z_residual_range",
+                "t_residual_range",
+            ),
+            "analysis",
+        )
+        _check_bools(self, ("draw_fixed_ellipses", "draw_fitted_ellipses"), "analysis")
         for name in ("plot_min_ntracks", "plot_max_ntracks", "plot_bin_width_ntracks"):
             if not _is_int(getattr(self, name)) or getattr(self, name) < 1:
                 raise ValueError(f"analysis.{name} must be a positive integer")
         if not _is_int(self.plot_event_id) or self.plot_event_id < 0:
             raise ValueError("analysis.plot_event_id must be a nonnegative integer")
+        if self.plot_min_ntracks > self.plot_max_ntracks:
+            raise ValueError(
+                "analysis.plot_min_ntracks must not exceed plot_max_ntracks"
+            )
         for name in self._PATH_KEYS:
             if getattr(self, name) is not None:
                 _check_path(getattr(self, name), f"paths.{name}")
