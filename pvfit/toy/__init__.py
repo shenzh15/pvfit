@@ -19,6 +19,7 @@ import uproot
 from scipy.special import ndtr, ndtri
 from scipy.stats import rankdata
 
+from ..fit.event_identity import unify_event_identity
 from ..fit.truth_matching import read_mcpv_dataframe
 
 C_MM_PER_NS = 299.792458
@@ -185,26 +186,25 @@ def track_features(tracks):
 def load_reference(input_paths):
     """Tracks and effective vertices of one file, a glob, or a list of files.
 
-    Event numbers restart in every file, so each file's events are offset to
-    keep them distinct.
+    Event numbers restart in every run, so events are identified by
+    (run_number, event_number) across all files; both trees must carry
+    run_number.
     """
     if isinstance(input_paths, (str, Path)):
         paths = sorted(glob.glob(str(input_paths))) or [str(input_paths)]
     else:
         paths = [str(p) for p in input_paths]
-    tracks, vertices, offset = [], [], 0
+    per_file = []
     for path in paths:
         with uproot.open(path) as root:
             t = pd.DataFrame(
                 root["velo_kalman_filter/monitor_tree"].arrays(library="np")
             )
             v = read_mcpv_dataframe(root["mc_pv_dumper/MCPV_effective_tree"])
-        t["event_number"] = t["event_number"].astype(np.int64) + offset
-        v["event_number"] = v["event_number"].astype(np.int64) + offset
-        offset = int(max(t["event_number"].max(), v["event_number"].max())) + 1
-        tracks.append(t)
-        vertices.append(v)
-    return pd.concat(tracks, ignore_index=True), pd.concat(vertices, ignore_index=True)
+        per_file.append((t, v, path))
+    # Events are identified by (run_number, event_number) across all files
+    tracks, vertices, _ = unify_event_identity(per_file)
+    return tracks, vertices
 
 
 def calibrate_profile(input_paths):
@@ -288,7 +288,7 @@ def draw_counts(rng, mean, variance, size=None, minimum=0):
     return minimum + rng.poisson(extra_mean, size)
 
 
-def make_tracks(rng, origins, distribution, event, first_key, from_pv):
+def make_tracks(rng, origins, distribution, run, event, first_key, from_pv):
     n = len(origins)
     backward = rng.random(n) < distribution["backward_fraction"]
     features = np.empty((n, len(FEATURES)))
@@ -309,6 +309,7 @@ def make_tracks(rng, origins, distribution, event, first_key, from_pv):
     time_slope = np.where(backward, -1, 1) * np.sqrt(1 + theta**2) / C_MM_PER_NS
     return pd.DataFrame(
         {
+            "run_number": np.full(n, run, dtype=np.int64),
             "event_number": np.full(n, event, dtype=np.int64),
             "mc_key": np.arange(first_key, first_key + n, dtype=np.int64),
             "beamPOCA_x": x0 + dz * tx,
@@ -340,14 +341,16 @@ def make_tracks(rng, origins, distribution, event, first_key, from_pv):
     )
 
 
-def generate_event(rng, profile, event):
+def generate_event(rng, profile, run, event):
     n_pvs = int(draw_counts(rng, **profile["vertices_per_event"], minimum=1))
     points = rng.multivariate_normal(
         profile["vertex_mean"], profile["vertex_covariance"], n_pvs
     )
     counts = draw_counts(rng, **profile["tracks_per_vertex"], size=n_pvs)
     origins = np.repeat(points, counts, axis=0)
-    prompt = make_tracks(rng, origins, profile["populations"]["prompt"], event, 0, True)
+    prompt = make_tracks(
+        rng, origins, profile["populations"]["prompt"], run, event, 0, True
+    )
     n_background = int(
         rng.poisson(len(prompt) * profile["background_per_prompt_track"])
     )
@@ -358,6 +361,7 @@ def generate_event(rng, profile, event):
         rng,
         background_origins,
         profile["populations"]["background"],
+        run,
         event,
         len(prompt),
         rng.random(n_background) < profile["background_from_pv_fraction"],
@@ -365,6 +369,7 @@ def generate_event(rng, profile, event):
     starts = np.concatenate(([0], np.cumsum(counts)))
     vertices = pd.DataFrame(
         {
+            "run_number": np.full(n_pvs, run, dtype=np.int64),
             "event_number": np.full(n_pvs, event, dtype=np.int64),
             "effective_pv_key": np.arange(n_pvs, dtype=np.int64),
             "x": points[:, 0],
@@ -388,6 +393,11 @@ def generate_event(rng, profile, event):
 
 
 def generate_sample(profile, output, events=10, seed=20260922):
+    """Write ``events`` synthetic events as one run whose run_number is ``seed``.
+
+    Events are identified by (run_number, event_number), so samples generated
+    with different seeds can be read together without colliding.
+    """
     output = Path(output)
     if output.exists() or output.is_symlink():
         raise FileExistsError(
@@ -411,12 +421,13 @@ def generate_sample(profile, output, events=10, seed=20260922):
             {
                 "sample_type": "synthetic_parametric_toy",
                 "seed": seed,
+                "run_number": seed,
                 "events": events,
                 "profile": profile,
             }
         )
         for event in range(events):
-            tracks, vertices = generate_event(rng, profile, event)
+            tracks, vertices = generate_event(rng, profile, seed, event)
             arrays = {k: tracks[k].to_numpy() for k in tracks}
             pv_arrays = {
                 k: vertices[k].to_numpy() for k in vertices if k != "track_keys"
@@ -448,4 +459,5 @@ def generate_sample(profile, output, events=10, seed=20260922):
         "tracks": n_tracks,
         "effective_vertices": n_vertices,
         "seed": seed,
+        "run_number": seed,
     }

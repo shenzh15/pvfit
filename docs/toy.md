@@ -13,7 +13,8 @@ uv run pvfit run --config configs/reconstruction.yaml --input input/toy_sample.r
 `pvfit toy` refuses to overwrite an existing file: pass another `--output` and
 give that path to `pvfit run --input`. `--seed` and
 `--events` choose the sample; the default seed is `20260922` and event numbers
-start at zero.
+start at zero. The sample is written as a single run whose `run_number` equals
+the seed, because PVFit identifies events by `(run_number, event_number)`.
 
 ## Model
 

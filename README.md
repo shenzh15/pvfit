@@ -51,8 +51,17 @@ environment and invoke `pvfit` directly. `python -m pvfit` is also supported.
 
 PVFit reads a ROOT file produced by an Allen monitoring job. **No sample data
 ships with this repository** — you need to point `paths.input_root` at your own
-file. `paths.input_root` accepts a glob, and multiple files are concatenated with
-`event_number` offset so that event ids stay unique.
+file. `paths.input_root` accepts a glob; multiple files are read together.
+
+Allen monitoring dumps preserve the run and event numbers from MDF ODIN.
+Event numbers can repeat across runs, so an event is identified by the pair
+`(run_number, event_number)`, and both trees **must** carry a `run_number`
+branch; a dump without it is rejected. PVFit numbers the events densely in
+`(run_number, event_number)` order across all input files, and that integer is
+the id used everywhere downstream (`workflow.event_number`, `plot_event_id`, the
+HDF5 group names). Each HDF5 event group records the original `run_number`,
+`source_event_number` and `source_file` in its attributes. The same
+`(run_number, event_number)` appearing in two input files is an error.
 
 Two trees are required.
 
@@ -61,6 +70,7 @@ Two trees are required.
 | Branch                                                         | Meaning                                                    |
 | -------------------------------------------------------------- | ---------------------------------------------------------- |
 | `event_number`                                               | event id, used to group rows                               |
+| `run_number`                                                 | run id —**required**; events are keyed by (run, event) |
 | `beamPOCA_x`, `beamPOCA_y`, `beamPOCA_z`, `beamPOCA_t` | point of closest approach to the beamline                  |
 | `beamPOCA_tx`, `beamPOCA_ty`                               | track slopes at the POCA                                   |
 | `c00`, `c11`, `c55`                                      | diagonal covariance entries for`x`, `y`, `t`         |
@@ -75,6 +85,7 @@ true PV:
 | Branch                        | Meaning                                                          |
 | ----------------------------- | ---------------------------------------------------------------- |
 | `event_number`              | event id                                                         |
+| `run_number`                | run id —**required**                                            |
 | `x`, `y`, `z`, `time` | true vertex position                                             |
 | `effective_pv_key`          | unique key of the vertex within the event                        |
 | `track_keys`                | variable-length array of the`mc_key`s belonging to this vertex |
@@ -103,7 +114,8 @@ Consequences worth knowing:
 `pvfit toy` writes a synthetic ROOT sample with the same trees and keys as the
 reference data, generated from aggregate statistics in
 `pvfit/toy/profile.json`; the whole pipeline
-then runs on it:
+then runs on it. The sample is one run whose `run_number` is the seed, so
+samples made with different seeds can be read together:
 
 ```bash
 uv run pvfit toy --events 10
@@ -299,6 +311,7 @@ fit_results.h5
 ├── @source                        "PVFit" (producer label used by plots)
 └── <event_id>/
     ├── @n_tracks, @n_true_vertices, @n_rec_vertices, @n_seedings, @truth_matching
+    ├── @run_number, @source_event_number, @source_file   (the dump's own identity)
     │
     ├── histogram [n_bins_z, n_bins_t] float64
     │   @z_min, @z_max, @t_min, @t_max, @n_bins_z, @n_bins_t

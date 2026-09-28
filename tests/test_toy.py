@@ -23,19 +23,19 @@ class ToyTests(unittest.TestCase):
         cls.profile = default_profile()
 
     def test_seed_is_reproducible(self):
-        a, av = generate_event(np.random.default_rng(12), self.profile, 0)
-        b, bv = generate_event(np.random.default_rng(12), self.profile, 0)
+        a, av = generate_event(np.random.default_rng(12), self.profile, 1, 0)
+        b, bv = generate_event(np.random.default_rng(12), self.profile, 1, 0)
         pd.testing.assert_frame_equal(a, b)
         pd.testing.assert_frame_equal(
             av.drop(columns="track_keys"), bv.drop(columns="track_keys")
         )
         for first, second in zip(av.track_keys, bv.track_keys, strict=False):
             np.testing.assert_array_equal(first, second)
-        c, _ = generate_event(np.random.default_rng(13), self.profile, 0)
+        c, _ = generate_event(np.random.default_rng(13), self.profile, 1, 0)
         self.assertFalse(a.equals(c))
 
     def test_geometry_momentum_and_covariance(self):
-        t, _ = generate_event(np.random.default_rng(14), self.profile, 0)
+        t, _ = generate_event(np.random.default_rng(14), self.profile, 1, 0)
         dot = t.beamPOCA_x * t.beamPOCA_tx + t.beamPOCA_y * t.beamPOCA_ty
         np.testing.assert_allclose(dot, 0, atol=1e-10)
         theta = np.hypot(t.beamPOCA_tx, t.beamPOCA_ty)
@@ -45,7 +45,7 @@ class ToyTests(unittest.TestCase):
         self.assertTrue(t.mc_key.is_unique)
 
     def test_keys_recover_full_vertex_membership_after_shuffle(self):
-        t, vertices = generate_event(np.random.default_rng(15), self.profile, 9)
+        t, vertices = generate_event(np.random.default_rng(15), self.profile, 1, 9)
         truth = build_true_vertex_info(t, vertices)
         self.assertEqual(len(truth), len(vertices))
         used = set()
@@ -71,6 +71,9 @@ class ToyTests(unittest.TestCase):
                 v = read_mcpv_dataframe(root["mc_pv_dumper/MCPV_effective_tree"])
             self.assertEqual(len(t), result["tracks"])
             self.assertEqual(set(t.event_number), {0, 1})
+            self.assertEqual(set(t.run_number), {16})
+            self.assertEqual(set(v.run_number), {16})
+            self.assertEqual(result["run_number"], 16)
             for event in (0, 1):
                 truth = build_true_vertex_info(
                     t[t.event_number == event], v[v.event_number == event]
@@ -80,7 +83,7 @@ class ToyTests(unittest.TestCase):
                 generate_sample(self.profile, path)
 
     def test_time_errors_retain_discrete_levels(self):
-        tracks, _ = generate_event(np.random.default_rng(17), self.profile, 0)
+        tracks, _ = generate_event(np.random.default_rng(17), self.profile, 1, 0)
         levels = set()
         for population in self.profile["populations"].values():
             for direction in ("forward", "backward"):

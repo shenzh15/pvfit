@@ -103,6 +103,11 @@ def save_event_to_hdf5(event_result, event_data_selected, output_file, params):
         event.attrs["n_rec_vertices"] = len(rec_info)
         event.attrs["n_seedings"] = event_result["n_seedings"]
         event.attrs["truth_matching"] = "key"
+        # The dump's own identity of the event, attached by run_fit (see
+        # event_identity); results built elsewhere may not carry it
+        for attr in ("run_number", "source_event_number", "source_file"):
+            if attr in event_result:
+                event.attrs[attr] = event_result[attr]
 
         histogram = _write_dataset_returning(
             event, "histogram", event_result["histogram"]

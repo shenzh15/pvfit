@@ -1,10 +1,10 @@
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-import pandas as pd
 import uproot
 from tqdm import tqdm
 
+from .event_identity import require_run_numbers, unify_event_identity
 from .event_processing import process_event, process_event_wrapper
 from .save_results_to_hdf5 import save_all_events_to_hdf5
 from .truth_matching import read_mcpv_dataframe
@@ -46,8 +46,7 @@ def run_fit(
     # Load ROOT data
     # ------------------------------------------------------------
     print("\nLoading ROOT files:")
-    all_track_data = []
-    all_mcpv_data = []
+    per_file = []
     total_events = 0
 
     if not input_files:
@@ -69,36 +68,26 @@ def run_fit(
                     "MCPV_effective_tree with effective_pv_key, track_keys, n_valid_tracks"
                 )
             track_df = track_tree.arrays(library="pd")
-            all_track_data.append(track_df)
 
             # Load MC true vertices from MCPV_effective_tree
             mcpv_tree = file[mc_vertex_tree_name]
             mcpv_df = read_mcpv_dataframe(mcpv_tree)
-            all_mcpv_data.append(mcpv_df)
 
-            n_evt = track_df.groupby("event_number").ngroups
+            # Events are identified by (run_number, event_number)
+            require_run_numbers(track_df, mcpv_df)
+            per_file.append((track_df, mcpv_df, file_path))
+
+            keys = ["run_number", "event_number"]
+            n_evt = track_df.groupby(keys).ngroups
             total_events += n_evt
+            print(f"    runs: {track_df['run_number'].nunique()}")
             print(f"    track events: {n_evt}")
-            print(f"    MCPV events: {mcpv_df.groupby('event_number').ngroups}")
+            print(f"    MCPV events: {mcpv_df.groupby(keys).ngroups}")
 
-    # Concatenate & reindex event_number if needed
-    if len(all_track_data) == 1:
-        track_data = all_track_data[0]
-        mcpv_data = all_mcpv_data[0]
-    else:
-        track_data = []
-        mcpv_data = []
-        event_offset = 0
-        for track_df, mcpv_df in zip(all_track_data, all_mcpv_data, strict=True):
-            track_df = track_df.copy()
-            mcpv_df = mcpv_df.copy()
-            track_df["event_number"] += event_offset
-            mcpv_df["event_number"] += event_offset
-            event_offset = track_df["event_number"].max() + 1
-            track_data.append(track_df)
-            mcpv_data.append(mcpv_df)
-        track_data = pd.concat(track_data, ignore_index=True)
-        mcpv_data = pd.concat(mcpv_data, ignore_index=True)
+    # One dense id per (run_number, event_number) across all files; the
+    # dump's own numbers stay in source_event_number and the identity table.
+    track_data, mcpv_data, identity = unify_event_identity(per_file)
+    identity = identity.set_index("event_number")
 
     # ------------------------------------------------------------
     # Group by event
@@ -157,6 +146,13 @@ def run_fit(
                     raise RuntimeError(f"Event {evt_id} failed") from e
 
     print(f"\nFinished processing {len(fit_results)} events")
+
+    # Carry the original identity of every event into the output
+    for result in fit_results:
+        origin = identity.loc[result["event_number"]]
+        result["run_number"] = int(origin["run_number"])
+        result["source_event_number"] = int(origin["source_event_number"])
+        result["source_file"] = str(origin["source_file"])
 
     # ------------------------------------------------------------
     # Save to HDF5

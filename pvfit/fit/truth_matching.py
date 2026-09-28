@@ -46,6 +46,14 @@ def build_true_vertex_info(tracks, vertices, min_tracks=4):
     events = set(tracks["event_number"]) | set(vertices["event_number"])
     if len(events) > 1:
         raise ValueError("Truth matching inputs must belong to the same single event")
+    if "run_number" in tracks and "run_number" in vertices:
+        runs = set(tracks["run_number"]) | set(vertices["run_number"])
+        if len(runs) > 1:
+            raise ValueError(
+                "Truth matching inputs must belong to the same single event: "
+                f"event_number {events.pop()} appears in runs {sorted(runs)}; "
+                "key events by (run_number, event_number) first"
+            )
     if vertices["effective_pv_key"].duplicated().any():
         raise ValueError("Duplicate effective_pv_key within one event")
     keys = tracks["mc_key"].to_numpy()
