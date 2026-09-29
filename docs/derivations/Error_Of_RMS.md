@@ -1,150 +1,77 @@
-# Deriving the Standard Error of RMS to $\displaystyle \sigma/\sqrt{2n}$
+# Uncertainty of a sample standard deviation
 
-> **Target Formula**  
-> For $n$ independent and identically distributed samples from $\mathcal{N}(0,\sigma^2)$  
-> $$
-> \hat{s} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}X_i^{2}}
-> $$  
-> we have  
-> $$
-> \operatorname{SE}(\hat{s}) = \frac{\sigma}{\sqrt{2n}}
-> $$
+[Back to derivations](README.md)
 
----
+## What the code uses
 
-## 1. Definitions and Prerequisites
-
-1. **Data Assumption**  
-   $$
-   X_i \stackrel{\text{i.i.d.}}{\sim} \mathcal{N}(0,\sigma^2), \quad i=1,\ldots,n
-   $$
-
-2. **Sample RMS (Root Mean Square)**  
-   $$
-   \hat{s} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}X_i^{2}} \quad
-   \text{(Since the mean is known to be 0, } \hat{s} \text{ is also called "sample standard deviation")}
-   $$
-
----
-
-## 2. Sum of Squares $\longrightarrow$ $\chi^2$ Distribution
-
-- **Single Gaussian**  
-  $$
-  \frac{X_i^2}{\sigma^2} \sim \chi^2_{(1)}
-  $$
-
-- **n Independent Gaussians**  
-  $$
-  Y = \frac{1}{\sigma^{2}}\sum_{i=1}^{n}X_i^{2}
-  \quad \Longrightarrow \quad Y \sim \chi^2_{(n)}
-  $$
-
-- **Rewrite** $\hat{s}$ **using Y**  
-  $$
-  \hat{s} = \sigma \sqrt{\frac{Y}{n}}
-  $$
-
----
-
-## 3. Two Fundamental Properties of $\chi^2$ Distribution
-
-For a $\chi^2$ variable with degrees of freedom $k$:
+`pvfit.analysis.utils.std_with_error` reports the sample standard deviation
+$s$ (with $n-1$ in the denominator) and an uncertainty that makes no Gaussian
+assumption. With $m_4$ the fourth central moment of the sample,
 
 $$
-\boxed{
-\mathbb{E}[Y]=k, \quad
-\operatorname{Var}(Y)=2k
-}
+\operatorname{Var}(s^2)\approx\frac{1}{n}\left[m_4-\frac{n-3}{n-1}\,s^4\right],
+\qquad
+\operatorname{Var}(s)\approx\frac{\operatorname{Var}(s^2)}{4s^2},
 $$
 
-Here $k=n$, so
+the second step being the first-order delta method for $s=\sqrt{s^2}$. For a
+Gaussian sample $m_4=3\sigma^4$ and the expression reduces to the familiar
+$\operatorname{SE}(s)\approx\sigma/\sqrt{2n}$ derived below; heavier tails
+give a larger uncertainty than the Gaussian formula would.
+
+The `resolution` analysis applies this to residuals rec − true inside a window
+and reports the std as the resolution and the mean as the bias, each with its
+own uncertainty ($s/\sqrt{n}$ for the mean). It does not report the RMS about
+zero, which would combine the two: $\mathrm{RMS}^2 \approx s^2 + \text{bias}^2$.
+
+## Gaussian limit
+
+For independent samples $X_i \sim \mathcal{N}(0,\sigma^2)$ with known zero mean,
+define the sample RMS as
 
 $$
-\mathbb{E}[Y]=n, \quad
-\operatorname{Var}(Y)=2n
+\hat{s}=\sqrt{\frac{1}{n}\sum_{i=1}^{n}X_i^2}.
 $$
 
----
+The first-order delta method gives the large-sample approximation
 
-## 4. Delta Method: Variance Approximation for Nonlinear Functions
+$$
+\operatorname{SE}(\hat{s})\approx\frac{\sigma}{\sqrt{2n}}.
+$$
 
-1. **Let**  
-   $$
-   g(y) = \sigma \sqrt{\frac{y}{n}}
-   $$
+## Derivation
 
-2. **First-order Taylor expansion around the mean** $y_0=\mathbb{E}[Y]=n$  
-   $$
-   g(Y) \approx g(y_0) + g'(y_0)(Y-y_0)
-   $$
+The normalized sum of squares follows a chi-square distribution:
 
-3. **Variance Propagation**  
-   $$
-   \operatorname{Var}[g(Y)] \approx
-   \bigl(g'(y_0)\bigr)^2 \operatorname{Var}(Y)
-   $$
+$$
+Y=\frac{1}{\sigma^2}\sum_{i=1}^{n}X_i^2\sim\chi_n^2,
+\qquad \mathbb{E}[Y]=n,\qquad \operatorname{Var}(Y)=2n.
+$$
 
----
+Write $\hat{s}=g(Y)=\sigma\sqrt{Y/n}$. Expanding around $\mathbb{E}[Y]=n$ gives
 
-## 5. Calculate Derivative and Substitute
+$$
+g(Y)\approx g(n)+g'(n)(Y-n),\qquad g'(n)=\frac{\sigma}{2n}.
+$$
 
-- **Derivative**  
-  $$
-  g'(y) = \sigma \frac{1}{2}\frac{1}{\sqrt{ny}}
-  $$
+Hence
 
-- **At** $y_0=n$  
-  $$
-  g'(y_0)=\sigma \frac{1}{2}\frac{1}{\sqrt{n \cdot n}}
-           =\frac{\sigma}{2n}
-  $$
+$$
+\operatorname{Var}(\hat{s})\approx[g'(n)]^2\operatorname{Var}(Y)
+=\frac{\sigma^2}{2n}.
+$$
 
-- **Substitute back into variance**  
-  $$
-  \operatorname{Var}(\hat{s})
-    \approx
-    \left(\frac{\sigma}{2n}\right)^2 (2n)
-    =\frac{\sigma^{2}}{2n}
-  $$
+Taking the square root gives the stated standard error. This approximation
+omits higher-order terms; it is not an exact finite-sample identity.
 
-- **Standard Error (square root of variance)**  
-  $$
-  \boxed{\operatorname{SE}(\hat{s})=\frac{\sigma}{\sqrt{2n}}}
-  $$
+## Scope
 
----
+If the mean is unknown and the estimator is the sample standard deviation
+$s=\sqrt{\sum_i(X_i-\bar{X})^2/(n-1)}$, the same argument replaces $n$ by $n-1$:
 
-## 6. About the Accuracy of the "Approximation"
+$$
+\operatorname{SE}(s)\approx\frac{\sigma}{\sqrt{2(n-1)}}.
+$$
 
-- Including second-order terms gives  
-  $$
-  \operatorname{Var}(\hat{s})
-  =\frac{\sigma^{2}}{2n}\left(1-\frac{1}{2n}+O(n^{-2})\right)
-  $$
-- When $n \geq 10$, the first-order approximation is already very close to the true value.
-
----
-
-## 7. Summary and Key Points to Remember
-
-| Step | Key Formula | Must Remember |
-|------|-------------|---------------|
-| **①** Gaussian sum of squares → $\chi^2$ | $Y = \frac{1}{\sigma^2}\sum X_i^2 \sim \chi^2_{(n)}$ | One of the most commonly used Gaussian properties |
-| **②** $\chi^2$ mean and variance | $\mathbb{E}[Y]=n, \operatorname{Var}(Y)=2n$ | Memorize this |
-| **③** Delta method | $\operatorname{Var}[g(Y)] \approx g'(\mathbb{E} Y)^2\operatorname{Var}(Y)$ | Master the approach |
-| **④** Substitute to find SE | $\operatorname{SE}(\hat{s})=\sigma/\sqrt{2n}$ | The conclusion |
-
----
-
-### ✎ Notes
-
-1. **Unknown mean** case requires centering first and dividing by $(n-1)$, then  
-   $$
-   \operatorname{SE}(\hat{s})\approx\frac{\sigma}{\sqrt{2(n-1)}}
-   $$
-2. **Non-Gaussian distributions** can also use the Delta method for RMS, but the coefficient $\sigma/\sqrt{2}$ only holds for Gaussian distributions because it relies on the $\chi^2$ structure.
-3. The Delta method's choice to **expand around** $\mathbb{E}[Y]$ **is the most natural and efficient—it centers the error terms and minimizes computation.**
-
-> **One-sentence memory aid**  
-> **"Sum of squares→χ², remember mean and variance, then apply Delta: three steps to get σ/√(2n)."**
+For non-Gaussian distributions, the delta-method calculation depends on the
+fourth moment. The Gaussian coefficient does not apply in general.

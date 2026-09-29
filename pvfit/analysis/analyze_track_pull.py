@@ -11,6 +11,8 @@ import h5py
 import matplotlib.pyplot as plt
 import numpy as np
 
+from .utils import mean_with_error, std_with_error
+
 C_MM_PER_NS = 299.792458
 DATA_FIELDS = (
     "pull_x",
@@ -101,14 +103,31 @@ def _collect_track_pulls(hdf5_path):
 
 
 def _statistics(values):
-    """Report full-sample statistics, irrespective of plotting limits."""
+    """Report full-sample statistics, irrespective of plotting limits.
+
+    ``mean_error`` is s/√n and ``std_error`` comes from the fourth central
+    moment (see :func:`~pvfit.analysis.utils.std_with_error`); both are
+    ``None`` below two entries. ``std`` itself is the population form (ddof=0)
+    of the collected sample.
+    """
     if not len(values):
-        return {"n": 0, "mean": None, "std": None, "central68_half_width": None}
+        return {
+            "n": 0,
+            "mean": None,
+            "mean_error": None,
+            "std": None,
+            "std_error": None,
+            "central68_half_width": None,
+        }
     low, high = np.quantile(values, [0.16, 0.84])
+    mean, mean_error = mean_with_error(values)
+    std_error = std_with_error(values)[1] if len(values) > 1 else None
     return {
         "n": len(values),
-        "mean": float(np.mean(values)),
+        "mean": mean,
+        "mean_error": mean_error,
         "std": float(np.std(values)),
+        "std_error": std_error,
         "central68_half_width": float((high - low) / 2),
     }
 
@@ -149,6 +168,11 @@ def analyze_track_pull(hdf5_path, output_dir):
     return summary
 
 
+def _pm(value, error):
+    """``value ± error`` for titles; the error is omitted when unavailable."""
+    return f"{value:.3g}" if error is None else f"{value:.3g} ± {error:.2g}"
+
+
 def _plot_track_pulls(data, output_dir):
     """Show the core, label overflow, and retain tails in the displayed statistics."""
     fig, axes = plt.subplots(3, 4, figsize=(20, 13), layout="constrained")
@@ -178,7 +202,8 @@ def _plot_track_pulls(data, output_dir):
         stats = _statistics(values)
         outside = 100 * (1 - counts.sum() / len(values))
         ax.set_title(
-            f"Mean {stats['mean']:.3g}, std {stats['std']:.3g}, "
+            f"Mean {_pm(stats['mean'], stats['mean_error'])}\n"
+            f"std {_pm(stats['std'], stats['std_error'])} | "
             f"68% half-width {stats['central68_half_width']:.3g}\n"
             f"Outside display: {outside:.2f}%",
             fontsize=10,

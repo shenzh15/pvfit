@@ -1,16 +1,21 @@
-"""Vertex position resolution (RMS of residuals) with overlap matching.
+"""Vertex position resolution and bias of residuals, with overlap matching.
 
-Residuals of matched reconstructed-true pairs are binned by the true vertex's
-track count; each coordinate keeps only residuals inside its window.
+Residuals rec − true of matched reconstructed-true pairs are binned by the true
+vertex's track count; each coordinate keeps only residuals inside its window,
+so every number below describes the core of the distribution, not its tails.
+
+Two quantities are reported separately: the *resolution*, the sample standard
+deviation of the residuals about their mean, and the *bias*, that mean. The
+RMS about zero would mix the two (RMS² = resolution² + bias²).
 """
 
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 from .binned_rate import find_bin, iter_events, track_matched_pairs
+from .utils import mean_with_error, std_with_error
 
 COORDS = ("x", "y", "z", "t")
 
@@ -53,9 +58,10 @@ def analyze_vertex_resolution(
 
     resolutions = {}
     resolution_errors = {}
+    biases = {}
     for coord in COORDS:
-        resolutions[coord], resolution_errors[coord] = _calculate_resolutions(
-            bins, bin_residuals[coord]
+        resolutions[coord], resolution_errors[coord], biases[coord] = (
+            _calculate_resolutions(bins, bin_residuals[coord])
         )
     overall_stats = _calculate_overall_resolution(bin_residuals)
 
@@ -64,6 +70,7 @@ def analyze_vertex_resolution(
         unit = "ns" if coord == "t" else "mm"
         print(
             f"resolution  {coord}  {stats['resolution']:.4f} ± {stats['error']:.4f} {unit}"
+            f"  bias {stats['bias']:.4f} ± {stats['bias_error']:.4f} {unit}"
             f"  ({stats['n_vertices']} vertices)"
         )
 
@@ -77,13 +84,14 @@ def analyze_vertex_resolution(
         plot_data, recall_threshold, purity_threshold, *ranges, output_dir, method_name
     )
     _create_residual_histograms(
-        bins, bin_residuals, resolutions, *ranges, output_dir, method_name
+        bins, bin_residuals, resolutions, biases, *ranges, output_dir, method_name
     )
     _save_resolution_to_csv(
         bins,
         plot_data,
         resolutions,
         resolution_errors,
+        biases,
         bin_residuals,
         overall_stats,
         recall_threshold,
@@ -93,42 +101,35 @@ def analyze_vertex_resolution(
     )
 
 
-def rms_with_error(residuals):
-    """Sample RMS (ddof=1) and its uncertainty from the fourth central moment.
-
-    Var(s²) ≈ (1/n)[m4 − ((n−3)/(n−1)) s⁴] and Var(s) ≈ Var(s²)/(4 s²).
-    Fewer than two values give (0.0, 0.0).
-    """
-    if len(residuals) < 2:
+def _bias(residuals):
+    """(mean, error of the mean) of the residuals; (0.0, 0.0) below two values."""
+    mean, error = mean_with_error(residuals)
+    if mean is None or error is None:
         return 0.0, 0.0
-    values = np.array(residuals)
-    n = len(values)
-    sample_var = np.var(values, ddof=1)
-    centered = values - np.mean(values)
-    m4 = np.mean(centered**4)
-    var_of_sample_var = (1 / n) * (m4 - ((n - 3) / (n - 1)) * sample_var**2)
-    if sample_var > 0 and var_of_sample_var > 0:
-        return np.sqrt(sample_var), np.sqrt(var_of_sample_var / (4 * sample_var))
-    return np.sqrt(sample_var), 0.0
+    return mean, error
 
 
 def _calculate_resolutions(bins, bin_residuals_coord):
-    """Resolution and its error per bin for one coordinate."""
-    resolutions, errors = {}, {}
+    """Resolution, its error and (bias, bias error) per bin for one coordinate."""
+    resolutions, errors, biases = {}, {}, {}
     for bin_ in bins:
-        resolutions[bin_], errors[bin_] = rms_with_error(bin_residuals_coord[bin_])
-    return resolutions, errors
+        resolutions[bin_], errors[bin_] = std_with_error(bin_residuals_coord[bin_])
+        biases[bin_] = _bias(bin_residuals_coord[bin_])
+    return resolutions, errors, biases
 
 
 def _calculate_overall_resolution(bin_residuals):
-    """Resolution, error and vertex count per coordinate over all bins."""
+    """Resolution, bias, their errors and vertex count per coordinate over all bins."""
     overall_stats = {}
     for coord in COORDS:
         residuals = [r for values in bin_residuals[coord].values() for r in values]
-        resolution, error = rms_with_error(residuals)
+        resolution, error = std_with_error(residuals)
+        bias, bias_error = _bias(residuals)
         overall_stats[coord] = {
             "resolution": resolution,
             "error": error,
+            "bias": bias,
+            "bias_error": bias_error,
             "n_vertices": len(residuals) if len(residuals) > 1 else 0,
         }
     return overall_stats
@@ -235,7 +236,7 @@ def _create_resolution_plots(
             markersize=8,
             capsize=5,
             capthick=2,
-            label=f"{coord.upper()} Resolution (RMS)",
+            label=f"{coord.upper()} Resolution (std of residuals)",
         )
 
         ax.set_xlabel("Number of tracks per primary vertex", fontsize=12)
@@ -249,7 +250,7 @@ def _create_resolution_plots(
 
         ax.set_title(
             f"{coord.upper()} Resolution vs Track Count\n"
-            f"(residuals in {range_str})\n"
+            f"(std of residuals in {range_str}; bias reported separately)\n"
             r"Error: $\sqrt{Var(s^2)/(4s^2)}$",
             fontsize=11,
         )
@@ -287,6 +288,7 @@ def _create_residual_histograms(
     bins,
     bin_residuals,
     resolutions,
+    biases,
     x_residual_range,
     y_residual_range,
     z_residual_range,
@@ -344,7 +346,8 @@ def _create_residual_histograms(
                 ax.set_ylabel("Density", fontsize=11)
                 ax.set_title(
                     f"{coord.upper()} Residuals - [{bin_start}, {bin_end}] tracks\n"
-                    f"σ={resolutions[coord][bin_tuple]:.4f} {unit}, n={len(residuals)}",
+                    f"std={resolutions[coord][bin_tuple]:.4f} {unit}, "
+                    f"bias={biases[coord][bin_tuple][0]:.4f} {unit}, n={len(residuals)}",
                     fontsize=11,
                 )
                 ax.set_xlim(-res_range, res_range)
@@ -370,6 +373,7 @@ def _save_resolution_to_csv(
     plot_data,
     resolutions,
     resolution_errors,
+    biases,
     bin_residuals,
     overall_stats,
     recall_threshold,
@@ -392,6 +396,7 @@ def _save_resolution_to_csv(
             bin_center = (bin_start + bin_end) / 2
             resolution = resolutions[coord][bin_tuple]
             error = resolution_errors[coord][bin_tuple]
+            bias, bias_error = biases[coord][bin_tuple]
             n_vertices = len(bin_residuals[coord][bin_tuple])
 
             bin_data.append(
@@ -401,6 +406,8 @@ def _save_resolution_to_csv(
                     "bin_center": bin_center,
                     f"resolution_{unit}": resolution,
                     f"resolution_error_{unit}": error,
+                    f"bias_{unit}": bias,
+                    f"bias_error_{unit}": bias_error,
                     "n_vertices": n_vertices,
                 }
             )
@@ -420,6 +427,8 @@ def _save_resolution_to_csv(
                     "coordinate": coord,
                     f"overall_resolution_{unit}": stats["resolution"],
                     f"overall_error_{unit}": stats["error"],
+                    f"overall_bias_{unit}": stats["bias"],
+                    f"overall_bias_error_{unit}": stats["bias_error"],
                     "total_vertices": stats["n_vertices"],
                     "recall_threshold": recall_threshold,
                     "purity_threshold": purity_threshold,

@@ -1,11 +1,56 @@
 """Fitted vertex pull analysis: Compare fitted vertex parameters to true vertices."""
 
+import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 from .binned_rate import iter_events, track_matched_pairs
+from .utils import mean_with_error, std_with_error
+
+COORDS = ("x", "y", "z", "t")
+
+
+def _summary(values):
+    """Full-sample mean and std with their errors, and the central 68% half-width."""
+    values = np.asarray(values, dtype=float)
+    if not len(values):
+        return {
+            "n": 0,
+            "mean": None,
+            "mean_error": None,
+            "std": None,
+            "std_error": None,
+            "central68_half_width": None,
+        }
+    mean, mean_error = mean_with_error(values)
+    std, std_error = std_with_error(values) if len(values) > 1 else (None, None)
+    low, high = np.quantile(values, [0.16, 0.84])
+    return {
+        "n": int(len(values)),
+        "mean": mean,
+        "mean_error": mean_error,
+        "std": std,
+        "std_error": std_error,
+        "central68_half_width": float((high - low) / 2),
+    }
+
+
+def summarize_vertex_pulls(pull_data):
+    """Statistics of every residual, error and pull column over all entries."""
+    return {name: _summary(values) for name, values in pull_data.items()}
+
+
+def _pm(values):
+    """``mean=a ± b, std=c ± d`` of the values inside a display window."""
+    mean, mean_error = mean_with_error(values)
+    if mean is None:
+        return "no entries"
+    std, std_error = std_with_error(values)
+    if mean_error is None:
+        return f"mean={mean:.3f}, std={std:.3f}"
+    return f"mean={mean:.3f} ± {mean_error:.3f}, std={std:.3f} ± {std_error:.3f}"
 
 
 def analyze_vertex_pull(hdf5_path, output_dir, recall_threshold, purity_threshold):
@@ -67,8 +112,29 @@ def analyze_vertex_pull(hdf5_path, output_dir, recall_threshold, purity_threshol
         print("No valid matched vertices found for pull analysis")
         return
 
+    summary = {
+        "statistics_scope": "All matched vertices with valid errors, including "
+        "values outside the plot windows",
+        "n_vertices": int(len(pull_data["pull_x"])),
+        "statistics": summarize_vertex_pulls(pull_data),
+    }
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    (output_path / "pull_analysis_fitted_vertex_summary.json").write_text(
+        json.dumps(summary, indent=2, allow_nan=False) + "\n"
+    )
+    for coord in COORDS:
+        stats = summary["statistics"][f"pull_{coord}"]
+        print(
+            f"vertex_pull  {coord}  mean {stats['mean']:.3f} ± "
+            f"{stats['mean_error'] if stats['mean_error'] is not None else float('nan'):.3f}"
+            f"  std {stats['std'] if stats['std'] is not None else float('nan'):.3f} ± "
+            f"{stats['std_error'] if stats['std_error'] is not None else float('nan'):.3f}"
+        )
+
     # Create plots
     _plot_vertex_pulls(pull_data, output_dir)
+    return summary
 
 
 def _plot_vertex_pulls(pull_data, output_dir):
@@ -128,9 +194,7 @@ def _plot_vertex_pulls(pull_data, output_dir):
     )
     axes[0, 0].set_xlabel("Residual X (mm)")
     axes[0, 0].set_ylabel("Density")
-    axes[0, 0].set_title(
-        f"Residual X (mean={np.mean(residual_x_in_range):.4f}, std={np.std(residual_x_in_range):.4f})"
-    )
+    axes[0, 0].set_title(f"Residual X ({_pm(residual_x_in_range)})")
     axes[0, 0].grid(True, alpha=0.3)
 
     axes[0, 1].hist(
@@ -142,9 +206,7 @@ def _plot_vertex_pulls(pull_data, output_dir):
     )
     axes[0, 1].set_xlabel("Residual Y (mm)")
     axes[0, 1].set_ylabel("Density")
-    axes[0, 1].set_title(
-        f"Residual Y (mean={np.mean(residual_y_in_range):.4f}, std={np.std(residual_y_in_range):.4f})"
-    )
+    axes[0, 1].set_title(f"Residual Y ({_pm(residual_y_in_range)})")
     axes[0, 1].grid(True, alpha=0.3)
 
     axes[0, 2].hist(
@@ -156,9 +218,7 @@ def _plot_vertex_pulls(pull_data, output_dir):
     )
     axes[0, 2].set_xlabel("Residual Z (mm)")
     axes[0, 2].set_ylabel("Density")
-    axes[0, 2].set_title(
-        f"Residual Z (mean={np.mean(residual_z_in_range):.4f}, std={np.std(residual_z_in_range):.4f})"
-    )
+    axes[0, 2].set_title(f"Residual Z ({_pm(residual_z_in_range)})")
     axes[0, 2].grid(True, alpha=0.3)
 
     axes[0, 3].hist(
@@ -170,42 +230,32 @@ def _plot_vertex_pulls(pull_data, output_dir):
     )
     axes[0, 3].set_xlabel("Residual T (ns)")
     axes[0, 3].set_ylabel("Density")
-    axes[0, 3].set_title(
-        f"Residual T (mean={np.mean(residual_t_in_range):.4f}, std={np.std(residual_t_in_range):.4f})"
-    )
+    axes[0, 3].set_title(f"Residual T ({_pm(residual_t_in_range)})")
     axes[0, 3].grid(True, alpha=0.3)
 
     # Row 2: Error distributions
     axes[1, 0].hist(pull_data["error_x"], bins=50, alpha=0.7, density=True)
     axes[1, 0].set_xlabel("Error X (mm)")
     axes[1, 0].set_ylabel("Density")
-    axes[1, 0].set_title(
-        f"Error X (mean={np.mean(pull_data['error_x']):.4f}, std={np.std(pull_data['error_x']):.4f})"
-    )
+    axes[1, 0].set_title(f"Error X ({_pm(pull_data['error_x'])})")
     axes[1, 0].grid(True, alpha=0.3)
 
     axes[1, 1].hist(pull_data["error_y"], bins=50, alpha=0.7, density=True)
     axes[1, 1].set_xlabel("Error Y (mm)")
     axes[1, 1].set_ylabel("Density")
-    axes[1, 1].set_title(
-        f"Error Y (mean={np.mean(pull_data['error_y']):.4f}, std={np.std(pull_data['error_y']):.4f})"
-    )
+    axes[1, 1].set_title(f"Error Y ({_pm(pull_data['error_y'])})")
     axes[1, 1].grid(True, alpha=0.3)
 
     axes[1, 2].hist(pull_data["error_z"], bins=50, alpha=0.7, density=True)
     axes[1, 2].set_xlabel("Error Z (mm)")
     axes[1, 2].set_ylabel("Density")
-    axes[1, 2].set_title(
-        f"Error Z (mean={np.mean(pull_data['error_z']):.4f}, std={np.std(pull_data['error_z']):.4f})"
-    )
+    axes[1, 2].set_title(f"Error Z ({_pm(pull_data['error_z'])})")
     axes[1, 2].grid(True, alpha=0.3)
 
     axes[1, 3].hist(pull_data["error_t"], bins=50, alpha=0.7, density=True)
     axes[1, 3].set_xlabel("Error T (ns)")
     axes[1, 3].set_ylabel("Density")
-    axes[1, 3].set_title(
-        f"Error T (mean={np.mean(pull_data['error_t']):.4f}, std={np.std(pull_data['error_t']):.4f})"
-    )
+    axes[1, 3].set_title(f"Error T ({_pm(pull_data['error_t'])})")
     axes[1, 3].grid(True, alpha=0.3)
 
     # Row 3: Pull distributions
@@ -218,9 +268,7 @@ def _plot_vertex_pulls(pull_data, output_dir):
     )
     axes[2, 0].set_xlabel("Pull X")
     axes[2, 0].set_ylabel("Density")
-    axes[2, 0].set_title(
-        f"Pull X (mean={np.mean(pull_x_in_range):.3f}, std={np.std(pull_x_in_range):.3f})"
-    )
+    axes[2, 0].set_title(f"Pull X ({_pm(pull_x_in_range)})")
     axes[2, 0].grid(True, alpha=0.3)
 
     axes[2, 1].hist(
@@ -232,9 +280,7 @@ def _plot_vertex_pulls(pull_data, output_dir):
     )
     axes[2, 1].set_xlabel("Pull Y")
     axes[2, 1].set_ylabel("Density")
-    axes[2, 1].set_title(
-        f"Pull Y (mean={np.mean(pull_y_in_range):.3f}, std={np.std(pull_y_in_range):.3f})"
-    )
+    axes[2, 1].set_title(f"Pull Y ({_pm(pull_y_in_range)})")
     axes[2, 1].grid(True, alpha=0.3)
 
     axes[2, 2].hist(
@@ -246,9 +292,7 @@ def _plot_vertex_pulls(pull_data, output_dir):
     )
     axes[2, 2].set_xlabel("Pull Z")
     axes[2, 2].set_ylabel("Density")
-    axes[2, 2].set_title(
-        f"Pull Z (mean={np.mean(pull_z_in_range):.3f}, std={np.std(pull_z_in_range):.3f})"
-    )
+    axes[2, 2].set_title(f"Pull Z ({_pm(pull_z_in_range)})")
     axes[2, 2].grid(True, alpha=0.3)
 
     axes[2, 3].hist(
@@ -260,9 +304,7 @@ def _plot_vertex_pulls(pull_data, output_dir):
     )
     axes[2, 3].set_xlabel("Pull T")
     axes[2, 3].set_ylabel("Density")
-    axes[2, 3].set_title(
-        f"Pull T (mean={np.mean(pull_t_in_range):.3f}, std={np.std(pull_t_in_range):.3f})"
-    )
+    axes[2, 3].set_title(f"Pull T ({_pm(pull_t_in_range)})")
     axes[2, 3].grid(True, alpha=0.3)
 
     plt.tight_layout()

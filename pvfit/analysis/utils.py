@@ -1,7 +1,50 @@
 """Utility functions for vertex reconstruction performance analysis."""
 
 import numpy as np
-from scipy.stats import beta
+from scipy.stats import beta, norm
+
+# Two-sided 68.27% (one-sigma) interval: the tail probability on each side.
+ONE_SIGMA_TAIL = float(norm.cdf(-1.0))
+
+
+def mean_with_error(values):
+    """Sample mean and its standard error s / sqrt(n).
+
+    Fewer than two values give an error of ``None``; no values give ``(None,
+    None)``.
+    """
+    values = np.asarray(values, dtype=float)
+    n = len(values)
+    if n == 0:
+        return None, None
+    mean = float(np.mean(values))
+    if n < 2:
+        return mean, None
+    return mean, float(np.std(values, ddof=1) / np.sqrt(n))
+
+
+def std_with_error(values):
+    """Sample standard deviation (ddof=1) and its uncertainty.
+
+    The variance of the sample variance is taken from the fourth central
+    moment, Var(s²) ≈ (1/n)[m₄ − ((n−3)/(n−1)) s⁴], with no Gaussian
+    assumption; the delta method then gives Var(s) ≈ Var(s²)/(4 s²). For a
+    Gaussian sample m₄ = 3σ⁴ and the error reduces to σ/√(2n). Fewer than two
+    values give ``(0.0, 0.0)``; a degenerate sample gives ``(s, 0.0)``.
+    """
+    values = np.asarray(values, dtype=float)
+    n = len(values)
+    if n < 2:
+        return 0.0, 0.0
+    sample_var = float(np.var(values, ddof=1))
+    centered = values - np.mean(values)
+    m4 = float(np.mean(centered**4))
+    var_of_sample_var = (1 / n) * (m4 - ((n - 3) / (n - 1)) * sample_var**2)
+    if sample_var > 0 and var_of_sample_var > 0:
+        return float(np.sqrt(sample_var)), float(
+            np.sqrt(var_of_sample_var / (4 * sample_var))
+        )
+    return float(np.sqrt(sample_var)), 0.0
 
 
 def calculate_clopper_pearson_errors(k, n, rate):
@@ -18,8 +61,8 @@ def calculate_clopper_pearson_errors(k, n, rate):
     if n == 0:
         return 0.0, 0.0
 
-    lower_bound = beta.ppf(0.1585, k, n - k + 1) if k > 0 else 0.0
-    upper_bound = beta.ppf(0.8415, k + 1, n - k) if k < n else 1.0
+    lower_bound = beta.ppf(ONE_SIGMA_TAIL, k, n - k + 1) if k > 0 else 0.0
+    upper_bound = beta.ppf(1 - ONE_SIGMA_TAIL, k + 1, n - k) if k < n else 1.0
 
     if np.isnan(lower_bound) or np.isnan(upper_bound):
         return 0.0, 0.0
