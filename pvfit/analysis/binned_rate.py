@@ -12,8 +12,15 @@ from pathlib import Path
 
 import h5py
 import matplotlib.pyplot as plt
+import mplhep as hep
 import numpy as np
 import pandas as pd
+from matplotlib.ticker import (
+    AutoMinorLocator,
+    MaxNLocator,
+    MultipleLocator,
+    StrMethodFormatter,
+)
 
 from .utils import calculate_clopper_pearson_errors, find_best_match
 
@@ -173,6 +180,9 @@ class RateResult:
     label: str = ""  # plot title / legend text for this definition
     matching: str = "track"  # "track" (overlap), "geo" or "reso" (distance)
 
+    # Optional population histogram, independent of rate numerator/denominator.
+    reconstructed_counts: dict[tuple[int, int], int] | None = None
+
     @property
     def stem(self):
         return f"{self.metric}_{self.binned_by}_binned"
@@ -218,176 +228,216 @@ def write_rate_csv(result, output_dir, base_name):
     )
 
 
-def _points(counts):
-    """Bins with entries: (x, rate, lower, upper, denominator, numerator) lists."""
-    x, rate, lower, upper, denominator, numerator = [], [], [], [], [], []
-    for start, end in counts.bins:
-        if counts.denominator[start, end] == 0:
-            continue
-        r, lo, hi = counts.rate((start, end))
-        x.append((start + end) / 2)
-        rate.append(r)
-        lower.append(lo)
-        upper.append(hi)
-        denominator.append(counts.denominator[start, end])
-        numerator.append(counts.numerator[start, end])
-    return x, rate, lower, upper, denominator, numerator
+def count_vertex_tracks(hdf5_path, bins):
+    """Raw true/rec populations by their own track count, without matching."""
+    bins = list(bins)
+    true_counts = dict.fromkeys(bins, 0)
+    reconstructed_counts = dict.fromkeys(bins, 0)
+    for event in iter_events(hdf5_path):
+        for vertices, counts in (
+            (event.true_tracks, true_counts),
+            (event.rec_tracks, reconstructed_counts),
+        ):
+            for tracks in vertices:
+                if not tracks:
+                    continue
+                bin_ = find_bin(bins, len(tracks))
+                if bin_ is not None:
+                    counts[bin_] += 1
+    return true_counts, reconstructed_counts
+
+
+def write_vertex_track_count_csv(
+    true_counts, reconstructed_counts, output_dir, base_name
+):
+    """Save both raw populations once, with no matching suffix or display scaling."""
+    if true_counts.keys() != reconstructed_counts.keys():
+        raise ValueError(
+            "True and reconstructed track-count distributions need the same bins"
+        )
+    columns = [
+        "bin_start",
+        "bin_end",
+        "bin_center",
+        "true_count",
+        "reconstructed_count",
+    ]
+    rows = [
+        (
+            start,
+            end,
+            (start + end) / 2,
+            true_counts[start, end],
+            reconstructed_counts[start, end],
+        )
+        for start, end in sorted(true_counts)
+    ]
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    csv_file = output_path / f"vertex_track_count_distribution_{_slug(base_name)}.csv"
+    pd.DataFrame(rows, columns=columns).to_csv(csv_file, index=False)
+    return csv_file
 
 
 _VERTEX_WORD = {"true": "true", "rec": "reconstructed"}
 
 
-def plot_rate(result, output_dir, base_name, bin_width):
-    """Rate vs track multiplicity with its 1-sigma band and the bin counts."""
-    x, rate, lower, upper, denominator, numerator = _points(result.counts)
-    if not x:
-        print(f"No {result.metric} data to plot")
+def plot_efficiency_lhcb2(result, output_dir, base_name, max_ntracks=150):
+    """Efficiency with asymmetric 1-sigma bars and a reconstructed-vertex spectrum."""
+    return plot_rate_lhcb2(result, output_dir, base_name, max_ntracks)
+
+
+def _rate_display_ymax(table):
+    """Leave headroom above central values, independently of long intervals."""
+    target = max(0.001, 1.25 * float(table["rate"].max()))
+    step = 10 ** np.floor(np.log10(target)) / 2
+    return min(1.05, float(np.ceil(target / step) * step))
+
+
+def plot_rate_lhcb2(result, output_dir, base_name, max_ntracks=150, ymax=None):
+    """Compact rate plot with CP bars and an optional vertex spectrum.
+
+    Efficiency uses a separately counted reconstructed-vertex spectrum;
+    other true-binned rates show their truth population. Keep complete bins.
+    Large intervals remain intact and get an overflow marker when they
+    extend beyond the displayed y range.
+    """
+    table = result.counts.table()
+    table = table[(table["denominator"] > 0) & (table["bin_end"] <= max_ntracks)]
+    if table.empty:
         return None
 
-    _, ax1 = plt.subplots(figsize=(9, 6))
-    ax2 = ax1.twinx()
-    metric_text = result.metric.replace("_", " ").title()
-
-    ax1.plot(x, rate, "bo-", linewidth=2, markersize=8, label=metric_text)
-    ax1.fill_between(
-        x,
-        [r - e for r, e in zip(rate, lower, strict=True)],
-        [r + e for r, e in zip(rate, upper, strict=True)],
-        alpha=0.3,
-        color="blue",
-        label="Clopper-Pearson 1-sigma CI",
-    )
-    ax1.set_xlabel(
-        f"Number of tracks per {_VERTEX_WORD[result.binned_by]} vertex", fontsize=12
-    )
-    ax1.set_ylabel(metric_text, fontsize=12)
-    ax1.set_title(f"{metric_text} vs Track Count\n{result.label}", fontsize=14)
-    ax1.set_ylim(0, 1.27)
-    ax1.grid(True, alpha=0.3)
-    ax1.legend(loc="upper left")
-
-    # Bin populations on a hidden second axis, numerator on top of denominator
-    x_array = np.array(x)
-    max_count = max(max(denominator), max(numerator))
-    y_max = max_count * 2.3
-    ax2.bar(
-        x_array,
-        denominator,
-        bin_width,
-        alpha=0.8,
-        color="lightblue",
-        label=f"Total {_VERTEX_WORD[result.binned_by]} vertices",
-        linewidth=0.5,
-    )
-    ax2.bar(
-        x_array,
-        numerator,
-        bin_width,
-        alpha=0.9,
-        color="darkorange",
-        label=f"{metric_text} numerator",
-        linewidth=0.5,
-    )
-    ax2.set_ylim(0, y_max)
-    ax2.set_yticklabels([])
-    ax2.tick_params(axis="y", which="both", length=0)
-    ax2.legend(loc="upper right")
-
-    label_box = {"boxstyle": "round,pad=0.2", "alpha": 0.8, "edgecolor": "none"}
-    for x_pos, n_denominator, n_numerator in zip(
-        x_array, denominator, numerator, strict=True
-    ):
-        ax2.text(
-            x_pos,
-            n_denominator + y_max * 0.03,
-            str(n_denominator),
-            ha="center",
-            va="bottom",
-            fontsize=7,
-            color="darkblue",
-            bbox={**label_box, "facecolor": "white"},
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    stem = f"{result.stem}_{_slug(result.method_name(base_name))}_lhcb2"
+    plot_file = output_path / f"{stem}.pdf"
+    is_efficiency = result.metric == "efficiency"
+    spectrum = None
+    if is_efficiency:
+        if result.reconstructed_counts is None:
+            raise ValueError("Efficiency plots require reconstructed-vertex counts")
+        spectrum = pd.DataFrame(
+            [
+                (start, end, count)
+                for (start, end), count in result.reconstructed_counts.items()
+            ],
+            columns=["bin_start", "bin_end", "count"],
         )
-        if n_numerator > 0:
-            y_pos = (
-                n_numerator / 2
-                if n_numerator >= max_count * 0.15
-                else n_numerator + y_max * 0.01
-            )
-            ax2.text(
-                x_pos,
-                y_pos,
-                str(n_numerator),
-                ha="center",
-                va="center",
-                fontsize=7,
-                weight="bold",
-                color="white",
-                bbox={**label_box, "facecolor": "darkred", "alpha": 0.9},
-            )
+        spectrum = spectrum[
+            (spectrum["count"] > 0) & (spectrum["bin_end"] <= max_ntracks)
+        ].sort_values("bin_start")
+        spectrum_label = "Reconstructed-vertex distribution (scaled)"
+    elif result.binned_by == "true":
+        spectrum = table.rename(columns={"denominator": "count"})
+        spectrum_label = "True-vertex distribution (scaled)"
+    if ymax is None:
+        ymax = 1.10 if is_efficiency else _rate_display_ymax(table)
+    if not np.isfinite(ymax) or ymax <= 0:
+        raise ValueError("Rate plot ymax must be positive and finite")
+    if ymax < table["rate"].max():
+        raise ValueError("Rate plot ymax must include all displayed central values")
+    label = f"{base_name}: {result.label}"
+    if result.matching == "geo" and "m_r" in result.parameters:
+        label = rf"{base_name}: geometric matching ($m_r={result.parameters['m_r']:g}$)"
 
-    plt.tight_layout()
-    output_path = Path(output_dir)
-    output_path.mkdir(parents=True, exist_ok=True)
-    plot_file = (
-        output_path / f"{result.stem}_{_slug(result.method_name(base_name))}.pdf"
-    )
-    plt.savefig(plot_file, dpi=300, bbox_inches="tight")
-    plt.close()
+    with plt.rc_context():
+        hep.style.use(hep.style.LHCb2)
+        # Compact paper styling: thin frames and short inward ticks.
+        plt.rcParams.update(
+            {
+                "axes.linewidth": 0.7,
+                "font.weight": "normal",
+                "xtick.top": False,
+                "ytick.right": False,
+                "xtick.major.size": 4.5,
+                "ytick.major.size": 4.5,
+                "xtick.minor.size": 2.2,
+                "ytick.minor.size": 2.2,
+                "xtick.major.width": 0.65,
+                "ytick.major.width": 0.65,
+                "xtick.minor.width": 0.55,
+                "ytick.minor.width": 0.55,
+                "xtick.major.pad": 3,
+                "ytick.major.pad": 3,
+            }
+        )
+        fig, ax = plt.subplots(figsize=(6.6, 4.6))
+        if spectrum is not None and not spectrum.empty:
+            # Scale only the background shape, independently of the rate.
+            peak = 0.65 if is_efficiency else 0.6 * ymax
+            distribution = peak * spectrum["count"] / spectrum["count"].max()
+            ax.bar(
+                (spectrum["bin_start"] + spectrum["bin_end"]) / 2,
+                distribution,
+                width=spectrum["bin_end"] - spectrum["bin_start"] + 1,
+                color="0.8",
+                edgecolor="none",
+                linewidth=0,
+                zorder=0,
+                label=spectrum_label,
+            )
+        ax.errorbar(
+            table["bin_center"],
+            table["rate"],
+            yerr=table[["error_lower", "error_upper"]].to_numpy().T,
+            fmt="o",
+            color="#2446b5",
+            markersize=3.0,
+            markerfacecolor="none",
+            markeredgewidth=0.65,
+            elinewidth=0.8,
+            capsize=2.0,
+            capthick=0.8,
+            barsabove=True,
+            label=label,
+        )
+        above = table["rate"] + table["error_upper"] > ymax
+        if above.any():
+            ax.plot(
+                table.loc[above, "bin_center"],
+                np.full(above.sum(), 0.97 * ymax),
+                linestyle="none",
+                marker="^",
+                markersize=3,
+                color="#2446b5",
+                label="Interval extends above axis",
+            )
+        ax.set_xlim(0, max_ntracks)
+        ax.set_ylim(0, ymax)
+        ax.set_xlabel(
+            "Number of tracks per vertex"
+            if is_efficiency
+            else f"Number of tracks per {_VERTEX_WORD[result.binned_by]} vertex",
+            fontsize=16,
+            labelpad=3,
+        )
+        ax.set_ylabel(
+            result.metric.replace("_", " ").capitalize(), fontsize=17, labelpad=4
+        )
+        ax.xaxis.set_major_locator(MultipleLocator(25))
+        ax.xaxis.set_minor_locator(AutoMinorLocator(5))
+        ax.yaxis.set_major_locator(
+            MultipleLocator(0.2) if is_efficiency else MaxNLocator(nbins=5)
+        )
+        ax.yaxis.set_minor_locator(AutoMinorLocator(5))
+        ax.yaxis.set_major_formatter(StrMethodFormatter("{x:g}"))
+        ax.tick_params(axis="both", which="major", labelsize=14)
+        ax.grid(False)
+        ax.legend(
+            loc="lower left",
+            bbox_to_anchor=(0, 1.025),
+            fontsize=11.5,
+            borderaxespad=0,
+            handlelength=1.4,
+            handletextpad=0.45,
+        )
+        fig.tight_layout(pad=0.7)
+        fig.savefig(plot_file, bbox_inches="tight", pad_inches=0.04)
+        fig.savefig(
+            output_path / f"{stem}.png",
+            dpi=240,
+            bbox_inches="tight",
+            pad_inches=0.04,
+        )
+        plt.close(fig)
     return plot_file
-
-
-def plot_rate_comparison(results, output_dir, base_name, name):
-    """Overlay several rates of the same metric, plus their ratio to the first."""
-    if len({r.metric for r in results}) != 1:
-        raise ValueError("compared results must share a metric")
-    metric = results[0].metric
-    metric_text = metric.replace("_", " ").title()
-    binned_by = results[0].binned_by
-    slug = _slug(base_name)
-    output_path = Path(output_dir)
-    output_path.mkdir(parents=True, exist_ok=True)
-
-    points = [_points(r.counts) for r in results]
-    if any(not p[0] for p in points):
-        print(f"No {metric} data to compare")
-        return
-
-    _, ax = plt.subplots(figsize=(9, 6))
-    for result, (x, rate, lower, upper, _, _), fmt in zip(
-        results, points, ("o-", "s-", "d-", "^-"), strict=False
-    ):
-        ax.errorbar(x, rate, yerr=[lower, upper], fmt=fmt, label=result.label)
-    ax.set_xlabel(f"Number of tracks per {_VERTEX_WORD[binned_by]} vertex")
-    ax.set_ylabel(metric_text)
-    ax.set_title(f"{metric_text} Comparison")
-    ax.set_ylim(0, 1.27)
-    ax.grid(alpha=0.3)
-    ax.legend()
-    plt.savefig(
-        output_path / f"{metric}_comparison_{name}_{slug}.pdf",
-        dpi=300,
-        bbox_inches="tight",
-    )
-    plt.close()
-
-    reference_x, reference_rate = points[0][0], points[0][1]
-    _, ax = plt.subplots(figsize=(9, 6))
-    for result, (x, rate, *_), fmt in zip(
-        results[1:], points[1:], ("d-", "^-", "v-"), strict=False
-    ):
-        if x != reference_x:
-            raise ValueError("compared results must use the same bins")
-        ratio = [
-            r / g if g > 0 else 0 for g, r in zip(reference_rate, rate, strict=True)
-        ]
-        ax.plot(x, ratio, fmt, label=f"{result.label} / {results[0].label}")
-    ax.axhline(1.0, linestyle="--", color="gray")
-    ax.set_xlabel(f"Number of tracks per {_VERTEX_WORD[binned_by]} vertex")
-    ax.set_ylabel(f"{metric_text} Ratio")
-    ax.set_title(f"{metric_text} Ratio")
-    ax.grid(alpha=0.3)
-    ax.legend()
-    plt.savefig(
-        output_path / f"{metric}_ratio_{name}_{slug}.pdf", dpi=300, bbox_inches="tight"
-    )
-    plt.close()

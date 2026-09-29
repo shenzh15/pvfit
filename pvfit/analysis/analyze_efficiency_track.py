@@ -1,6 +1,6 @@
 """Reconstruction efficiency with overlap (track-based) matching."""
 
-from .binned_rate import BinnedCounts, RateResult, iter_events
+from .binned_rate import BinnedCounts, RateResult, find_bin, iter_events
 from .utils import find_best_match
 
 
@@ -13,6 +13,7 @@ def analyze_vertex_efficiency(hdf5_path, bins, recall_threshold, purity_threshol
     Binned by the true vertex's reconstructed track count.
     """
     counts = BinnedCounts(bins)
+    reconstructed_counts = dict.fromkeys(counts.bins, 0)
     for event in iter_events(hdf5_path):
         true_vertex_info = {
             vertex_id: {"track_indices": tracks, "num_tracks": len(tracks)}
@@ -22,6 +23,10 @@ def analyze_vertex_efficiency(hdf5_path, bins, recall_threshold, purity_threshol
         for rec_tracks in event.rec_tracks:
             if not rec_tracks:
                 continue
+            # Count the background independently of this vertex's match.
+            bin_ = find_bin(counts.bins, len(rec_tracks))
+            if bin_ is not None:
+                reconstructed_counts[bin_] += 1
             best_match_id = find_best_match(
                 rec_tracks, true_vertex_info, recall_threshold, purity_threshold
             )
@@ -40,5 +45,6 @@ def analyze_vertex_efficiency(hdf5_path, bins, recall_threshold, purity_threshol
                 "purity_threshold": purity_threshold,
             },
             label=f"Recall≥{recall_threshold}, Purity≥{purity_threshold}",
+            reconstructed_counts=reconstructed_counts,
         )
     ]

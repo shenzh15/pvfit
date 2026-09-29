@@ -5,7 +5,7 @@ Two definitions are evaluated on the same events: a fixed ellipse
 vertex's fit uncertainty (``match_vertices_resolution_zt``).
 """
 
-from .binned_rate import BinnedCounts, RateResult, iter_events
+from .binned_rate import BinnedCounts, RateResult, find_bin, iter_events
 from .utils import match_vertices_elliptical_zt, match_vertices_resolution_zt
 
 
@@ -44,7 +44,15 @@ def analyze_vertex_efficiency(hdf5_path, bins, m_r, z_scale, t_scale, nsigma):
     """
     by_geo = BinnedCounts(bins)
     by_reso = BinnedCounts(bins)
+    reconstructed_counts = dict.fromkeys(by_geo.bins, 0)
     for event in iter_events(hdf5_path):
+        # All nonempty reconstructed vertices, including unmatched ones;
+        # the spectrum uses their own multiplicity, independently of truth.
+        for tracks in event.rec_tracks:
+            if tracks:
+                bin_ = find_bin(by_geo.bins, len(tracks))
+                if bin_ is not None:
+                    reconstructed_counts[bin_] += 1
         true_vertices = _true_vertices(event)
         matched_geo = matched_reso = set()
         if len(event.rec_tracks) > 0:
@@ -68,6 +76,7 @@ def analyze_vertex_efficiency(hdf5_path, bins, m_r, z_scale, t_scale, nsigma):
             parameters={"m_r": m_r, "z_scale": z_scale, "t_scale": t_scale},
             label=f"Geo matching (m_r={m_r})",
             matching="geo",
+            reconstructed_counts=reconstructed_counts,
         ),
         RateResult(
             metric="efficiency",
@@ -76,5 +85,6 @@ def analyze_vertex_efficiency(hdf5_path, bins, m_r, z_scale, t_scale, nsigma):
             parameters={"nsigma": nsigma},
             label=f"Resolution matching ({nsigma}σ)",
             matching="reso",
+            reconstructed_counts=reconstructed_counts,
         ),
     ]

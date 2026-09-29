@@ -39,6 +39,13 @@ analysis:
   plot_max_ntracks: 200
   plot_bin_width_ntracks: 5
 
+  # Display limit for all LHCb2 efficiency plots with error bars.
+  efficiency_plot_max_ntracks: 150
+  rate_plot_max_ntracks: 150
+  # Empty: use rate central values, not error-bar ends, to choose the y range.
+  # Optional per-plot override, e.g. {split_rate_geo_rec: 0.001}.
+  rate_plot_ymax: {}
+
   plot_event_id: 0
   draw_fixed_ellipses: false
   draw_fitted_ellipses: true

@@ -1,8 +1,10 @@
 """Each rate analysis counts hand-built events the way its definition says."""
 
+import csv
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import h5py
 import numpy as np
@@ -25,6 +27,8 @@ from pvfit.analysis.analyze_split_rate_track import (
     analyze_vertex_split_rate as split_track,
 )
 from pvfit.analysis.binned_rate import BinnedCounts, make_bins
+from pvfit.analysis.run_analysis import run_analysis
+from pvfit.config_loader import AnalysisConfig
 
 BINS = make_bins(4, 13, 5)  # (4, 8) and (9, 13)
 LOW, HIGH = BINS
@@ -116,6 +120,9 @@ class TrackBasedRateTests(unittest.TestCase):
         # rec B fails purity, D and E fail recall
         self.assertEqual(counts(result), {LOW: (0, 2), HIGH: (1, 2)})
         self.assertEqual(result.parameters["recall_threshold"], 0.7)
+        # The spectrum includes unmatched and split rec vertices by their own
+        # multiplicity, independently of the true-vertex efficiency counts.
+        self.assertEqual(result.reconstructed_counts, {LOW: 4, HIGH: 1})
 
     def test_fake_rate(self):
         (result,) = fake_track(self.path, BINS, 0.7, 0.7)
@@ -178,6 +185,11 @@ class DistanceBasedRateTests(unittest.TestCase):
             self.assertEqual(
                 counts(results[matching, "true"]), {LOW: (1, 1), HIGH: (1, 1)}
             )
+            # Three rec vertices (including unmatched B) all have 4-8 tracks;
+            # truth has one vertex in each bin. Do not substitute truth counts.
+            self.assertEqual(
+                results[matching, "true"].reconstructed_counts, {LOW: 3, HIGH: 0}
+            )
 
     def test_fake_rate(self):
         results = by_key(fake_geo(*self.args))
@@ -203,6 +215,79 @@ class DistanceBasedRateTests(unittest.TestCase):
         self.assertEqual(counts(results["geo", "rec"]), {LOW: (2, 3), HIGH: (0, 0)})
         self.assertEqual(counts(results["reso", "true"]), {LOW: (0, 1), HIGH: (0, 1)})
         self.assertEqual(counts(results["reso", "rec"]), {LOW: (0, 3), HIGH: (0, 0)})
+
+    def test_standalone_distribution_is_raw_and_independent_of_analysis(self):
+        selections = (
+            ("efficiency_track",),
+            ("efficiency_geo",),
+            ("fake_rate_geo",),
+            ("merge_rate", "split_rate"),
+            (
+                "efficiency_track",
+                "efficiency_geo",
+                "fake_rate_track",
+                "fake_rate_geo",
+                "merge_rate",
+                "split_rate",
+                "merge_rate_geo",
+                "split_rate_geo",
+            ),
+        )
+        for analyses in selections:
+            with (
+                self.subTest(analyses=analyses),
+                tempfile.TemporaryDirectory() as directory,
+                patch("pvfit.analysis.run_analysis.plot_efficiency_lhcb2"),
+                patch("pvfit.analysis.run_analysis.plot_rate_lhcb2"),
+            ):
+                run_analysis(
+                    str(self.path),
+                    directory,
+                    AnalysisConfig(
+                        analyses=analyses,
+                        method_name="External Reco",
+                        plot_min_ntracks=4,
+                        plot_max_ntracks=18,
+                        plot_bin_width_ntracks=5,
+                        # Display limits must not truncate the saved distribution.
+                        efficiency_plot_max_ntracks=8,
+                        rate_plot_max_ntracks=8,
+                    ),
+                )
+                files = list(
+                    Path(directory).glob("vertex_track_count_distribution_*.csv")
+                )
+                self.assertEqual(
+                    [p.name for p in files],
+                    ["vertex_track_count_distribution_external_reco.csv"],
+                )
+                with files[0].open() as f:
+                    rows = list(csv.DictReader(f))
+                self.assertEqual(
+                    list(rows[0]),
+                    [
+                        "bin_start",
+                        "bin_end",
+                        "bin_center",
+                        "true_count",
+                        "reconstructed_count",
+                    ],
+                )
+                # Includes unmatched rec B and the empty final bin, without
+                # matching cuts, display scaling, or true/rec multiplicity mixing.
+                self.assertEqual(
+                    [[row[key] for key in rows[0]] for row in rows],
+                    [
+                        ["4", "8", "6.0", "1", "3"],
+                        ["9", "13", "11.0", "1", "0"],
+                        ["14", "18", "16.0", "0", "0"],
+                    ],
+                )
+                self.assertEqual(
+                    len(list(Path(directory).glob("efficiency_*binned*.csv"))),
+                    2 * int("efficiency_track" in analyses)
+                    + 4 * int("efficiency_geo" in analyses),
+                )
 
 
 if __name__ == "__main__":

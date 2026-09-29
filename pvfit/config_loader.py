@@ -347,6 +347,11 @@ class AnalysisConfig:
     plot_min_ntracks: int = 4
     plot_max_ntracks: int = 200
     plot_bin_width_ntracks: int = 5
+    # Display limit for all LHCb2 efficiency figures.
+    efficiency_plot_max_ntracks: int = 150
+    rate_plot_max_ntracks: int = 150
+    # Optional y limits keyed by e.g. "split_rate_geo_rec"; empty means automatic.
+    rate_plot_ymax: dict[str, float] = field(default_factory=dict)
 
     # 2D histogram plot
     plot_event_id: int = 0
@@ -394,9 +399,33 @@ class AnalysisConfig:
         if self.track_pull_chi2 is not None:
             _check_positive(self, ("track_pull_chi2",), "analysis")
         _check_bools(self, ("draw_fixed_ellipses", "draw_fitted_ellipses"), "analysis")
-        for name in ("plot_min_ntracks", "plot_max_ntracks", "plot_bin_width_ntracks"):
+        for name in (
+            "plot_min_ntracks",
+            "plot_max_ntracks",
+            "plot_bin_width_ntracks",
+            "efficiency_plot_max_ntracks",
+            "rate_plot_max_ntracks",
+        ):
             if not _is_int(getattr(self, name)) or getattr(self, name) < 1:
                 raise ValueError(f"analysis.{name} must be a positive integer")
+        if not isinstance(self.rate_plot_ymax, dict):
+            raise ValueError("analysis.rate_plot_ymax must be a mapping")
+        rate_plot_keys = {
+            f"{metric}_{matching}_{binned_by}"
+            for metric, binnings in (
+                ("fake_rate", ("rec",)),
+                ("merge_rate", ("true", "rec")),
+                ("split_rate", ("true", "rec")),
+            )
+            for matching in ("track", "geo", "reso")
+            for binned_by in binnings
+        }
+        _reject_unknown(self.rate_plot_ymax, "analysis.rate_plot_ymax", rate_plot_keys)
+        for key, value in self.rate_plot_ymax.items():
+            if not _is_number(value) or value <= 0:
+                raise ValueError(
+                    f"analysis.rate_plot_ymax.{key} must be a positive finite number"
+                )
         if not _is_int(self.plot_event_id) or self.plot_event_id < 0:
             raise ValueError("analysis.plot_event_id must be a nonnegative integer")
         if self.plot_min_ntracks > self.plot_max_ntracks:

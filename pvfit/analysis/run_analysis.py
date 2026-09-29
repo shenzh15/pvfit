@@ -36,7 +36,14 @@ from .analyze_split_rate_track import (
 )
 from .analyze_track_pull import analyze_track_pull
 from .analyze_vertex_pull import analyze_vertex_pull
-from .binned_rate import make_bins, plot_rate, plot_rate_comparison, write_rate_csv
+from .binned_rate import (
+    count_vertex_tracks,
+    make_bins,
+    plot_efficiency_lhcb2,
+    plot_rate_lhcb2,
+    write_rate_csv,
+    write_vertex_track_count_csv,
+)
 from .plot_histogram import plot_event_histogram
 
 
@@ -63,7 +70,6 @@ def run_analysis(hdf5_file: str, output_dir: str, settings: AnalysisConfig):
     # Rates binned in track multiplicity: count, then report uniformly
     # ------------------------------------------------------------
     results = []
-    comparisons = []
     if "efficiency_track" in analyses:
         results += analyze_vertex_efficiency_track(
             hdf5_file, bins, settings.recall_threshold, settings.purity_threshold
@@ -78,7 +84,6 @@ def run_analysis(hdf5_file: str, output_dir: str, settings: AnalysisConfig):
             settings.nsigma,
         )
         results += geo_results
-        comparisons.append(("geo_vs_reso", geo_results))
     if "fake_rate_track" in analyses:
         results += analyze_vertex_fake_rate_track(
             hdf5_file, bins, settings.recall_threshold, settings.purity_threshold
@@ -93,7 +98,6 @@ def run_analysis(hdf5_file: str, output_dir: str, settings: AnalysisConfig):
             settings.nsigma,
         )
         results += geo_results
-        comparisons.append(("geo_vs_reso", geo_results))
     if "merge_rate" in analyses:
         results += analyze_vertex_merge_rate_track(
             hdf5_file, bins, settings.recall_threshold
@@ -110,22 +114,40 @@ def run_analysis(hdf5_file: str, output_dir: str, settings: AnalysisConfig):
         if name in analyses:
             geo_results = analyze(hdf5_file, bins, *ellipses)
             results += geo_results
-            for binned_by in ("true", "rec"):
-                comparisons.append(
-                    (
-                        f"geo_vs_reso_{binned_by}",
-                        [r for r in geo_results if r.binned_by == binned_by],
-                    )
-                )
+
+    if results:
+        # Efficiency already carries both unconditioned populations. Reuse
+        # them without another HDF5 scan; other analysis selections also
+        # get the standalone distribution, independently of matching.
+        efficiency = next((r for r in results if r.metric == "efficiency"), None)
+        if efficiency is not None:
+            true_counts = efficiency.counts.denominator
+            reconstructed_counts = efficiency.reconstructed_counts
+        else:
+            true_counts, reconstructed_counts = count_vertex_tracks(hdf5_file, bins)
+        write_vertex_track_count_csv(
+            true_counts, reconstructed_counts, output_dir, settings.method_name
+        )
 
     for result in results:
         print(result.summary_line(settings.method_name))
         write_rate_csv(result, output_dir, settings.method_name)
-        plot_rate(
-            result, output_dir, settings.method_name, settings.plot_bin_width_ntracks
-        )
-    for name, compared in comparisons:
-        plot_rate_comparison(compared, output_dir, settings.method_name, name)
+        if result.metric == "efficiency":
+            plot_efficiency_lhcb2(
+                result,
+                output_dir,
+                settings.method_name,
+                settings.efficiency_plot_max_ntracks,
+            )
+        else:
+            key = f"{result.metric}_{result.matching}_{result.binned_by}"
+            plot_rate_lhcb2(
+                result,
+                output_dir,
+                settings.method_name,
+                settings.rate_plot_max_ntracks,
+                settings.rate_plot_ymax.get(key),
+            )
 
     # ------------------------------------------------------------
     # Residual analyses and the event display
