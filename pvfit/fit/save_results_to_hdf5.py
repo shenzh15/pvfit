@@ -172,6 +172,8 @@ def save_all_events_to_hdf5(fit_results, output_file, params):
     with h5py.File(output_file, "w") as f:
         f.attrs["n_events"] = len(fit_results)
         f.attrs["source"] = "PVFit"
+        if "max_chi2" in params:
+            f.attrs["reconstruction_max_chi2"] = params["max_chi2"]
 
     for event_result in tqdm(fit_results, desc="Saving events to HDF5"):
         save_event_to_hdf5(

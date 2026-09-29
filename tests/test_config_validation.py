@@ -73,9 +73,10 @@ class AnalysisConfigValidationTests(unittest.TestCase):
             yaml.safe_load((CONFIGS / "analysis.yaml").read_text())
         )
 
-    def test_fit_keys_are_rejected_and_defaults_do_not_inherit_fit_thresholds(self):
+    def test_fit_keys_are_rejected_and_track_cut_defaults_to_metadata(self):
         settings = AnalysisConfig.from_mapping({"analysis": {"m_r": 0.5}})
         self.assertEqual(settings.purity_threshold, 0.7)
+        self.assertIsNone(settings.track_pull_chi2)
         self.assertFalse(hasattr(settings, "max_chi2"))
         with self.assertRaisesRegex(ValueError, "Unknown analysis keys: max_chi2"):
             AnalysisConfig.from_mapping({"analysis": {"max_chi2": 4}})
@@ -95,6 +96,7 @@ class AnalysisConfigValidationTests(unittest.TestCase):
             "nsigma",
             "z_scale",
             "t_scale",
+            "track_pull_chi2",
             "x_residual_range",
             "y_residual_range",
             "z_residual_range",

@@ -24,6 +24,10 @@ analysis:
   m_r: 0.8
   nsigma: 3.0
 
+  # null follows reconstruction's max_chi2 saved with the HDF5 result.
+  # Set a number only to override the cut for a diagnostic comparison.
+  track_pull_chi2: null
+
   # Existing vertex-resolution selection; not a track-pull cut.
   x_residual_range: 0.1  # mm
   y_residual_range: 0.1  # mm

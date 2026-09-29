@@ -152,7 +152,11 @@ def run_analysis(hdf5_file: str, output_dir: str, settings: AnalysisConfig):
         )
 
     if "track_pull" in analyses:
-        analyze_track_pull(hdf5_path=hdf5_file, output_dir=output_dir)
+        analyze_track_pull(
+            hdf5_path=hdf5_file,
+            output_dir=output_dir,
+            max_chi2=settings.track_pull_chi2,
+        )
 
     if "vertex_pull" in analyses:
         analyze_vertex_pull(

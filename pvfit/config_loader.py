@@ -334,6 +334,9 @@ class AnalysisConfig:
     z_scale: float = 1.5
     t_scale: float = 0.06
 
+    # None follows the threshold recorded by reconstruction; a number overrides it.
+    track_pull_chi2: float | None = None
+
     # vertex-resolution selection windows
     x_residual_range: float = 0.1  # mm
     y_residual_range: float = 0.1  # mm
@@ -388,6 +391,8 @@ class AnalysisConfig:
             ),
             "analysis",
         )
+        if self.track_pull_chi2 is not None:
+            _check_positive(self, ("track_pull_chi2",), "analysis")
         _check_bools(self, ("draw_fixed_ellipses", "draw_fitted_ellipses"), "analysis")
         for name in ("plot_min_ntracks", "plot_max_ntracks", "plot_bin_width_ntracks"):
             if not _is_int(getattr(self, name)) or getattr(self, name) < 1:

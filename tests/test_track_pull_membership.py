@@ -1,4 +1,4 @@
-"""Regression checks for truth association, transport, and uncut diagnostics."""
+"""Regression checks for truth association, transport, and residual chi2 selection."""
 
 import json
 import tempfile
@@ -10,7 +10,9 @@ import h5py
 import numpy as np
 import pandas as pd
 
-from pvfit.analysis.analyze_track_pull import analyze_track_pull
+from pvfit.analysis.analyze_track_pull import _resolve_max_chi2, analyze_track_pull
+from pvfit.analysis.run_analysis import run_analysis
+from pvfit.config_loader import AnalysisConfig
 from pvfit.fit.save_results_to_hdf5 import save_all_events_to_hdf5
 from pvfit.fit.truth_matching import build_true_vertex_info
 
@@ -21,13 +23,15 @@ class TrackPullMembershipTests(unittest.TestCase):
         self.addCleanup(self.directory.cleanup)
         self.path = Path(self.directory.name) / "input.h5"
 
-    def write_tracks(self, n=2, indices=None, states=None, truth=None):
+    def write_tracks(self, n=2, indices=None, states=None, truth=None, max_chi2=10.0):
         defaults = {name: np.zeros(n) for name in ("x", "y", "z", "t", "tx", "ty")}
         defaults["backward"] = np.zeros(n, dtype=bool)
         defaults.update({name: np.ones(n) for name in ("cov_xx", "cov_yy", "cov_tt")})
         defaults.update(states or {})
         with h5py.File(self.path, "w") as f:
             f.attrs["n_events"] = 1
+            if max_chi2 is not None:
+                f.attrs["reconstruction_max_chi2"] = max_chi2
             event = f.create_group("0")
             true = event.create_group("true_vertices")
             for name in ("x", "y", "z", "t"):
@@ -42,9 +46,9 @@ class TrackPullMembershipTests(unittest.TestCase):
             for name, values in defaults.items():
                 tracks[name] = values
 
-    def analyze(self):
+    def analyze(self, max_chi2=None):
         with patch("pvfit.analysis.analyze_track_pull._plot_track_pulls") as plot:
-            summary = analyze_track_pull(self.path, self.directory.name)
+            summary = analyze_track_pull(self.path, self.directory.name, max_chi2)
         plot.assert_called_once()
         return summary, plot.call_args.args[0]
 
@@ -75,12 +79,15 @@ class TrackPullMembershipTests(unittest.TestCase):
             np.testing.assert_allclose(data[f"residual_{axis}"], 0, atol=1e-12)
         np.testing.assert_array_equal(data["delta_z"], [2.0, 2.0])
 
-    def test_large_residual_is_kept_in_primary_plot_and_statistics(self):
+    def test_large_residual_is_rejected_from_plot_and_statistics(self):
         self.write_tracks(states={"x": [0.5, 8.0]})
         summary, data = self.analyze()
-        np.testing.assert_array_equal(data["pull_x"], [0.5, 8.0])
+        np.testing.assert_array_equal(data["pull_x"], [0.5])
         self.assertEqual(summary["n_valid"], 2)
-        self.assertEqual(summary["statistics"]["pull_x"]["std"], 3.75)
+        self.assertEqual(summary["n_selected"], 1)
+        self.assertEqual(summary["n_rejected_by_chi2"], 1)
+        self.assertEqual(summary["statistics"]["pull_x"]["n"], 1)
+        self.assertEqual(summary["statistics"]["pull_x"]["mean"], 0.5)
         stored = json.loads(
             (
                 Path(self.directory.name) / "pull_analysis_input_track_summary.json"
@@ -88,13 +95,85 @@ class TrackPullMembershipTests(unittest.TestCase):
         )
         self.assertEqual(stored, summary)
 
-    def test_large_residual_after_transport_is_retained(self):
-        # Transport produces a 4-sigma residual; the analysis must retain the track.
+    def test_cut_is_applied_after_transport_and_handles_no_survivors(self):
+        # The raw residual is zero, but transport produces a 4-sigma residual.
         self.write_tracks(n=1, states={"tx": [2.0]}, truth={"z": 2.0})
         summary, data = self.analyze()
-        np.testing.assert_array_equal(data["pull_x"], [4.0])
         self.assertEqual(summary["n_valid"], 1)
-        self.assertEqual(summary["statistics"]["pull_x"]["mean"], 4.0)
+        self.assertEqual(summary["n_selected"], 0)
+        self.assertEqual(summary["n_rejected_by_chi2"], 1)
+        self.assertEqual(len(data["pull_x"]), 0)
+        self.assertIsNone(summary["statistics"]["pull_x"]["mean"])
+
+    def test_cut_includes_time_and_accepts_the_threshold(self):
+        self.write_tracks(
+            n=3,
+            states={"x": [3.0, 3.0, 0.0], "y": [1.0, 1.0, 0.0], "t": [0.0, 0.1, 4.0]},
+        )
+        summary, data = self.analyze()
+        np.testing.assert_array_equal(data["chi2"], [10.0])
+        self.assertEqual(summary["n_selected"], 1)
+        self.assertEqual(summary["n_rejected_by_chi2"], 2)
+
+    def test_configured_threshold_controls_the_selection(self):
+        self.write_tracks(states={"x": [0.5, 2.0]})
+        summary, data = self.analyze(max_chi2=1.0)
+        np.testing.assert_array_equal(data["pull_x"], [0.5])
+        self.assertEqual(summary["max_chi2"], 1.0)
+
+    def test_default_analysis_follows_stored_reconstruction_threshold(self):
+        self.write_tracks(states={"x": [2.0, 3.0]}, max_chi2=4.0)
+        with patch("pvfit.analysis.analyze_track_pull._plot_track_pulls") as plot:
+            run_analysis(
+                str(self.path),
+                self.directory.name,
+                AnalysisConfig(analyses=("track_pull",)),
+            )
+        np.testing.assert_array_equal(plot.call_args.args[0]["pull_x"], [2.0])
+        summary = json.loads(
+            (
+                Path(self.directory.name) / "pull_analysis_input_track_summary.json"
+            ).read_text()
+        )
+        self.assertEqual(summary["max_chi2"], 4.0)
+        self.assertIn("HDF5 attribute", summary["max_chi2_source"])
+
+    def test_legacy_file_uses_adjacent_reconstruction_snapshot(self):
+        self.write_tracks(states={"x": [0.5, 2.0]}, max_chi2=None)
+        self.path.with_name("reconstruction.yaml").write_text(
+            "algorithm:\n  max_chi2: 1.0\n"
+        )
+        summary, data = self.analyze()
+        np.testing.assert_array_equal(data["pull_x"], [0.5])
+        self.assertEqual(summary["max_chi2"], 1.0)
+        self.assertIn("reconstruction.yaml", summary["max_chi2_source"])
+
+    def test_stored_value_takes_precedence_over_a_different_snapshot(self):
+        self.write_tracks(max_chi2=4.0)
+        self.path.with_name("reconstruction.yaml").write_text(
+            "algorithm:\n  max_chi2: 9\n"
+        )
+        value, source = _resolve_max_chi2(self.path)
+        self.assertEqual(value, 4.0)
+        self.assertIn("HDF5 attribute", source)
+
+    def test_missing_threshold_has_no_silent_numeric_default(self):
+        self.write_tracks(max_chi2=None)
+        with self.assertRaisesRegex(ValueError, "Cannot determine the reconstruction"):
+            self.analyze()
+        self.path.with_name("reconstruction.yaml").write_text("algorithm: {}\n")
+        with self.assertRaisesRegex(ValueError, "positive finite max_chi2"):
+            self.analyze()
+        summary, _ = self.analyze(max_chi2=6.5)
+        self.assertEqual(summary["max_chi2"], 6.5)
+        self.assertEqual(summary["max_chi2_source"], "explicit analysis override")
+
+    def test_invalid_stored_threshold_is_not_ignored(self):
+        for value in (0, -1, np.nan, np.inf, True, "4"):
+            with self.subTest(value=value):
+                self.write_tracks(max_chi2=value)
+                with self.assertRaisesRegex(ValueError, "positive finite max_chi2"):
+                    self.analyze()
 
     def test_invalid_states_and_covariances_are_excluded_and_counted(self):
         self.write_tracks(
@@ -189,9 +268,11 @@ class TrackPullMembershipTests(unittest.TestCase):
             "tmax": 0.8,
             "Nbins_z": 2,
             "Nbins_t": 2,
+            "max_chi2": 6.5,
         }
         save_all_events_to_hdf5([result], self.path, params)
         with h5py.File(self.path, "r") as f:
+            self.assertEqual(f.attrs["reconstruction_max_chi2"], 6.5)
             saved = f["0/tracks"]
             for name in ("tx", "ty"):
                 np.testing.assert_array_equal(
@@ -204,6 +285,7 @@ class TrackPullMembershipTests(unittest.TestCase):
             summary["n_associated"], sum(len(v["track_indices"]) for v in truth)
         )
         self.assertEqual(summary["n_invalid"], 0)
+        self.assertEqual(summary["max_chi2"], 6.5)
 
 
 if __name__ == "__main__":
