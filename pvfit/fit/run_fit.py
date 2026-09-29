@@ -19,6 +19,8 @@ def run_fit(
     max_workers: int,
     output_dir: str,
     hdf5_file: str,
+    *,
+    provenance_path: str | None = None,
 ):
     """
     Run the full PVfit reconstruction pipeline and save results to HDF5.
@@ -164,6 +166,7 @@ def run_fit(
         fit_results,
         hdf5_path,
         params,
+        provenance_path=provenance_path,
     )
 
     return hdf5_path

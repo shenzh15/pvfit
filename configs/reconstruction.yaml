@@ -2,7 +2,7 @@
 # Reconstruction input/output (data paths are relative to the working directory)
 # =========================
 paths:
-  input_root: "input/key_sample.root"
+  input_root: "input/toy_sample.root"
   track_tree_name: "velo_kalman_filter/monitor_tree"  # Track data from Allen
   mc_vertex_tree_name: "mc_pv_dumper/MCPV_effective_tree"       # MC true vertex data
   output_dir: "./output/baseline"

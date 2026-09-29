@@ -2,12 +2,11 @@
 
 import copy
 import glob
-import hashlib
 import math
-from importlib import metadata
 from pathlib import Path
 
 from ..config_loader import load_config
+from ..provenance import implementation_fingerprint as implementation_fingerprint
 from .backends import get_backend
 
 # What a study's recorded configuration must contain before trials are reused.
@@ -36,25 +35,6 @@ def input_fingerprint(input_pattern, root):
             {"path": shown, "size": stat.st_size, "mtime_ns": stat.st_mtime_ns}
         )
     return files
-
-
-def implementation_fingerprint():
-    """Version and source digest of the pvfit package that scores the trials.
-
-    Any change to reconstruction, analysis or the bundled toy profile changes
-    the digest, so metrics from an older code state are not mixed in.
-    """
-    package = Path(__file__).resolve().parents[1]
-    digest = hashlib.sha256()
-    for path in sorted(package.rglob("*")):
-        if path.suffix in (".py", ".json") and "__pycache__" not in path.parts:
-            digest.update(str(path.relative_to(package)).encode())
-            digest.update(path.read_bytes())
-    try:
-        version = metadata.version("pvfit")
-    except metadata.PackageNotFoundError:
-        version = "unknown"
-    return {"pvfit_version": version, "source_sha256": digest.hexdigest()}
 
 
 def validate_search_space(space, backend):

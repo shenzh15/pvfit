@@ -15,6 +15,8 @@ from .config_loader import (
     ReconstructionConfig,
     load_config,
 )
+from .defaults import default_config_path, export_configs
+from .provenance import StageRecord
 
 
 def _positive_int(value):
@@ -40,7 +42,7 @@ def _add_options(parser, command):
         "-c",
         dest="config_file",
         type=Path,
-        default=None if command == "analyze" else Path("configs/reconstruction.yaml"),
+        default=None,
         help="Analysis YAML for analyze (optional); reconstruction YAML for fit/run",
     )
     parser.add_argument(
@@ -57,7 +59,7 @@ def _add_options(parser, command):
         parser.add_argument(
             "--analysis-config",
             type=Path,
-            default=Path("configs/analysis.yaml"),
+            default=None,
             help="Independent analysis YAML (default: configs/analysis.yaml)",
         )
     if command in ("fit", "run"):
@@ -99,7 +101,7 @@ def _add_optimize_options(parser):
         "--config",
         "-c",
         type=Path,
-        default=Path("configs/optimization.yaml"),
+        default=None,
         help="Optimization YAML (default: configs/optimization.yaml)",
     )
     parser.add_argument("--study-name", help="Override study.name")
@@ -164,11 +166,14 @@ def build_parser():
         ("run", "Run reconstruction followed by analysis"),
         ("optimize", "Run an NSGA-II parameter study over a reconstruction backend"),
         ("toy", "Generate a synthetic ROOT sample that needs no reference data"),
+        ("init-config", "Copy the bundled default YAML files for editing"),
     ):
         command = commands.add_parser(
             name, help=help_text, description=help_text, allow_abbrev=False
         )
-        if name == "optimize":
+        if name == "init-config":
+            command.add_argument("--output", type=Path, default=Path("configs"))
+        elif name == "optimize":
             _add_optimize_options(command)
         elif name == "toy":
             _add_toy_options(command)
@@ -182,8 +187,11 @@ def parse_args(argv=None):
 
 
 def _prepare(args):
-    config = load_config(args.config_file) if args.config_file else {}
-    fit_options = analysis_options = None
+    config_path = args.config_file
+    if config_path is None and args.command in ("fit", "run"):
+        config_path = default_config_path("reconstruction.yaml")
+    config = load_config(config_path) if config_path else {}
+    fit_options = analysis_options = effective_reconstruction = None
 
     if args.command in ("fit", "run"):
         # Command-line values override the YAML; the dataclass validates both.
@@ -198,6 +206,7 @@ def _prepare(args):
             if value is not None
         }
         cfg = replace(ReconstructionConfig.from_mapping(config), **overrides)
+        effective_reconstruction = cfg.to_mapping()
         inputs = sorted(glob.glob(str(Path(cfg.input_root).expanduser())))
         if not inputs:
             raise ValueError(f"No input ROOT files matched: {cfg.input_root}")
@@ -214,7 +223,9 @@ def _prepare(args):
 
     if args.command in ("analyze", "run"):
         analysis_config_path = (
-            args.analysis_config if args.command == "run" else args.config_file
+            (args.analysis_config or default_config_path("analysis.yaml"))
+            if args.command == "run"
+            else args.config_file
         )
         analysis_config = (
             load_config(analysis_config_path) if args.command == "run" else config
@@ -244,7 +255,7 @@ def _prepare(args):
             output_dir=str(Path(analysis_dir).expanduser()),
             settings=settings,
         )
-    return fit_options, analysis_options
+    return fit_options, analysis_options, effective_reconstruction
 
 
 def _run_fit(options):
@@ -277,22 +288,29 @@ def _run_optimization(args):
     from .optimize.run import run_optimization
 
     overrides = {key: value for key, value in vars(args).items() if key != "config"}
-    return run_optimization(args.config, overrides)
+    return run_optimization(
+        args.config or default_config_path("optimization.yaml"), overrides
+    )
 
 
 def main(argv=None):
     """Run the CLI; return 0 on success, 2 for bad inputs, or 1 on execution failure."""
     args = parse_args(argv)
+    invocation = list(sys.argv[1:] if argv is None else argv)
     try:
+        if args.command == "init-config":
+            export_configs(args.output)
+            print(f"Configuration templates written to {args.output}")
+            return 0
         if args.command == "optimize":
             _run_optimization(args)
             return 0
         if args.command == "toy":
             _run_toy(args)
             return 0
-        fit_options, analysis_options = _prepare(args)
+        fit_options, analysis_options, reconstruction = _prepare(args)
     except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError) as exc:
-        if args.debug:
+        if getattr(args, "debug", False):
             raise
         detail = (
             f"Missing configuration key: {exc}"
@@ -303,7 +321,15 @@ def main(argv=None):
         return 2
     try:
         if fit_options:
-            output = _run_fit(fit_options)
+            with StageRecord(
+                fit_options["output_dir"],
+                "fit",
+                reconstruction,
+                fit_options["input_files"],
+                invocation,
+            ) as record:
+                output = _run_fit({**fit_options, "provenance_path": str(record.path)})
+                record.data["outputs"] = [str(Path(output).resolve())]
             print(f"Fitting complete: {output}")
             if analysis_options:
                 analysis_options["hdf5_file"] = str(output)
@@ -312,7 +338,20 @@ def main(argv=None):
             output_dir.mkdir(parents=True, exist_ok=True)
             done = output_dir / "analysis.done"
             done.unlink(missing_ok=True)
-            _run_analysis(analysis_options)
+            settings = replace(
+                analysis_options["settings"],
+                input_hdf5=analysis_options["hdf5_file"],
+                output_dir=str(output_dir),
+            )
+            with StageRecord(
+                output_dir,
+                "analyze",
+                settings.to_mapping(),
+                [analysis_options["hdf5_file"]],
+                invocation,
+            ) as record:
+                _run_analysis(analysis_options)
+                record.data["outputs"] = [str(output_dir.resolve())]
             done.touch()
             print(f"Analysis complete: {output_dir}")
         return 0
@@ -320,7 +359,7 @@ def main(argv=None):
         print("pvfit: interrupted", file=sys.stderr)
         return 130
     except (OSError, RuntimeError, ValueError, KeyError) as exc:
-        if args.debug:
+        if getattr(args, "debug", False):
             raise
         print(f"pvfit: error: {exc} (use --debug for a traceback)", file=sys.stderr)
         return 1

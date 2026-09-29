@@ -1,15 +1,18 @@
 """Write PVfit results to HDF5 for the analysis stage.
 
 The layout (one group per event with histogram, seeds/, true_vertices/,
-rec_vertices/ and tracks/) is documented in the README under "HDF5 layout";
+rec_vertices/ and tracks/) is documented in docs/data-format.md under "HDF5 layout";
 the tables below are its definition. Every dataset is gzip-compressed.
 """
 
+import json
 from pathlib import Path
 
 import h5py
 import numpy as np
 from tqdm import tqdm
+
+from ..provenance import HDF5_SCHEMA_VERSION, implementation_fingerprint
 
 # tracks/<name>: (column of the selected-track DataFrame, dtype)
 TRACK_COLUMNS = {
@@ -155,7 +158,7 @@ def _write_dataset_returning(group, name, data):
     return group.create_dataset(name, data=data, compression="gzip", compression_opts=4)
 
 
-def save_all_events_to_hdf5(fit_results, output_file, params):
+def save_all_events_to_hdf5(fit_results, output_file, params, *, provenance_path=None):
     """Save all events' results to HDF5 file with dynamic sizes per event.
 
     Args:
@@ -172,6 +175,14 @@ def save_all_events_to_hdf5(fit_results, output_file, params):
     with h5py.File(output_file, "w") as f:
         f.attrs["n_events"] = len(fit_results)
         f.attrs["source"] = "PVFit"
+        f.attrs["schema_version"] = HDF5_SCHEMA_VERSION
+        for key, value in implementation_fingerprint().items():
+            f.attrs[key] = value
+        f.attrs["reconstruction_parameters"] = json.dumps(
+            params, sort_keys=True, allow_nan=False
+        )
+        if provenance_path is not None:
+            f.attrs["provenance_manifest"] = str(Path(provenance_path).resolve())
         if "max_chi2" in params:
             f.attrs["reconstruction_max_chi2"] = params["max_chi2"]
 

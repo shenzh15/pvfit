@@ -1413,7 +1413,7 @@ requires-dist = [
     { name = "awkward", specifier = ">=2.8" },
     { name = "h5py", specifier = ">=3.15.1" },
     { name = "matplotlib", specifier = ">=3.10.5" },
-    { name = "mplhep", specifier = "==1.1.2" },
+    { name = "mplhep", specifier = ">=1.1.2,<2" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "optuna", specifier = ">=4.8.0" },
     { name = "pandas", specifier = ">=2.3.1" },
