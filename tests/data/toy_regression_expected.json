@@ -1,0 +1,8098 @@
+{
+  "events": {
+    "0": {
+      "run_number": 22001,
+      "source_event_number": 3,
+      "n_tracks": 33,
+      "n_seedings": 2,
+      "tracks/mc_key": [
+        29,
+        13,
+        23,
+        11,
+        17,
+        0,
+        12,
+        28,
+        22,
+        3,
+        8,
+        16,
+        7,
+        35,
+        4,
+        5,
+        20,
+        14,
+        18,
+        6,
+        24,
+        25,
+        9,
+        27,
+        19,
+        15,
+        26,
+        21,
+        1,
+        2,
+        34,
+        10,
+        33
+      ],
+      "true_vertices/effective_pv_key": [
+        0,
+        1
+      ],
+      "true_vertices/track_indices": [
+        [
+          3,
+          5,
+          9,
+          10,
+          12,
+          14,
+          15,
+          19,
+          22,
+          28,
+          29,
+          31
+        ],
+        [
+          0,
+          1,
+          2,
+          4,
+          6,
+          7,
+          8,
+          11,
+          16,
+          17,
+          18,
+          20,
+          21,
+          23,
+          24,
+          25,
+          26,
+          27
+        ]
+      ],
+      "rec_vertices/track_indices": [
+        [
+          0,
+          1,
+          2,
+          4,
+          6,
+          7,
+          8,
+          11,
+          16,
+          17,
+          18,
+          20,
+          21,
+          23,
+          24,
+          25,
+          26,
+          27
+        ],
+        [
+          3,
+          5,
+          9,
+          10,
+          14,
+          15,
+          19,
+          22,
+          28,
+          29,
+          31
+        ]
+      ],
+      "seeds/z": [
+        6.607644081115723,
+        80.25617980957031
+      ],
+      "seeds/t": [
+        0.0327603779733181,
+        -0.27850446105003357
+      ],
+      "rec_vertices/x": [
+        0.004542447626590729,
+        0.034447405487298965
+      ],
+      "rec_vertices/x_err": [
+        0.012025541625916958,
+        0.020799435675144196
+      ],
+      "rec_vertices/y": [
+        -0.002458022441715002,
+        -0.00558914290741086
+      ],
+      "rec_vertices/y_err": [
+        0.012026801705360413,
+        0.01837240345776081
+      ],
+      "rec_vertices/z": [
+        6.569145202636719,
+        80.4769287109375
+      ],
+      "rec_vertices/z_err": [
+        0.07433371990919113,
+        0.15574799478054047
+      ],
+      "rec_vertices/t": [
+        0.03300068899989128,
+        -0.2796495258808136
+      ],
+      "rec_vertices/t_err": [
+        0.005052447784692049,
+        0.007233553100377321
+      ],
+      "histogram_sum": 20.909419977363605
+    },
+    "1": {
+      "run_number": 22001,
+      "source_event_number": 9,
+      "n_tracks": 50,
+      "n_seedings": 2,
+      "tracks/mc_key": [
+        20,
+        9,
+        31,
+        17,
+        41,
+        37,
+        48,
+        14,
+        46,
+        18,
+        45,
+        2,
+        10,
+        27,
+        51,
+        7,
+        26,
+        1,
+        15,
+        24,
+        38,
+        0,
+        39,
+        42,
+        11,
+        19,
+        25,
+        21,
+        32,
+        35,
+        22,
+        23,
+        8,
+        13,
+        43,
+        3,
+        16,
+        4,
+        5,
+        12,
+        29,
+        44,
+        47,
+        34,
+        28,
+        40,
+        6,
+        36,
+        33,
+        30
+      ],
+      "true_vertices/effective_pv_key": [
+        0,
+        1
+      ],
+      "true_vertices/track_indices": [
+        [
+          0,
+          1,
+          3,
+          7,
+          9,
+          11,
+          12,
+          15,
+          17,
+          18,
+          19,
+          21,
+          24,
+          25,
+          27,
+          30,
+          31,
+          32,
+          33,
+          35,
+          36,
+          37,
+          38,
+          39,
+          46
+        ],
+        [
+          2,
+          4,
+          5,
+          6,
+          8,
+          10,
+          13,
+          16,
+          20,
+          22,
+          23,
+          26,
+          28,
+          29,
+          34,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          47,
+          48,
+          49
+        ]
+      ],
+      "rec_vertices/track_indices": [
+        [
+          4,
+          5,
+          6,
+          8,
+          10,
+          13,
+          20,
+          23,
+          28,
+          29,
+          34,
+          40,
+          41,
+          42,
+          44,
+          45,
+          47,
+          49
+        ],
+        [
+          0,
+          3,
+          7,
+          9,
+          11,
+          12,
+          15,
+          17,
+          18,
+          19,
+          21,
+          24,
+          25,
+          27,
+          30,
+          31,
+          32,
+          33,
+          35,
+          36,
+          37,
+          38,
+          46
+        ]
+      ],
+      "seeds/z": [
+        -44.25395965576172,
+        -0.3038131296634674
+      ],
+      "seeds/t": [
+        -0.1063898503780365,
+        -0.0720534697175026
+      ],
+      "rec_vertices/x": [
+        -0.03317923843860626,
+        0.04659505933523178
+      ],
+      "rec_vertices/x_err": [
+        0.01590443216264248,
+        0.011868523433804512
+      ],
+      "rec_vertices/y": [
+        -0.008074257522821426,
+        -0.003890909254550934
+      ],
+      "rec_vertices/y_err": [
+        0.015933023765683174,
+        0.011868462897837162
+      ],
+      "rec_vertices/z": [
+        -44.3873291015625,
+        -0.23144623637199402
+      ],
+      "rec_vertices/z_err": [
+        0.12587203085422516,
+        0.09644902497529984
+      ],
+      "rec_vertices/t": [
+        -0.09347039461135864,
+        -0.07510944455862045
+      ],
+      "rec_vertices/t_err": [
+        0.006407680921256542,
+        0.005030878819525242
+      ],
+      "histogram_sum": 34.794585000376586
+    }
+  },
+  "rates": {
+    "efficiency_overall_true_binned_pvfit_geo_based.csv": [
+      {
+        "numerator": "4",
+        "denominator": "4",
+        "rate": "1.0",
+        "error_lower": "0.36887757085042716",
+        "error_upper": "0.0",
+        "m_r": "0.8",
+        "z_scale": "1.5",
+        "t_scale": "0.06",
+        "method_name": "PVfit_Geo_Based"
+      }
+    ],
+    "efficiency_overall_true_binned_pvfit_reso_based.csv": [
+      {
+        "numerator": "4",
+        "denominator": "4",
+        "rate": "1.0",
+        "error_lower": "0.36887757085042716",
+        "error_upper": "0.0",
+        "nsigma": "3.0",
+        "method_name": "PVfit_Reso_Based"
+      }
+    ],
+    "efficiency_overall_true_binned_pvfit_track_based.csv": [
+      {
+        "numerator": "4",
+        "denominator": "4",
+        "rate": "1.0",
+        "error_lower": "0.36887757085042716",
+        "error_upper": "0.0",
+        "recall_threshold": "0.7",
+        "purity_threshold": "0.7",
+        "method_name": "PVfit_Track_Based"
+      }
+    ],
+    "efficiency_true_binned_pvfit_geo_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "1.0",
+        "error_lower": "0.8413447460685429",
+        "error_upper": "0.0",
+        "denominator": "1",
+        "numerator": "1"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "1.0",
+        "error_lower": "0.8413447460685429",
+        "error_upper": "0.0",
+        "denominator": "1",
+        "numerator": "1"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "1.0",
+        "error_lower": "0.6016844794243424",
+        "error_upper": "0.0",
+        "denominator": "2",
+        "numerator": "2"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "efficiency_true_binned_pvfit_reso_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "1.0",
+        "error_lower": "0.8413447460685429",
+        "error_upper": "0.0",
+        "denominator": "1",
+        "numerator": "1"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "1.0",
+        "error_lower": "0.8413447460685429",
+        "error_upper": "0.0",
+        "denominator": "1",
+        "numerator": "1"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "1.0",
+        "error_lower": "0.6016844794243424",
+        "error_upper": "0.0",
+        "denominator": "2",
+        "numerator": "2"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "efficiency_true_binned_pvfit_track_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "1.0",
+        "error_lower": "0.8413447460685429",
+        "error_upper": "0.0",
+        "denominator": "1",
+        "numerator": "1"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "1.0",
+        "error_lower": "0.8413447460685429",
+        "error_upper": "0.0",
+        "denominator": "1",
+        "numerator": "1"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "1.0",
+        "error_lower": "0.6016844794243424",
+        "error_upper": "0.0",
+        "denominator": "2",
+        "numerator": "2"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "fake_rate_overall_rec_binned_pvfit_geo_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "m_r": "0.8",
+        "z_scale": "1.5",
+        "t_scale": "0.06",
+        "method_name": "PVfit_Geo_Based"
+      }
+    ],
+    "fake_rate_overall_rec_binned_pvfit_reso_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "nsigma": "3.0",
+        "method_name": "PVfit_Reso_Based"
+      }
+    ],
+    "fake_rate_overall_rec_binned_pvfit_track_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "recall_threshold": "0.7",
+        "purity_threshold": "0.7",
+        "method_name": "PVfit_Track_Based"
+      }
+    ],
+    "fake_rate_rec_binned_pvfit_geo_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "fake_rate_rec_binned_pvfit_reso_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "fake_rate_rec_binned_pvfit_track_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "merge_rate_overall_rec_binned_pvfit_geo_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "m_r": "0.8",
+        "z_scale": "1.5",
+        "t_scale": "0.06",
+        "method_name": "PVfit_Geo_Based"
+      }
+    ],
+    "merge_rate_overall_rec_binned_pvfit_reso_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "nsigma": "3.0",
+        "method_name": "PVfit_Reso_Based"
+      }
+    ],
+    "merge_rate_overall_rec_binned_pvfit_track_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "recall_threshold": "0.7",
+        "method_name": "PVfit_Track_Based"
+      }
+    ],
+    "merge_rate_overall_true_binned_pvfit_geo_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "m_r": "0.8",
+        "z_scale": "1.5",
+        "t_scale": "0.06",
+        "method_name": "PVfit_Geo_Based"
+      }
+    ],
+    "merge_rate_overall_true_binned_pvfit_reso_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "nsigma": "3.0",
+        "method_name": "PVfit_Reso_Based"
+      }
+    ],
+    "merge_rate_overall_true_binned_pvfit_track_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "recall_threshold": "0.7",
+        "method_name": "PVfit_Track_Based"
+      }
+    ],
+    "merge_rate_rec_binned_pvfit_geo_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "merge_rate_rec_binned_pvfit_reso_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "merge_rate_rec_binned_pvfit_track_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "merge_rate_true_binned_pvfit_geo_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "merge_rate_true_binned_pvfit_reso_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "merge_rate_true_binned_pvfit_track_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "split_rate_overall_rec_binned_pvfit_geo_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "m_r": "0.8",
+        "z_scale": "1.5",
+        "t_scale": "0.06",
+        "method_name": "PVfit_Geo_Based"
+      }
+    ],
+    "split_rate_overall_rec_binned_pvfit_reso_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "nsigma": "3.0",
+        "method_name": "PVfit_Reso_Based"
+      }
+    ],
+    "split_rate_overall_rec_binned_pvfit_track_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "purity_threshold": "0.7",
+        "method_name": "PVfit_Track_Based"
+      }
+    ],
+    "split_rate_overall_true_binned_pvfit_geo_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "m_r": "0.8",
+        "z_scale": "1.5",
+        "t_scale": "0.06",
+        "method_name": "PVfit_Geo_Based"
+      }
+    ],
+    "split_rate_overall_true_binned_pvfit_reso_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "nsigma": "3.0",
+        "method_name": "PVfit_Reso_Based"
+      }
+    ],
+    "split_rate_overall_true_binned_pvfit_track_based.csv": [
+      {
+        "numerator": "0",
+        "denominator": "4",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.3688775708504272",
+        "purity_threshold": "0.7",
+        "method_name": "PVfit_Track_Based"
+      }
+    ],
+    "split_rate_rec_binned_pvfit_geo_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "split_rate_rec_binned_pvfit_reso_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "split_rate_rec_binned_pvfit_track_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "split_rate_true_binned_pvfit_geo_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "split_rate_true_binned_pvfit_reso_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "split_rate_true_binned_pvfit_track_based.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.8413447460685429",
+        "denominator": "1",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.6016844794243424",
+        "denominator": "2",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "rate": "0.0",
+        "error_lower": "0.0",
+        "error_upper": "0.0",
+        "denominator": "0",
+        "numerator": "0"
+      }
+    ],
+    "vertex_track_count_distribution_pvfit.csv": [
+      {
+        "bin_start": "4",
+        "bin_end": "8",
+        "bin_center": "6.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "9",
+        "bin_end": "13",
+        "bin_center": "11.0",
+        "true_count": "1",
+        "reconstructed_count": "1"
+      },
+      {
+        "bin_start": "14",
+        "bin_end": "18",
+        "bin_center": "16.0",
+        "true_count": "1",
+        "reconstructed_count": "2"
+      },
+      {
+        "bin_start": "19",
+        "bin_end": "23",
+        "bin_center": "21.0",
+        "true_count": "0",
+        "reconstructed_count": "1"
+      },
+      {
+        "bin_start": "24",
+        "bin_end": "28",
+        "bin_center": "26.0",
+        "true_count": "2",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "29",
+        "bin_end": "33",
+        "bin_center": "31.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "34",
+        "bin_end": "38",
+        "bin_center": "36.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "39",
+        "bin_end": "43",
+        "bin_center": "41.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "44",
+        "bin_end": "48",
+        "bin_center": "46.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "49",
+        "bin_end": "53",
+        "bin_center": "51.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "54",
+        "bin_end": "58",
+        "bin_center": "56.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "59",
+        "bin_end": "63",
+        "bin_center": "61.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "64",
+        "bin_end": "68",
+        "bin_center": "66.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "69",
+        "bin_end": "73",
+        "bin_center": "71.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "74",
+        "bin_end": "78",
+        "bin_center": "76.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "79",
+        "bin_end": "83",
+        "bin_center": "81.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "84",
+        "bin_end": "88",
+        "bin_center": "86.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "89",
+        "bin_end": "93",
+        "bin_center": "91.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "94",
+        "bin_end": "98",
+        "bin_center": "96.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "99",
+        "bin_end": "103",
+        "bin_center": "101.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "104",
+        "bin_end": "108",
+        "bin_center": "106.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "109",
+        "bin_end": "113",
+        "bin_center": "111.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "114",
+        "bin_end": "118",
+        "bin_center": "116.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "119",
+        "bin_end": "123",
+        "bin_center": "121.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "124",
+        "bin_end": "128",
+        "bin_center": "126.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "129",
+        "bin_end": "133",
+        "bin_center": "131.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "134",
+        "bin_end": "138",
+        "bin_center": "136.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "139",
+        "bin_end": "143",
+        "bin_center": "141.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "144",
+        "bin_end": "148",
+        "bin_center": "146.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "149",
+        "bin_end": "153",
+        "bin_center": "151.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "154",
+        "bin_end": "158",
+        "bin_center": "156.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "159",
+        "bin_end": "163",
+        "bin_center": "161.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "164",
+        "bin_end": "168",
+        "bin_center": "166.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "169",
+        "bin_end": "173",
+        "bin_center": "171.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "174",
+        "bin_end": "178",
+        "bin_center": "176.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "179",
+        "bin_end": "183",
+        "bin_center": "181.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "184",
+        "bin_end": "188",
+        "bin_center": "186.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "189",
+        "bin_end": "193",
+        "bin_center": "191.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "194",
+        "bin_end": "198",
+        "bin_center": "196.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      },
+      {
+        "bin_start": "199",
+        "bin_end": "203",
+        "bin_center": "201.0",
+        "true_count": "0",
+        "reconstructed_count": "0"
+      }
+    ]
+  }
+}
