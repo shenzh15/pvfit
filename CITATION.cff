@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use PVFit, please cite this versioned software release."
+type: software
+title: "PVFit: 4D primary vertex reconstruction and performance analysis"
+authors:
+  - family-names: Shen
+    given-names: Zhihong
+  - family-names: Yang
+    given-names: Xueting
+  - family-names: Zhou
+    given-names: Tianwen
+version: 0.1.0
+date-released: 2026-09-29
+repository-code: "https://github.com/shenzh15/pvfit"
+url: "https://github.com/shenzh15/pvfit/releases/tag/v0.1.0"
+license: MIT
+keywords:
+  - primary vertex reconstruction
+  - high-energy physics
+  - four-dimensional tracking

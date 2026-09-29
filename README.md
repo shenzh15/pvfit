@@ -49,6 +49,12 @@ The results are `output/toy/fit_results.h5` and plots and tables under
 sample; choose another `--output` and pass it to `run --input` when repeating it.
 Toy results demonstrate the workflow; they are not detector performance.
 See the [toy model and limitations](docs/toy.md).
+Each fit/analysis stage also saves its effective configuration and
+[run provenance](docs/usage.md#run-provenance).
+
+For installation from a release wheel, use `python -m pip install <wheel-file>`.
+Bundled defaults let `pvfit toy` followed by `pvfit run --max-workers 2` work
+outside a checkout; `pvfit init-config` exports editable YAML templates.
 
 ## Using your own data
 
@@ -80,11 +86,16 @@ event numbering, truth association and HDF5 schema for compatible producers.
 uv sync --locked --group dev
 uv run python -m unittest discover -s tests -v
 uv run ruff check .
-uv run ruff format .
+uv run ruff format --check .
+uv run python scripts/check_docs.py
 ```
 
 The implementation lives in `pvfit/fit/`, `pvfit/analysis/`, `pvfit/toy/` and
 `pvfit/optimize/`; `pvfit/cli.py` provides the command-line entry point.
+CI runs these checks and verifies a wheel installation outside the checkout.
+The [synthetic regression](tests/data/README.md) freezes numerical behavior
+without shipping reference events. See the [changelog](CHANGELOG.md) for releases
+and [CITATION.cff](CITATION.cff) for citation metadata.
 
 ## Acknowledgements
 

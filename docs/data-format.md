@@ -75,6 +75,10 @@ Selection and validation:
 fit_results.h5
 ├── @n_events
 ├── @source                        "PVFit" (producer label used by plots)
+├── @schema_version                1 (new writers; legacy files may omit it)
+├── @pvfit_version, @source_sha256  imported package identity
+├── @reconstruction_parameters     JSON of effective fitter parameters
+├── @provenance_manifest           CLI fit record path, when supplied
 ├── @reconstruction_max_chi2        algorithm.max_chi2 used for this reconstruction
 └── <event_id>/
     ├── @n_tracks, @n_true_vertices, @n_rec_vertices, @n_seedings, @truth_matching
@@ -118,3 +122,8 @@ The `plot_histogram` analysis needs only `histogram` and its attributes; it draw
 `seeds/`, `true_vertices/` and `rec_vertices/` (and `z_err`/`t_err` ellipses) when
 present, so other producers can write just the parts they have. Files without
 `seeds/` fall back to `rec_vertices/{z,t}_seed`.
+
+Schema version 1 adds provenance attributes without changing the event dataset
+layout. Existing analyses continue to accept compatible legacy files without a
+schema attribute; individual diagnostics still require their documented fields.
+See [run provenance](usage.md#run-provenance) for effective configuration snapshots.

@@ -3,13 +3,19 @@
 [Back to README](../README.md)
 
 Run the examples from the project root. For your first run, use the
-[toy quick start](../README.md#quick-start). The reconstruction YAML otherwise
-expects `input/key_sample.root`; set `paths.input_root` or pass `--input` to
+[toy quick start](../README.md#quick-start). The reconstruction YAML
+expects `input/toy_sample.root`; set `paths.input_root` or pass `--input` to
 `fit` or `run` for your own sample.
 
 Alternatively, install the checkout with `python -m pip install .` in a virtual
 environment and invoke `pvfit` directly. `python -m pvfit` uses the same CLI.
-The examples assume access to the checkout's `configs/` files.
+Wheels include the same default YAML templates. With no explicit config option,
+`fit`, `run` and `optimize` prefer a local `configs/<stage>.yaml`, then use the
+shipped template. An explicitly named missing file remains an error. Run
+`pvfit init-config` to copy all three templates into `configs/` for editing;
+`--output DIRECTORY` chooses another directory, and existing files are never
+overwritten. The wheel supports the CLI; use the source archive or checkout for
+Snakemake, notebooks and documentation.
 
 ## Command-line interface
 
@@ -75,9 +81,8 @@ uv run snakemake -c 1 --config \
   analysis_config=configs/analysis.yaml
 ```
 
-Snakemake reads input paths from the reconstruction YAML. The toy quick start
-overrides those paths only for its CLI invocation; update the YAML before
-running Snakemake on that sample. Snakemake writes `logs/fit.log` and
+Snakemake reads input paths from the reconstruction YAML. Its default input
+matches `pvfit toy`; update the YAML for another sample. Snakemake writes `logs/fit.log` and
 `logs/analysis.log` beneath the reconstruction output directory.
 
 ## Configuration
@@ -171,3 +176,27 @@ These keys belong to `analysis:` in `configs/analysis.yaml`:
 Event selections use the [dense internal IDs](data-format.md#event-identity),
 not the original ROOT event numbers. See [analysis definitions](analysis.md)
 for matching criteria and the interpretation of residual plots.
+
+## Run provenance
+
+Each CLI `fit` and `analyze` stage (including the two stages of `run`) writes a
+unique `provenance/<UTC timestamp>_<id>_<stage>/` directory under its output
+directory. It contains `manifest.json` and an effective `reconstruction.yaml`
+or `analysis.yaml`, including CLI overrides. Reruns retain previous records.
+The manifest records the invocation and working directory, input paths/sizes/
+modification times, package version and source SHA-256, Git commit and dirty
+flag when available, Python/dependency versions, and completion or failure.
+Input identities use file metadata, not content checksums of large ROOT files.
+A hard process kill may leave the status `running`; this is not completion.
+
+HDF5 files store the schema version, package/source identity, effective fitter
+parameters and, for CLI fits, the provenance manifest path. Copy the provenance
+directory with the results to retain the full record; absolute recorded paths
+describe the original run and may no longer resolve after moving it. Analysis
+does not modify its input HDF5. Direct Python calls retain HDF5 writer metadata;
+the per-stage manifests are a CLI feature. Optimizer studies retain their
+existing configuration and input/source fingerprint checks.
+
+`uv.lock` fixes the tested environment. Package dependency ranges allow
+compatible installations (including `mplhep>=1.1.2,<2`); use `uv sync --locked`
+to reproduce the locked plotting stack.

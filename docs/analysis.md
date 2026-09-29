@@ -204,3 +204,23 @@ uv run pvfit fit --config configs/reconstruction.yaml
 uv run pvfit analyze --input output/baseline/fit_results.h5 \
   --config configs/analysis.yaml --analyses track_pull
 ```
+
+## Validation observations
+
+A development check of 10,000 minimum-bias events at luminosity
+`1.0e34`, beam origin `(0, 0)` and nominal 50 ps timing found the following
+with the existing default matching and reconstruction settings. These are
+sample-specific observations, not calibration corrections or guarantees for
+other inputs.
+
+- For 206,939 track-matched vertices with valid fit errors, the full-sample
+  z-pull standard deviation was about 0.745 and the mean reconstructed-minus-true
+  time residual was +1.52 ps. The summary includes residuals outside plot windows.
+- In the 4–8 selected-track bin, track-based efficiency was 11,100/29,603
+  (37.5%); geometric efficiency was 13,027/29,603 (44.0%). The two definitions
+  answer different matching questions and must not be labeled interchangeably.
+
+These observations motivate further checks of covariance calibration, time
+bias and track assignment. They do not by themselves establish a universal
+error rescaling or the cause of the low-multiplicity inefficiency. This release
+keeps geo, track and reso rate definitions and optimization objectives unchanged.
