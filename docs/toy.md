@@ -1,5 +1,7 @@
 # Synthetic example
 
+[Back to README](../README.md)
+
 Runs the whole pipeline without the reference ROOT sample or any private
 filesystem. From the project root:
 
@@ -7,7 +9,7 @@ filesystem. From the project root:
 uv sync --locked
 uv run pvfit toy --events 10                        # writes input/toy_sample.root
 uv run pvfit run --config configs/reconstruction.yaml --input input/toy_sample.root \
-  --output-dir output/toy --analysis-config configs/analysis.yaml   # writes output/toy/
+  --output-dir output/toy --analysis-config configs/analysis.yaml --max-workers 2
 ```
 
 `pvfit toy` refuses to overwrite an existing file: pass another `--output` and
@@ -20,8 +22,9 @@ the seed, because PVFit identifies events by `(run_number, event_number)`.
 
 `pvfit/toy/profile.json` holds aggregate statistics fitted by
 `pvfit.toy.calibrate_profile` to 10 000 reference events (100 files of the
-1.0e34 luminosity, 50 ps, beam-at-origin sample): quantiles and correlations only, no event
-records. All vertices, tracks and keys are generated afresh from the seed.
+1.0e34 luminosity, 50 ps, beam-at-origin sample). It stores distribution
+parameters, quantiles and correlations, with no event records. The generator
+creates all vertices, tracks and keys afresh from the seed.
 
 - A correlated Gaussian describes the luminous region in x, y, z and t.
 - Negative-binomial counts describe vertices per event and tracks per vertex.
