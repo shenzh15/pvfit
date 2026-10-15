@@ -42,6 +42,32 @@ All rate figures use the shared LHCb2 styling. Legacy count-annotation and
 ratio figures are no longer generated. Existing figures in previous output
 directories are retained.
 
+### Overall population and plotting bins
+
+Overall **rate** results include every stored true vertex on the true side
+and every nonempty reconstructed vertex on the rec side. In particular,
+reconstructed vertices with two or three final members still count. Matching
+uses the stored final members and the existing criteria below; this does not
+add a minimum reconstructed multiplicity cut or refit any vertices.
+
+`plot_min_ntracks`, `plot_max_ntracks` and `plot_bin_width_ntracks` control the
+binned tables and figures, not the overall rate or its uncertainty. Counters
+accumulate full-population totals and event-level statistics independently of
+the bins. The overall rate is the total numerator divided by the total
+denominator, not an average of bin rates. The optimizer uses this same
+population for its track-based objectives.
+
+The actual bin edges are inclusive: with minimum 4, maximum 200 and width 5,
+the last bin is 199–203. With width 1 the range is 4–200. Each overall CSV
+records these actual bounds and the underflow/overflow counts, so the
+unplotted populations remain visible. Horizontal display limits can further
+shorten a figure without changing its saved bins or overall result.
+
+Earlier releases summed only the configured bins for rate overall results.
+Re-run analysis on the existing HDF5 to obtain the complete totals; no new
+reconstruction or conversion is needed. Residual selections and resolution /
+pull summaries are unchanged by this rate-counting change.
+
 ### Uncertainties
 
 Rate uncertainties are one-sigma Clopper-Pearson intervals widened by a
@@ -85,8 +111,9 @@ ticks, a legend above the axes, and 3-point hollow markers with error bars drawn
 above them so the markers do not hide the uncertainties.
 `analysis.efficiency_plot_max_ntracks` sets
 its horizontal display limit (default 150). It shows complete populated bins
-within that limit, preserving the original binning and counts. CSV files and
-overall rates retain their full configured range.
+within that limit, preserving the original binning and counts. Per-bin CSV
+files retain the full configured bin range; overall rates include the complete
+population, including vertices outside those bins.
 
 ### LHCb2 fake, merge and split rate figures
 
@@ -137,6 +164,23 @@ matching `<metric>_overall_<true|rec>_binned_<method>.csv` has one row with
 `numerator, denominator, rate, error_lower, error_upper, design_effect`, the
 matching parameters and `method_name`. `<method>` is `<method_name>_Track_Based`, `_Geo_Based` or
 `_Reso_Based` after the matching used.
+
+Overall CSVs also record the population and bin coverage:
+
+| Columns | Meaning |
+| --- | --- |
+| `population_scope` | `all_stored_true` or `all_nonempty_rec` |
+| `bin_min_ntracks`, `bin_max_ntracks` | actual inclusive boundaries of the saved bins |
+| `binned_numerator`, `binned_denominator` | totals within those bins |
+| `underflow_numerator`, `underflow_denominator` | counts below the first bin |
+| `overflow_numerator`, `overflow_denominator` | counts above the last bin |
+| `underflow_rate`, `overflow_rate` | metric numerator / denominator within that region; blank for an empty region |
+| `underflow_fraction`, `overflow_fraction` | region denominator / overall denominator; blank for an empty overall population |
+
+All rates and fractions use the 0–1 scale. Binned, underflow and overflow
+counts sum to the overall counts. The underflow/overflow rates describe the
+same metric as that CSV, not a separate matching rule. The standalone
+track-count distribution CSV remains a binned table.
 
 `resolution_<coord>_binned_<method>.csv` has one row per bin with
 `resolution_<unit>, resolution_error_<unit>, bias_<unit>, bias_error_<unit>,

@@ -90,11 +90,11 @@ class BinnedCountsTests(unittest.TestCase):
         self.assertEqual(BINS, [(4, 8), (9, 13)])
         c = BinnedCounts(BINS)
         for n_tracks, success in ((4, True), (8, False), (13, True), (14, True)):
-            c.add(n_tracks, success)  # 14 is outside every bin: ignored
+            c.add(n_tracks, success)  # 14 contributes only to the overall count
         self.assertEqual(c.numerator, {LOW: 1, HIGH: 1})
         self.assertEqual(c.denominator, {LOW: 2, HIGH: 1})
         rate, lower, upper, numerator, denominator = c.overall()
-        self.assertEqual((rate, numerator, denominator), (2 / 3, 2, 3))
+        self.assertEqual((rate, numerator, denominator), (3 / 4, 3, 4))
         self.assertGreater(lower, 0)
         self.assertGreater(upper, 0)
         self.assertEqual(list(c.table()["rate"]), [0.5, 1.0])

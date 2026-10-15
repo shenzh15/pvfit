@@ -39,7 +39,7 @@ analysis:
   z_residual_range: 0.7  # mm
   t_residual_range: 0.06 # ns
 
-  # Track-multiplicity binning of the performance plots.
+  # Track-multiplicity binning; overall rates include vertices outside these bins.
   plot_min_ntracks: 4
   plot_max_ntracks: 200
   plot_bin_width_ntracks: 5

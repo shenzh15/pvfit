@@ -383,7 +383,20 @@
         "m_r": "0.8",
         "z_scale": "1.5",
         "t_scale": "0.06",
-        "method_name": "PVfit_Geo_Based"
+        "method_name": "PVfit_Geo_Based",
+        "population_scope": "all_stored_true",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "4",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "efficiency_overall_true_binned_pvfit_reso_based.csv": [
@@ -395,7 +408,20 @@
         "error_upper": "0.0",
         "design_effect": "1.0",
         "nsigma": "3.0",
-        "method_name": "PVfit_Reso_Based"
+        "method_name": "PVfit_Reso_Based",
+        "population_scope": "all_stored_true",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "4",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "efficiency_overall_true_binned_pvfit_track_based.csv": [
@@ -408,7 +434,20 @@
         "design_effect": "1.0",
         "recall_threshold": "0.7",
         "purity_threshold": "0.7",
-        "method_name": "PVfit_Track_Based"
+        "method_name": "PVfit_Track_Based",
+        "population_scope": "all_stored_true",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "4",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "efficiency_true_binned_pvfit_geo_based.csv": [
@@ -1748,7 +1787,20 @@
         "m_r": "0.8",
         "z_scale": "1.5",
         "t_scale": "0.06",
-        "method_name": "PVfit_Geo_Based"
+        "method_name": "PVfit_Geo_Based",
+        "population_scope": "all_nonempty_rec",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "fake_rate_overall_rec_binned_pvfit_reso_based.csv": [
@@ -1760,7 +1812,20 @@
         "error_upper": "0.3688775708504272",
         "design_effect": "1.0",
         "nsigma": "3.0",
-        "method_name": "PVfit_Reso_Based"
+        "method_name": "PVfit_Reso_Based",
+        "population_scope": "all_nonempty_rec",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "fake_rate_overall_rec_binned_pvfit_track_based.csv": [
@@ -1773,7 +1838,20 @@
         "design_effect": "1.0",
         "recall_threshold": "0.7",
         "purity_threshold": "0.7",
-        "method_name": "PVfit_Track_Based"
+        "method_name": "PVfit_Track_Based",
+        "population_scope": "all_nonempty_rec",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "fake_rate_rec_binned_pvfit_geo_based.csv": [
@@ -3113,7 +3191,20 @@
         "m_r": "0.8",
         "z_scale": "1.5",
         "t_scale": "0.06",
-        "method_name": "PVfit_Geo_Based"
+        "method_name": "PVfit_Geo_Based",
+        "population_scope": "all_nonempty_rec",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "merge_rate_overall_rec_binned_pvfit_reso_based.csv": [
@@ -3125,7 +3216,20 @@
         "error_upper": "0.3688775708504272",
         "design_effect": "1.0",
         "nsigma": "3.0",
-        "method_name": "PVfit_Reso_Based"
+        "method_name": "PVfit_Reso_Based",
+        "population_scope": "all_nonempty_rec",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "merge_rate_overall_rec_binned_pvfit_track_based.csv": [
@@ -3137,7 +3241,20 @@
         "error_upper": "0.3688775708504272",
         "design_effect": "1.0",
         "recall_threshold": "0.7",
-        "method_name": "PVfit_Track_Based"
+        "method_name": "PVfit_Track_Based",
+        "population_scope": "all_nonempty_rec",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "merge_rate_overall_true_binned_pvfit_geo_based.csv": [
@@ -3151,7 +3268,20 @@
         "m_r": "0.8",
         "z_scale": "1.5",
         "t_scale": "0.06",
-        "method_name": "PVfit_Geo_Based"
+        "method_name": "PVfit_Geo_Based",
+        "population_scope": "all_stored_true",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "merge_rate_overall_true_binned_pvfit_reso_based.csv": [
@@ -3163,7 +3293,20 @@
         "error_upper": "0.3688775708504272",
         "design_effect": "1.0",
         "nsigma": "3.0",
-        "method_name": "PVfit_Reso_Based"
+        "method_name": "PVfit_Reso_Based",
+        "population_scope": "all_stored_true",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "merge_rate_overall_true_binned_pvfit_track_based.csv": [
@@ -3175,7 +3318,20 @@
         "error_upper": "0.3688775708504272",
         "design_effect": "1.0",
         "recall_threshold": "0.7",
-        "method_name": "PVfit_Track_Based"
+        "method_name": "PVfit_Track_Based",
+        "population_scope": "all_stored_true",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "merge_rate_rec_binned_pvfit_geo_based.csv": [
@@ -5841,7 +5997,20 @@
         "m_r": "0.8",
         "z_scale": "1.5",
         "t_scale": "0.06",
-        "method_name": "PVfit_Geo_Based"
+        "method_name": "PVfit_Geo_Based",
+        "population_scope": "all_nonempty_rec",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "split_rate_overall_rec_binned_pvfit_reso_based.csv": [
@@ -5853,7 +6022,20 @@
         "error_upper": "0.3688775708504272",
         "design_effect": "1.0",
         "nsigma": "3.0",
-        "method_name": "PVfit_Reso_Based"
+        "method_name": "PVfit_Reso_Based",
+        "population_scope": "all_nonempty_rec",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "split_rate_overall_rec_binned_pvfit_track_based.csv": [
@@ -5865,7 +6047,20 @@
         "error_upper": "0.3688775708504272",
         "design_effect": "1.0",
         "purity_threshold": "0.7",
-        "method_name": "PVfit_Track_Based"
+        "method_name": "PVfit_Track_Based",
+        "population_scope": "all_nonempty_rec",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "split_rate_overall_true_binned_pvfit_geo_based.csv": [
@@ -5879,7 +6074,20 @@
         "m_r": "0.8",
         "z_scale": "1.5",
         "t_scale": "0.06",
-        "method_name": "PVfit_Geo_Based"
+        "method_name": "PVfit_Geo_Based",
+        "population_scope": "all_stored_true",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "split_rate_overall_true_binned_pvfit_reso_based.csv": [
@@ -5891,7 +6099,20 @@
         "error_upper": "0.3688775708504272",
         "design_effect": "1.0",
         "nsigma": "3.0",
-        "method_name": "PVfit_Reso_Based"
+        "method_name": "PVfit_Reso_Based",
+        "population_scope": "all_stored_true",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "split_rate_overall_true_binned_pvfit_track_based.csv": [
@@ -5903,7 +6124,20 @@
         "error_upper": "0.3688775708504272",
         "design_effect": "1.0",
         "purity_threshold": "0.7",
-        "method_name": "PVfit_Track_Based"
+        "method_name": "PVfit_Track_Based",
+        "population_scope": "all_stored_true",
+        "bin_min_ntracks": "4",
+        "bin_max_ntracks": "203",
+        "binned_numerator": "0",
+        "binned_denominator": "4",
+        "underflow_numerator": "0",
+        "underflow_denominator": "0",
+        "underflow_rate": "",
+        "underflow_fraction": "0.0",
+        "overflow_numerator": "0",
+        "overflow_denominator": "0",
+        "overflow_rate": "",
+        "overflow_fraction": "0.0"
       }
     ],
     "split_rate_rec_binned_pvfit_geo_based.csv": [

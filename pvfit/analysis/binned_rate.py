@@ -87,8 +87,11 @@ def track_matched_pairs(event, recall_threshold, purity_threshold):
 
 
 class BinnedCounts:
-    """Numerator and denominator per track-multiplicity bin, with the event
-    structure needed for errors that do not assume independent trials.
+    """Full-population and binned counts, with event-level error statistics.
+
+    Overall counts include every object passed to ``add``, independently of
+    the plotting bins. Underflow and overflow counts document the populations
+    outside those bins without changing the per-bin tables or figures.
 
     Vertices of one event are not independent Bernoulli trials: a merge marks
     two true vertices at once, a split two reconstructed fragments, a busy
@@ -103,20 +106,51 @@ class BinnedCounts:
     """
 
     _STATS = ("sum_ss", "sum_sn", "sum_nn")
+    _TOTALS = (
+        "total_numerator",
+        "total_denominator",
+        "total_ss",
+        "total_sn",
+        "total_nn",
+        "underflow_numerator",
+        "underflow_denominator",
+        "overflow_numerator",
+        "overflow_denominator",
+    )
 
     def __init__(self, bins):
         self.bins = list(bins)
+        if not self.bins or any(
+            end < start or (i and start != self.bins[i - 1][1] + 1)
+            for i, (start, end) in enumerate(self.bins)
+        ):
+            raise ValueError("Rate bins must be nonempty, ordered and contiguous")
         self.denominator = dict.fromkeys(self.bins, 0)
         self.numerator = dict.fromkeys(self.bins, 0)
         self.sum_ss = dict.fromkeys(self.bins, 0)
         self.sum_sn = dict.fromkeys(self.bins, 0)
         self.sum_nn = dict.fromkeys(self.bins, 0)
-        self.total_ss = self.total_sn = self.total_nn = 0
+        for name in self._TOTALS:
+            setattr(self, name, 0)
+        self._event_total_s = self._event_total_n = 0
         self._event_s = {}
         self._event_n = {}
 
     def add(self, n_tracks, success):
-        """Count one object in its bin; objects outside every bin are ignored."""
+        """Count every object overall, and in its bin when one exists."""
+        success = int(bool(success))
+        self.total_denominator += 1
+        self.total_numerator += success
+        self._event_total_n += 1
+        self._event_total_s += success
+        if n_tracks < self.bins[0][0]:
+            self.underflow_denominator += 1
+            self.underflow_numerator += success
+            return
+        if n_tracks > self.bins[-1][1]:
+            self.overflow_denominator += 1
+            self.overflow_numerator += success
+            return
         bin_ = find_bin(self.bins, n_tracks)
         if bin_ is not None:
             self.denominator[bin_] += 1
@@ -128,19 +162,17 @@ class BinnedCounts:
     def end_event(self):
         """Close the current event: fold its per-bin successes and trials into
         the cluster sums. Call once per event after all ``add`` calls."""
-        if not self._event_n:
-            return
-        total_s = total_n = 0
         for bin_, n in self._event_n.items():
             s = self._event_s.get(bin_, 0)
             self.sum_ss[bin_] += s * s
             self.sum_sn[bin_] += s * n
             self.sum_nn[bin_] += n * n
-            total_s += s
-            total_n += n
+        # Include events wholly outside the bins and cross-bin correlations.
+        total_s, total_n = self._event_total_s, self._event_total_n
         self.total_ss += total_s * total_s
         self.total_sn += total_s * total_n
         self.total_nn += total_n * total_n
+        self._event_total_s = self._event_total_n = 0
         self._event_s = {}
         self._event_n = {}
 
@@ -173,8 +205,8 @@ class BinnedCounts:
 
     def overall_design_effect(self):
         return self.design_effect(
-            sum(self.numerator.values()),
-            sum(self.denominator.values()),
+            self.total_numerator,
+            self.total_denominator,
             self.total_ss,
             self.total_sn,
             self.total_nn,
@@ -188,14 +220,43 @@ class BinnedCounts:
         )
 
     def overall(self):
-        """(rate, error_lower, error_upper, numerator, denominator) over all bins."""
-        numerator = sum(self.numerator.values())
-        denominator = sum(self.denominator.values())
+        """Rate, errors and counts for all objects, including under/overflow."""
+        numerator = self.total_numerator
+        denominator = self.total_denominator
         return (
             *self._rate(numerator, denominator, self.overall_design_effect()),
             numerator,
             denominator,
         )
+
+    def coverage(self):
+        """Counts and rates outside the actual inclusive bin boundaries.
+
+        ``fraction`` is the share of the full denominator in that region;
+        ``rate`` is its own success fraction, undefined for an empty region.
+        """
+        result = {
+            "bin_min_ntracks": self.bins[0][0],
+            "bin_max_ntracks": self.bins[-1][1],
+            "binned_numerator": sum(self.numerator.values()),
+            "binned_denominator": sum(self.denominator.values()),
+        }
+        for region in ("underflow", "overflow"):
+            numerator = getattr(self, f"{region}_numerator")
+            denominator = getattr(self, f"{region}_denominator")
+            result.update(
+                {
+                    f"{region}_numerator": numerator,
+                    f"{region}_denominator": denominator,
+                    f"{region}_rate": numerator / denominator
+                    if denominator
+                    else float("nan"),
+                    f"{region}_fraction": denominator / self.total_denominator
+                    if self.total_denominator
+                    else float("nan"),
+                }
+            )
+        return result
 
     def table(self):
         """One row per bin, including empty bins."""
@@ -228,7 +289,7 @@ class BinnedCounts:
                 name: [getattr(self, name)[b] for b in self.bins]
                 for name in self._STATS
             },
-            "totals": [self.total_ss, self.total_sn, self.total_nn],
+            "totals": [int(getattr(self, name)) for name in self._TOTALS],
         }
 
     @classmethod
@@ -239,9 +300,8 @@ class BinnedCounts:
             target = getattr(counts, name)
             for bin_, value in zip(counts.bins, values, strict=True):
                 target[bin_] = int(value)
-        counts.total_ss, counts.total_sn, counts.total_nn = (
-            int(v) for v in data["totals"]
-        )
+        for name, value in zip(cls._TOTALS, data["totals"], strict=True):
+            setattr(counts, name, int(value))
         return counts
 
     @staticmethod
@@ -310,6 +370,10 @@ def write_rate_csv(result, output_dir, base_name):
         "design_effect": result.counts.overall_design_effect(),
         **result.parameters,
         "method_name": method_name,
+        "population_scope": "all_stored_true"
+        if result.binned_by == "true"
+        else "all_nonempty_rec",
+        **result.counts.coverage(),
     }
     pd.DataFrame([overall]).to_csv(
         output_path / f"{result.metric}_overall_{result.binned_by}_binned_{slug}.csv",

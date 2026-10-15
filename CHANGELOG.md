@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+- Count all stored true vertices and all nonempty reconstructed vertices in
+  rate overall results, independently of plotting bins. Merge complete totals
+  and event-level uncertainty statistics across workers. Report bin bounds,
+  binned counts, underflow/overflow counts, rates and population fractions in
+  the existing overall CSVs. Match the optimizer's counted populations while
+  preserving per-bin results, figures and reconstruction. Existing HDF5 files
+  need analysis only to update the overall results.
+
 - Widen the rate uncertainties by an event-level design effect: every rate
   counter closes each event and accumulates the sums needed for the
   ratio-estimator (cluster) variance, and the Clopper-Pearson errors are

@@ -311,7 +311,7 @@ These keys belong to `analysis:` in `configs/analysis.yaml`:
 | `z_scale`, `t_scale`, `m_r`, `nsigma` | `1.5`, `0.06`, `0.8`, `5.0` | geo (elliptical) matching in `(z, t)` |
 | `plot_run_number`, `plot_event_number` | `null`, `null` | original run/event identity to plot; set both, or leave both null for the first stored event |
 | `draw_fixed_ellipses`, `draw_fitted_ellipses` | `false`, `true` | overlays on that plot |
-| `plot_min_ntracks`, `plot_max_ntracks`, `plot_bin_width_ntracks` | `4`, `200`, `5` | track-multiplicity binning of the performance plots |
+| `plot_min_ntracks`, `plot_max_ntracks`, `plot_bin_width_ntracks` | `4`, `200`, `5` | track-multiplicity bins; overall rates include vertices outside them ([population](analysis.md#overall-population-and-plotting-bins)) |
 | `efficiency_plot_max_ntracks` | `150` | horizontal display limit of all LHCb2 efficiency figures; keeps complete bins and does not change overall rates |
 | `rate_plot_max_ntracks` | `150` | horizontal display limit of the LHCb2 fake/merge/split rate figures |
 | `rate_plot_ymax` | `{}` | optional per-plot y maxima, e.g. `{merge_rate_geo_rec: 0.25}`; otherwise use central values without expanding for long error bars |
