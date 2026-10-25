@@ -173,7 +173,9 @@ class OverallOutputTests(unittest.TestCase):
                 for label, config in variants.items():
                     run_analysis(str(hdf5), str(root / label), config)
             files = sorted((root / "serial").glob("*.csv"))
-            self.assertEqual(len(files), 37)
+            self.assertEqual(len(files), 38)  # rate tables plus merge-pair diagnostic
+            pairs = root / "serial" / "merge_distance_population_track_based.csv"
+            self.assertEqual(len(read_csv(pairs)), 1)
             for path in files:
                 self.assertEqual(
                     path.read_bytes(),

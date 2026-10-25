@@ -142,6 +142,28 @@ background distribution. The comparison uses `analysis.rate_plot_max_ntracks`
 and derives its y range from the central values of both curves. The individual
 CSV files retain the complete counts and errors for each definition.
 
+### Merge-distance distributions
+
+Selecting `merge_rate` also collects pairs in the existing single-pass
+accumulator pipeline (including parallel batches) and writes `merge_distance_<method>_track_based.pdf`
+and `.png`: the signed true-pair Δz projection (mm), joint Δz–Δt counts, and
+horizontal Δt projection (ns). It reuses the track-based merge definition and
+`recall_threshold`; it does not change the rate or matching definitions. These
+are separations **between true vertices sharing a reconstructed merge**, not
+reconstructed-minus-true residuals or distances between arbitrary neighbours.
+
+Each unordered true pair counts once per event, including all k(k−1)/2 pairs
+in a merge of k true vertices; repeated merges of the same pair are deduplicated.
+The sign is higher true-row index minus lower index, without sorting by z or
+mirroring pairs. This diagnostic has no track-multiplicity bin cut. The `.csv`
+keeps all pairs and their file-local HDF5 event groups/true indices. The `.json`
+records input path, counting/sign convention, thresholds, nonfinite exclusions,
+bin edges and visible counts. Figure windows are ±3 mm and ±0.1 ns; projection
+counts include finite pairs outside the *other* coordinate's window, while the
+joint panel includes only pairs inside both. Tails remain in the CSV. Empty
+samples produce labelled empty plots. This plot uses track matching only;
+`merge_rate_geo` retains its existing geometric/resolution-based rate outputs.
+
 ### CSV files
 
 Whenever any rate analysis runs, it also writes one

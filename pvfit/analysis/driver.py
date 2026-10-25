@@ -32,6 +32,7 @@ from pvfit.analysis.binned_rate import (
 from pvfit.analysis.plot_histogram import plot_event_histogram
 
 from .accumulators import MAIN_PROCESS_ONLY, REGISTRY, VertexTrackCounts
+from .analyze_merge_distance import MergeDistance
 from .columns import ColumnReader, ColumnStore
 from .events import list_event_ids, make_batches, read_events
 from .track_pull_config import resolve_track_pull_chi2
@@ -65,6 +66,8 @@ def build_specs(hdf5_file, settings, analyses):
     for name in RATE_ORDER:
         if name in analyses:
             specs.append((name, {}))
+    if "merge_rate" in analyses:
+        specs.append((MergeDistance.name, {"hdf5_path": str(hdf5_file)}))
     if any(name in analyses for name in RATE_ORDER) and not any(
         name.startswith("efficiency") for name in analyses
     ):
@@ -305,6 +308,11 @@ def run_parallel_analysis(
                 output_dir,
                 settings.method_name,
                 settings.rate_plot_max_ntracks,
+            )
+
+        if MergeDistance.name in finalized:
+            by_name[MergeDistance.name].write(
+                finalized[MergeDistance.name], str(output_dir), settings
             )
 
         for name in RESIDUAL_ORDER:

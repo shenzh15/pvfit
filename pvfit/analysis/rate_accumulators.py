@@ -8,6 +8,7 @@ so the rate errors can account for correlated outcomes within an event.
 """
 
 from .accumulator_base import Accumulator
+from .analyze_merge_distance import _true_vertices_with_recall_above
 from .binned_rate import BinnedCounts, RateResult, find_bin
 from .utils import (
     claim_vertex_matches,
@@ -333,12 +334,9 @@ class MergeTrack(_RateAccumulator):
         for rec_tracks in event.rec_tracks:
             if not rec_tracks:
                 continue
-            overlapping = {
-                true_id
-                for true_id, true_tracks in enumerate(event.true_tracks)
-                if true_tracks
-                and len(rec_tracks & true_tracks) / len(true_tracks) >= threshold
-            }
+            overlapping = _true_vertices_with_recall_above(
+                rec_tracks, event.true_tracks, threshold
+            )
             is_merged = len(overlapping) > 1
             self.by_rec.add(len(rec_tracks), is_merged)
             if is_merged:

@@ -7,6 +7,7 @@ accumulations over events (the event display) run in the main process.
 """
 
 from .accumulator_base import Accumulator
+from .analyze_merge_distance import MergeDistance
 from .rate_accumulators import (
     EfficiencyGeo,
     EfficiencyTrack,
@@ -28,6 +29,7 @@ REGISTRY = {
         FakeTrack,
         FakeGeo,
         MergeTrack,
+        MergeDistance,
         SplitTrack,
         MergeGeo,
         SplitGeo,
@@ -48,6 +50,7 @@ __all__ = [
     "FakeGeo",
     "FakeTrack",
     "MAIN_PROCESS_ONLY",
+    "MergeDistance",
     "MergeGeo",
     "MergeTrack",
     "REGISTRY",
